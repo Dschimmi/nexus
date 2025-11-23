@@ -4,10 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title|default('Willkommen bei Nexus') }}</title>
+    <link rel="stylesheet" href="/css/cookie-banner.css">
 </head>
 <body>
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            Wir verwenden Cookies, um Ihr Erlebnis zu verbessern.
+            <a href="/datenschutz">Mehr erfahren</a>.
+        </p>
+        <div>
+            <button onclick="location.href='/consent/accept'">Alle akzeptieren</button>
+            <button onclick="location.href='/consent/decline'">Nur notwendige</button>
+        </div>
+    </div>
+
 </body>
 </html>

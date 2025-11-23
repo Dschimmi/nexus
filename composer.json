@@ -14,7 +14,8 @@
         "symfony/routing": "^7.3",
         "twig/twig": "^3.22",
         "tracy/tracy": "^2.11",
-        "symfony/dependency-injection": "^7.3"
+        "symfony/dependency-injection": "^7.3",
+        "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
         "psr-4": {

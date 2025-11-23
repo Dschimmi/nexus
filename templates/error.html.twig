@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Fehler {{ status_code }}</h1>
+    <p>{{ status_text }}</p>
+    
+    {# Dieser Teil wird nur im Entwicklungsmodus angezeigt #}
+    {% if app_env == 'development' and exception is defined %}
+        <h2>Details:</h2>
+        <pre>
+            <strong>Meldung:</strong> {{ exception.message }}
+            <strong>Datei:</strong> {{ exception.file }} (Zeile {{ exception.line }})
+        </pre>
+    {% endif %}
+{% endblock %}

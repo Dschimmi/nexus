@@ -1,0 +1,24 @@
+{
+    "name": "mr_wo/nexus",
+    "authors": [
+        {
+            "name": "Dschimmi Walez",
+            "email": "dschimmi@exelor.de"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.90"
+    },
+    "require": {
+        "symfony/http-foundation": "^7.3",
+        "symfony/routing": "^7.3",
+        "twig/twig": "^3.22",
+        "tracy/tracy": "^2.11",
+        "symfony/dependency-injection": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MrWo\\Nexus\\": "src/"
+        }
+    }
+}

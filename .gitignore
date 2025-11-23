@@ -1,0 +1,12 @@
+# Sensible Konfigurationsdatei
+.env
+
+# Cache-Datei vom Code-Formatter
+.php-cs-fixer.cache
+
+# Ordner für Composer-Abhängigkeiten
+/vendor/
+
+# Ordner für temporäre Dateien und Logs
+/temp/
+/log/

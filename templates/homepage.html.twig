@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Hallo vom Twig-Template!</h1>
-    <p>Das Rendering über die Template-Engine funktioniert.</p>
+    <h1>{{ 'welcome_message'|trans }}</h1>
+    <p>{{ 'homepage_text'|trans }}</p>
 {% endblock %}

@@ -4,12 +4,28 @@ namespace MrWo\Nexus\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+
 /**
  * Controller für die Anzeige der Startseite.
  */
 class HomepageController
 {
+    /**
+     * @var Environment Die Twig Template-Engine.
+     */
+    private Environment $twig;
+
+    /**
+     * Der DI-Container wird diesen Konstruktor aufrufen und automatisch
+     * eine Instanz des 'Twig\Environment'-Service übergeben.
+     *
+     * @param Environment $twig Die zu injizierende Twig-Umgebung.
+     */
+    public function __construct(Environment $twig)
+    {
+        $this->twig = $twig;
+    }
+
     /**
      * Behandelt die Anfrage für die Startseite und rendert das Twig-Template.
      *
@@ -17,17 +33,15 @@ class HomepageController
      */
     public function __invoke(): Response
     {
-        // 1. Definiere den Pfad zu unseren Templates
-        $loader = new FilesystemLoader(__DIR__ . '/../../templates');
+        // Test - wird der Fehler korrekt an Tracy weitergeleitet?
+        //$a = 1 / 0;
 
-        // 2. Initialisiere die Twig-Umgebung
-        $twig = new Environment($loader);
-
-        // 3. Rendere das Template anstatt rohes HTML zu schreiben
-        $content = $twig->render('homepage.html.twig', [
+        // Rendere das Template. Twig kennt die 'trans'-Funktion jetzt automatisch
+        // durch die Konfiguration in der services.php.
+        $content = $this->twig->render('homepage.html.twig', [
             'title' => 'Nexus Startseite',
         ]);
-
+        
         return new Response($content);
     }
 }

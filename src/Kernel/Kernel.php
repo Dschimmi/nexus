@@ -2,19 +2,16 @@
 
 namespace MrWo\Nexus\Kernel;
 
-use MrWo\Nexus\Service\SessionService;
+use MrWo\Nexus\Service\TranslatorService;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
 use Throwable;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 /**
  * Der zentrale Kernel der Anwendung.
@@ -47,42 +44,52 @@ class Kernel
      *
      * @param Request $request Das eingehende Request-Objekt.
      * @return Response Das ausgehende Response-Objekt.
+     * @throws Throwable Wenn im Entwicklungsmodus ein Fehler auftritt, wird er an Tracy weitergereicht.
      */
     public function handleRequest(Request $request): Response
     {
-        // Lade die Service-Konfigurations-Funktion
+        // Lade die Service-Konfigurations-Funktion und führe sie aus, um den Container zu füllen.
         $configureContainer = require_once __DIR__ . '/../../config/services.php';
-
-        // Führe die Funktion aus und übergib ihr unseren Container
         $configureContainer($this->container);
 
-        // Starte die Session über den neu registrierten Service
+        // Starte die Session über den Service aus dem Container.
         $this->container->get('session_service')->start();
 
+        // Code zur Spracherkennung (wird hier eingefügt, sobald er benötigt wird).
+
         try {
-            // 1. Finde die Route
+            // Finde die passende Route für die Anfrage.
             $request->attributes->add($this->resolveRoute($request));
 
-            // 2. Erstelle den Controller mit dem neuen ControllerResolver
-            // Neuer, container-bewusster ControllerResolver
+            // Finde den zuständigen Controller über den container-fähigen Resolver.
             $controllerResolver = new ContainerControllerResolver($this->container);
             $controller = $controllerResolver->getController($request);
-
-            // 3. Finde die Argumente für den Controller (z.B. Request-Objekt, Services)
+            
+            // Ermittle die benötigten Argumente für die Controller-Methode (z.B. Request-Objekt, Services).
             $argumentResolver = new ArgumentResolver();
             $arguments = $argumentResolver->getArguments($request, $controller);
 
-            // 4. Führe den Controller mit den korrekten Argumenten aus
+            // Führe den Controller mit den ermittelten Argumenten aus.
             $response = call_user_func_array($controller, $arguments);
 
         } catch (ResourceNotFoundException $e) {
-            $response = $this->handleError(404, 'Seite nicht gefunden', $e);
+            // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
+            if ($this->appEnv === 'development') {
+                throw $e;
+            }
+            // Im PROD-Modus geben wir eine einfache 404-Seite aus.
+            $response = new Response('Seite nicht gefunden', 404);
         } catch (Throwable $e) {
-            $response = $this->handleError(500, 'Interner Serverfehler', $e);
+            // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
+            if ($this->appEnv === 'development') {
+                throw $e;
+            }
+            // Im PROD-Modus geben wir eine einfache 500-Seite aus.
+            $response = new Response('Ein Fehler ist aufgetreten', 500);
         }
         return $response;
     }
-    
+
     /**
      * Findet die passende Route für die Anfrage.
      *
@@ -99,29 +106,5 @@ class Kernel
         $matcher = new UrlMatcher($routes, $context);
 
         return $matcher->match($request->getPathInfo());
-    }
-
-    /**
-     * Erstellt eine standardisierte Fehler-Antwort mittels Twig-Template.
-     *
-     * @param int       $statusCode Der HTTP-Statuscode (z.B. 404, 500).
-     * @param string    $statusText Die allgemeine Fehlermeldung (z.B. "Seite nicht gefunden").
-     * @param Throwable $exception Die ausgelöste Exception für detaillierte Debug-Informationen.
-     * @return Response
-     */
-    private function handleError(int $statusCode, string $statusText, Throwable $exception): Response
-    {
-        $loader = new FilesystemLoader(__DIR__ . '/../../templates');
-        $twig = new Environment($loader);
-
-        $content = $twig->render('error.html.twig', [
-            'status_code' => $statusCode,
-            'status_text' => $statusText,
-            'app_env'     => $this->appEnv,
-            'exception'   => $exception,
-            'title'       => "Fehler {$statusCode}"
-        ]);
-
-        return new Response($content, $statusCode);
     }
 }

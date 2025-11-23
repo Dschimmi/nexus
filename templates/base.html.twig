@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF--8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title|default('Willkommen bei Nexus') }}</title>
+    <title>{{ title|default('welcome_message'|trans) }}</title>
     <link rel="stylesheet" href="/css/cookie-banner.css">
 </head>
 <body>
@@ -13,12 +13,12 @@
 
     <div class="cookie-banner" id="cookie-banner">
         <p>
-            Wir verwenden Cookies, um Ihr Erlebnis zu verbessern.
-            <a href="/datenschutz">Mehr erfahren</a>.
+            {{ 'cookie_banner.text'|trans }}
+            <a href="/datenschutz">{{ 'cookie_banner.link'|trans }}</a>.
         </p>
         <div>
-            <button onclick="location.href='/consent/accept'">Alle akzeptieren</button>
-            <button onclick="location.href='/consent/decline'">Nur notwendige</button>
+            <button onclick="location.href='/consent/accept'">{{ 'cookie_banner.accept'|trans }}</button>
+            <button onclick="location.href='/consent/decline'">{{ 'cookie_banner.decline'|trans }}</button>
         </div>
     </div>
 

@@ -2,9 +2,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+	# Leite Anfragen NICHT weiter, wenn sie eine existierende Datei oder ein Verzeichnis sind
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
+	
+	# Leite Anfragen auch NICHT weiter, wenn sie auf eine typische Asset-Endung lauten
+    RewriteCond %{REQUEST_URI} !\.(ico|css|js|gif|jpg|jpeg|png)$ [NC]
     
+	# Leite alles andere auf die index.php um
     RewriteRule . index.php [L]
 </IfModule>
 

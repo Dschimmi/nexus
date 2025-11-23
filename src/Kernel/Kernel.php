@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Throwable;
+use Tracy\Debugger;
 
 /**
  * Der zentrale Kernel der Anwendung.
@@ -73,6 +74,10 @@ class Kernel
             $response = call_user_func_array($controller, $arguments);
 
         } catch (ResourceNotFoundException $e) {
+
+            // Logge den 404-Fehler mit geringerer Priorität.
+            Debugger::log($e, Debugger::WARNING);
+
             // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
             if ($this->appEnv === 'development') {
                 throw $e;
@@ -80,6 +85,10 @@ class Kernel
             // Im PROD-Modus geben wir eine einfache 404-Seite aus.
             $response = new Response('Seite nicht gefunden', 404);
         } catch (Throwable $e) {
+
+            // Logge den 500-Fehler mit höchster Priorität.
+            Debugger::log($e, Debugger::ERROR);
+
             // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
             if ($this->appEnv === 'development') {
                 throw $e;

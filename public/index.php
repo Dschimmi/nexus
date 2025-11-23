@@ -1,14 +1,19 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Tracy\Debugger;
+
+// Aktiviere Tracy im Entwicklungsmodus.
+// Der letzte Parameter ist der Pfad zum Log-Ordner.
+Debugger::enable(Debugger::DEVELOPMENT, __DIR__ . '/../log');
+
+
 
 // 1. Erstelle das Request-Objekt
 $request = Request::createFromGlobals();
@@ -30,17 +35,12 @@ try {
     $controllerClass = $parameters['_controller'];
     $controllerInstance = new $controllerClass();
 
-    // Ruft die __invoke Methode auf
     $response = $controllerInstance();
 
 } catch (ResourceNotFoundException $e) {
     // 6. Wenn keine Route passt, sende eine 404-Antwort
-    $response = new \Symfony\Component\HttpFoundation\Response('404 Not Found', 404);
-} catch (\Throwable $e) {
-    // 7. Für alle anderen Fehler, sende eine 500-Antwort
-    // (Dies wird später durch Tracy ersetzt)
-    $response = new \Symfony\Component\HttpFoundation\Response('500 Internal Server Error', 500);
+    $response = new Response('404 Not Found', 404);
 }
 
-// 8. Sende die vom Controller generierte Antwort an den Browser
+// 7. Sende die generierte Antwort an den Browser
 $response->send();

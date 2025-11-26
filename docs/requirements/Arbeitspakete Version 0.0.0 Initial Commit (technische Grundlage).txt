@@ -1,0 +1,257 @@
+AP-0.0.1 – Repository & Projektsetup
+Quelle: Git-Workflow PH 9.1.1.12 
+	Git-Repository erstellen
+	Branch-Konventionen einrichten (Trunk + Feature-Branches)
+	.gitignore erstellen (inkl. /log, /temp)
+	Lizenz, Readme, Grundstruktur /docs für ADRs
+
+AP-0.0.2 – Basis-Verzeichnisstruktur anlegen
+Quelle: Version 0.1.0 – „Grundgerüst und Verzeichnisstruktur“
+	/src, /public, /config, /templates, /tests
+	Struktur gemäß hexagonaler Architektur vorbereiten
+
+AP-0.0.3 – Composer-Setup
+composer.json anlegen
+Kernabhängigkeiten installieren:
+	Symfony HttpFoundation & Routing (PH 3.3.2) 
+	Twig (PH 3.3.3)
+	Symfony DI Container (PH 3.3.1)
+	Tracy (PH 3.3.4)
+
+AP-0.0.4 – Technischer Einstiegspunkt
+Quelle: PH 11.2.1 – Einstiegspunkt public/index.php
+	public/index.php erstellen
+	Autoloader in Betrieb nehmen
+	Basis-Request anlegen
+
+AP-0.0.5 – Grundlegende Routing-Konfiguration vorbereiten
+	Routing-Datei anlegen (z. B. /config/routes.php)
+	Controller-Ordner vorbereiten
+
+AP-0.0.6 – Grundlage für Twig-Rendering vorbereiten
+	Twig-Environment instanziieren (keine finalen Templates)
+	Template-Pfad registrieren
+
+AP-0.0.7 – Erste ADRs erstellen
+Quelle: PH 9.1.1 (ADRs verpflichtend)
+	ADR-000: Wahl der Architektur
+	ADR-001: Wahl der Bibliotheken (Twig, Symfony-Komponenten, Tracy)
+
+Ergebnis Version 0.0.0:
+Das Projekt existiert, baut, lädt die Abhängigkeiten, aber kann noch nichts rendern.
+
+Arbeitspakete Version 0.0.1 — „Routing funktionsfähig + erster Controller“
+
+AP-0.1 – Request/Response-Bootstrap in index.php
+	Request-Objekt erzeugen
+	Router laden
+	Routes-Datei einbinden (bereits vorhanden, nur verwenden)
+	Router matcht URL → gibt Controller-Ziel zurück
+
+AP-0.2 – Minimalen Dispatcher implementieren
+	Aus _controller den Klassennamen und die Methode extrahieren
+	Existenz prüfen
+	Instanz erzeugen
+	Methode ausführen
+	Sicherstellen, dass ein Response-Objekt zurückgegeben wird
+
+AP-0.3 – Ersten Controller anlegen
+	Ordner unter src/ definieren (z. B. src/Controller)
+	Namespace gemäß deinem Composer-Eintrag (MrWo\Nexus\…)
+	HomepageController mit index() erstellen
+	Rückgabe: new Response('OK') oder ähnlicher Minimalinhalt
+
+AP-0.4 – Entwicklungs-Fehlerausgabe aktivieren
+	Tracy im DEV-Modus aktivieren
+	Kein eigener Error-Handler, nur Initialintegration
+
+AP-0.5 – 404/500-Basisfälle abfangen
+	Nicht gefundene Route → Response mit Status 404
+	Fehler im Controller → Response mit Status 500
+	Noch keinen globalen Handler bauen, nur Minimalversion
+
+AP-0.6 – Autoload + Namespace überprüfen
+	Prüfen, ob Composer den Namespace lädt
+	Controller-Namespace testen
+	composer dump-autoload im Projekt kurz dokumentieren
+
+AP-0.7 – Smoke-Test durchführen
+	GET / trifft Controller
+	Rückgabe ist valide Response
+	Keine Exceptions
+	Routingkette voll funktionsfähig
+
+Ergebnis Version 0.0.1
+index.php verarbeitet Requests
+Routing funktioniert mit deinem vorhandenen routes.php-Gerüst
+Controller werden korrekt instanziiert
+Response wird an den Client ausgegeben
+Minimale Fehlerbehandlung eingebaut
+
+Arbeitspakete v0.2.0 – „Strukturierte Boot-Kette & Kernarchitektur“
+
+AP-0.2.1 – Bootstrap-Struktur anlegen
+Eigenes Bootstrap-/Kernel-Verzeichnis erstellen
+Zentrale Kernel-Klasse anlegen
+Verantwortlichkeiten aus index.php in den Kernel verschieben
+
+AP-0.2.2 – Ablaufkette definieren
+Einheitlichen Request-Handling-Ablauf festlegen
+Reihenfolge festschreiben: Request → Routing → Controller → Response
+Bootstrap so erweitern, dass alle Schritte zentralisiert sind
+
+AP-0.2.3 – Controller-Auflösung standardisieren
+ControllerResolver-Komponente hinzufügen
+Format für _controller verbindlich definieren
+Fehlerhafte Controller-Auflösung abfangen und definieren
+
+AP-0.2.4 – Fehlerbehandlung vereinheitlichen
+Zentralen ErrorHandler einführen
+DEV- und PROD-Verhalten klar trennen
+Fehler für Routing, Controller und interne Fehler standardisiert ausgeben
+
+AP-0.2.5 – Response-Emitter einführen
+Komponente zur Ausgabe der Response erstellen
+Verantwortung für Header- und Body-Ausgabe eindeutig zuordnen
+
+AP-0.2.6 – Projektstruktur bereinigen
+Ordnerstruktur für Bootstrap, HTTP, Controller finalisieren
+Konfigurationsdateien ordnen
+public/index.php auf einen einzigen Kernel-Aufruf reduzieren
+
+AP-0.2.7 – Entwicklungsdokumentation aktualisieren
+Beschreibung der neuen Boot-Kette
+Definition aller neuen Komponenten
+Übersicht über Verantwortlichkeiten im Request/Response-Lebenszyklus
+
+AP-0.2.8 – Smoke-Test für v0.2.0
+Funktion der Boot-Kette prüfen
+Routing-Auflösung testen
+Fehlerwege testen (404, 500)
+Prüfen, dass keine Logik mehr in index.php verbleibt
+
+Arbeitspakete für Version 0.3.0 – „DSGVO- und Compliance-Mechanismen“
+
+AP-0.3.1 – Consent-Management-Service erstellen
+Quelle: PH: 4.1.4
+        Einen ConsentService im src-Verzeichnis anlegen.
+        Dieser Service muss Methoden bereitstellen wie hasConsent(string $category): bool, grantConsent(string $category) und revokeConsent(string $category).
+        Der Service benötigt eine Abhängigkeit zum Session-Service, um die Zustimmung des Benutzers zu speichern.
+
+AP-0.3.2 – Session-Service implementieren
+Quelle: PH: 4.1.2
+        Einen SessionService anlegen, der die Symfony\Component\HttpFoundation\Session\Session-Komponente kapselt.
+        Der Service wird im Kernel gestartet ($session->start()).
+        Er stellt Methoden bereit wie get(string $key) und set(string $key, $value).
+        Der ConsentService wird angepasst, um diesen neuen SessionService zu verwenden.
+
+AP-0.3.3 – Cookie-Banner in das Template integrieren
+Quelle: PH: 4.1.4
+        Ein einfaches, rudimentäres HTML/CSS/JavaScript-Cookie-Banner im base.html.twig hinzufügen.
+        Das Banner wird initial angezeigt und ausgeblendet, sobald eine Zustimmung (oder Ablehnung) in der Session gespeichert ist.
+        Die Buttons im Banner ("Akzeptieren", "Ablehnen") müssen mit Routen verknüpft werden, die von neuen Controllern behandelt werden.
+
+AP-0.3.4 – Consent-Controller erstellen
+Quelle: PH: 4.1.4
+        Einen ConsentController mit Methoden wie acceptAction() und declineAction() erstellen.
+        Diese Methoden rufen die entsprechenden Funktionen des ConsentService auf und leiten den Benutzer anschließend zurück zur vorherigen Seite oder zur Startseite.
+        Die notwendigen Routen (/consent/accept, /consent/decline) in der routes.php registrieren.
+
+AP-0.3.5 – Dependency Injection für Services einrichten
+Quelle: PH: 3.3.1
+        Eine Konfigurationsdatei für den Symfony DI-Container anlegen (config/services.php).
+        Den SessionService und den ConsentService als zentrale Dienste im Container registrieren.
+        Den Kernel und die Controller anpassen, damit der DI-Container für die Erstellung von Objekten und die Übergabe von Abhängigkeiten (Injection) genutzt wird.
+
+AP-0.3.6 – Entwicklungsdokumentation aktualisieren
+	Beschreibung des ConsentService und des SessionService.
+	Anleitung zur Konfiguration der DI-Container-Dienste.
+
+Arbeitspakete für Version 0.4.0 – „Internationalisierung (i18n)“
+
+AP-0.4.1 – Translator-Service implementieren
+Quelle: PH: 4.1.3
+        Einen TranslatorService im src/Service-Verzeichnis anlegen.
+        Der Service muss eine translate(string $key): string-Methode bereitstellen.
+        Er benötigt eine Logik, um Übersetzungsdateien aus einem definierten Verzeichnis (z.B. /translations) zu laden und die Schlüssel-Wert-Paare in einem Array zu speichern.
+
+AP-0.4.2 – Twig-Integration für den Translator erstellen
+Quelle: PH: 4.1.3
+        Eine "Twig Extension" erstellen, die unseren TranslatorService für die Templates verfügbar macht.
+        Diese Extension registriert eine neue Twig-Funktion oder einen Filter (z.B. {{ 'welcome_message'|trans }}), der intern die translate()-Methode unseres Services aufruft.
+
+AP-0.4.3 – Sprach-Umschaltung und Persistenz implementieren
+Quelle: PH: 4.1.3, PH: 4.1.2
+        Eine Logik implementieren, um die vom Benutzer bevorzugte Sprache zu erkennen (z.B. aus der URL /en/, einem Cookie oder dem Accept-Language-Header des Browsers).
+        Die gewählte Sprache muss im SessionService gespeichert werden.
+        Der TranslatorService muss so angepasst werden, dass er die in der Session gespeicherte Sprache verwendet, um die korrekte Übersetzungsdatei zu laden.
+
+AP-0.4.4 – Bestehende Texte auf das i18n-System umstellen
+Quelle: PH: 4.1.3
+        Die Texte im Cookie-Banner (/templates/base.html.twig) und auf der Startseite (/templates/homepage.html.twig) durch die neuen Twig-Übersetzungs-Filter ersetzen (z.B. {{ 'cookie_banner.text'|trans }}).
+        Die entsprechenden Übersetzungsdateien anlegen (z.B. /translations/de.php und /translations/en.php) und die übersetzten Texte dort eintragen.
+
+AP-0.4.5 – Dependency Injection für den Translator-Service einrichten
+Quelle: PH: 3.3.1
+        Den neuen TranslatorService und die Twig Extension als Dienste in der /config/services.php registrieren.
+        Sicherstellen, dass alle Abhängigkeiten (z.B. der SessionService für den TranslatorService) korrekt injiziert werden.
+
+AP-0.4.6 – Entwicklungsdokumentation aktualisieren
+        Beschreibung des TranslatorService und seiner Konfiguration.
+        Anleitung zur Verwendung der Übersetzungs-Funktionen in Twig-Templates.
+
+Arbeitspakete für Version 0.5.0 – „Umgebungs-Handling, Logging und Sicherheits-Härtung“
+
+AP-0.5.1 – Umgebungs-Handling finalisieren
+Quelle: PH: 8.4
+        Überprüfen, ob die Logik in public/index.php ($_SERVER['APP_ENV'] ?? 'production') dem Fail-Safe-Prinzip entspricht.
+        Sicherstellen, dass die APP_ENV korrekt an den Kernel übergeben wird.
+
+AP-0.5.2 – Tracy-Konfiguration an Umgebung koppeln
+Quelle: PH: 8.4
+        Die Debugger::enable()-Zeile in public/index.php so anpassen, dass sie im production-Modus Debugger::PRODUCTION und im development-Modus Debugger::DEVELOPMENT verwendet.
+
+AP-0.5.3 – Fehlerbehandlung im Kernel an Umgebung koppeln
+Quelle: PH: 5.2, PH: 8.4
+        Die try-catch-Blöcke in der Kernel::handleRequest()-Methode so anpassen, dass Exceptions im development-Modus an Tracy weitergeworfen (throw $e;) und im production-Modus in eine generische Fehler-Response umgewandelt werden.
+
+AP-0.5.4 – HTTPS-Erzwingung implementieren
+Quelle: PH: 5.2
+	Einen Mechanismus am Anfang der public/index.php einfügen, der im production-Modus prüft, ob die Verbindung über HTTPS erfolgt. Wenn nicht, bricht er mit der im Pflichtenheft definierten Fehlermeldung ab.
+
+AP-0.5.5 – Entwicklungsdokumentation aktualisieren
+        Beschreibung des APP_ENV-Mechanismus und der Unterschiede zwischen den Umgebungen.
+        Anleitung zur Konfiguration der .env-Datei für Entwicklung und Produktion.
+
+Arbeitspakete für Version 0.6.0 – „Test-Suite, CI-Pipeline und Entwicklerdokumentation“
+
+AP-0.6.1 – PHPUnit als Entwicklungs-Abhängigkeit installieren
+Quelle: PH: 9.2.1
+        Das phpunit/phpunit-Paket über Composer als --dev-Abhängigkeit zum Projekt hinzufügen.
+        Eine phpunit.xml.dist-Konfigurationsdatei im Projekt-Stammverzeichnis erstellen, die grundlegende Einstellungen wie den Pfad zum Test-Verzeichnis (/tests) definiert.
+
+AP-0.6.2 – Ersten Unit-Test für einen Service schreiben
+Quelle: PH: 9.2.1
+        Einen Unit-Test für eine einfache, in sich geschlossene Klasse erstellen, z.B. für den TranslatorService.
+        Dieser Test prüft die Kernlogik (z.B. "Gibt der Service den korrekten String für einen Schlüssel zurück?", "Gibt er den Schlüssel selbst zurück, wenn keine Übersetzung existiert?").
+        Der Test wird im /tests-Verzeichnis abgelegt.
+
+AP-0.6.3 – Ersten Integrationstest für einen Controller schreiben
+Quelle: PH: 9.2.1
+        Einen Test für den HomepageController schreiben, der den gesamten Anwendungs-Stack (Kernel, Routing, Controller, Twig) durchläuft.
+        Dieser Test simuliert eine GET-Anfrage an die URL / und prüft, ob die Antwort einen HTTP-Statuscode 200 hat und ob der gerenderte HTML-Code einen bestimmten Text (z.B. "Willkommen bei Nexus") enthält.
+
+AP-0.6.4 – CI-Pipeline einrichten (z.B. mit GitHub Actions)
+Quelle: PH: 9.2.2
+        Eine Workflow-Konfigurationsdatei für eine CI-Plattform (z.B. .github/workflows/ci.yml) erstellen.
+        Der Workflow muss so konfiguriert werden, dass er bei jedem Push automatisch ausgelöst wird und die folgenden Schritte ausführt:
+            Code auschecken.
+            PHP-Umgebung (Version 8.2) einrichten.
+            Composer-Abhängigkeiten installieren (composer install).
+            Die PHPUnit-Testsuite ausführen (./vendor/bin/phpunit).
+            (Optional, aber empfohlen) Den PHP CS Fixer im "dry-run"-Modus ausführen, um Code-Stil-Verletzungen zu melden.
+
+AP-0.6.5 – Entwicklungsdokumentation vervollständigen
+Quelle: PH: 12.1
+        Die bestehenden Dokumentations-Dateien (request-lifecycle.md, i18n.md etc.) finalisieren und zu einem kohärenten Handbuch zusammenfügen.
+        Eine neue Seite hinzufügen, die beschreibt, wie man Tests schreibt und die Test-Suite lokal ausführt.

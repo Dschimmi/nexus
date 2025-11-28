@@ -1,0 +1,246 @@
+/* =========================================
+   DATEI: header.css
+   ZWECK: Sticky Header, Logo-Fenster, Navigation Actions
+   ========================================= */
+
+/* --- 1. HEADER CONTAINER --- */
+header {
+    background-color: var(--bg-header);
+    color: var(--text-header);
+    
+    /* FIX: Feste Höhe auf Desktop für sauberes Sticky-Verhalten */
+    height: var(--header-height); 
+    min-height: var(--header-height);
+    
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0.5rem 0;
+    
+    /* PFLICHT: Struktureller Trenner (Gold, 1px, kein Schatten) */
+    border-bottom: 1px solid var(--col-gold);
+    box-shadow: none;
+    
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Innerer Container */
+.header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    
+    /* Erlaubt Umbruch auf Mobile */
+    flex-wrap: wrap; 
+    gap: 1rem;
+}
+
+/* Links im Header erben Farbe */
+.header-inner a {
+    color: var(--text-header);
+    transition: color 0.3s;
+}
+
+/* =========================================
+   2. LOGO AREA (Das Fenster)
+   ========================================= */
+.logo-area {
+    /* Feste Größe für das Fenster */
+    height: 90px;
+    width: 280px;
+    margin: 5px 0;
+
+    /* Design: Immer Gunmetal (#152836) */
+    background-color: #152836;
+    border-radius: 6px;
+    
+    /* Optische Absetzung via Variablen (Schatten/Rahmen) */
+    box-shadow: var(--logo-window-shadow); 
+    border: var(--logo-window-border);
+
+    position: relative;
+    overflow: hidden; /* Schneidet Überstände ab */
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+/* Das Logo-Bild (Zoom & Positionierung) */
+.logo-img {
+    position: absolute;
+    /* Deine Einstellungen */
+    left: -110px;
+    top: 43%;
+    transform: translateY(-50%) scale(1);
+    
+    width: 500px;
+    max-width: none;
+    height: auto;
+}
+
+/* =========================================
+   3. HEADER ACTIONS (Rechts)
+   ========================================= */
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    
+    /* Erlaubt Umbruch der Buttons bei Platzmangel */
+    flex-wrap: wrap; 
+}
+
+/* --- Basis-Style für ALLE Header-Elemente --- */
+/* Suche, Select, Toggle, Buttons: Gleiche Höhe & Look */
+.header-search, 
+.header-select, 
+.header-btn,
+button#theme-toggle {
+    height: 38px; /* Exakte Höhe für Ausrichtung */
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    vertical-align: middle;
+    
+    /* PFLICHT: Dunkelblau-Variation (Solid) */
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* --- HOVER EFFEKT (Goldener Rahmen) --- */
+.header-search:hover, .header-search:focus,
+.header-select:hover, .header-select:focus,
+button#theme-toggle:hover, button#theme-toggle:focus {
+    border-color: var(--col-gold) !important;
+    outline: none;
+    cursor: pointer;
+}
+
+/* --- A. Suchfeld --- */
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.header-search {
+    width: 220px;
+    padding: 0 3.5rem 0 0.8rem; /* Rechts Platz für Badge */
+}
+
+/* Badge (Strg+K) */
+.search-wrapper .kbd-badge {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 1px 4px;
+    pointer-events: none;
+}
+
+/* --- B. Sprachauswahl --- */
+.header-select {
+    width: auto;
+    min-width: 60px;
+    padding: 0 2px 0 6px;
+    cursor: pointer;
+}
+
+/* --- C. Darkmode Toggle --- */
+button#theme-toggle {
+    width: 38px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+}
+
+/* --- D. Auth Buttons --- */
+.auth-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.header-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    text-decoration: none;
+    margin: 0;
+}
+
+/* Button Hover: Text muss lesbar bleiben */
+a.header-btn:hover {
+    text-decoration: none;
+    /* Farben kommen aus .btn Klassen */
+}
+
+/* =========================================
+   4. RESPONSIVE DESIGN (Mobile)
+   ========================================= */
+
+/* Tablet & Mobile (< 950px): Umbruch */
+@media (max-width: 950px) {
+    /* FIX: Nur mobil darf der Header wachsen */
+    header {
+        height: auto; 
+    }
+    .header-inner {
+        justify-content: center;
+    }
+    
+    .logo-area {
+        margin: 0 auto 0.5rem auto; /* Logo oben zentriert */
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: center;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border-color); /* Feine Trennlinie */
+    }
+}
+
+/* Smartphone (< 600px): Platzoptimierung */
+@media (max-width: 600px) {
+    .header-actions {
+        justify-content: space-between;
+    }
+    
+    .search-wrapper {
+        width: 100%; /* Suche volle Breite */
+        margin-bottom: 0.5rem;
+    }
+    
+    .header-search {
+        width: 100%;
+    }
+    
+    /* Restliche Elemente teilen sich den Platz */
+    .header-select, 
+    button#theme-toggle, 
+    .auth-buttons {
+        flex-grow: 1;
+    }
+    
+    .auth-buttons .header-btn {
+        flex: 1;
+    }
+}

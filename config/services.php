@@ -6,6 +6,7 @@ use MrWo\Nexus\Service\ConsentService;
 use MrWo\Nexus\Service\SessionService;
 use MrWo\Nexus\Service\TranslatorService;
 use MrWo\Nexus\Twig\AppExtension;
+use MrWo\Nexus\Service\AssetService;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Twig\Environment;
@@ -37,6 +38,10 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('session_service')) // Benötigt den Session-Service
         ->setPublic(true);
 
+    // Der Service für Assets (Manifest, Dev/Prod automatisch)
+    $container->register('asset_service', AssetService::class)
+        ->setPublic(true);
+
     // =========================================================================
     // TWIG KONFIGURATION
     // =========================================================================
@@ -45,9 +50,10 @@ return function(ContainerBuilder $container) {
     $container->register('twig.loader', FilesystemLoader::class)
         ->addArgument(__DIR__ . '/../templates');
 
-    // Die benutzerdefinierte Twig Extension mit dem 'trans'-Filter
+    // Die benutzerdefinierte Twig Extension mit 'trans'-Filter UND 'asset'-Funktion
     $container->register('twig.app_extension', AppExtension::class)
-        ->addArgument(new Reference('translator_service')) // Benötigt den Translator-Service
+        ->addArgument(new Reference('translator_service'))
+        ->addArgument(new Reference('asset_service')) // <- hier das neue Argument
         ->addTag('twig.extension'); // Wichtig: Markiert dies als Twig Extension
 
     // Der zentrale Twig Environment Service

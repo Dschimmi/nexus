@@ -1,26 +1,196 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF--8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title|default('welcome_message'|trans) }}</title>
-    <link rel="stylesheet" href="/css/cookie-banner.css">
+    <title>{% block title %}Nexus Framework{% endblock %}</title>
+    
+        
+<!-- 1. Variablen (Fundament) -->
+    <link rel="stylesheet" href="{{ asset('variables.css') }}">
+
+    <!-- 2. Basis Styles (Reset, Typo, Globale Elemente) -->
+    <link rel="stylesheet" href="{{ asset('base.css') }}">
+
+    <!-- 3. Layout-Module -->
+    <link rel="stylesheet" href="{{ asset('header.css') }}">
+    <link rel="stylesheet" href="{{ asset('subheader.css') }}">
+    <link rel="stylesheet" href="{{ asset('content.css') }}">
+    <link rel="stylesheet" href="{{ asset('footer.css') }}">
+
+  
+    <!-- Optional: Cookie CSS, falls du es noch nicht gemerged hast Todo: cookie-banner.css anlegen -->
+    {# <link rel="stylesheet" href="/css/cookie-banner.css"> #}
+
+    <!-- Dark Mode Init Script (gegen Flackern) -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && sys)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 <body>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
 
-    <div class="cookie-banner" id="cookie-banner">
-        <p>
-            {{ 'cookie_banner.text'|trans }}
-            <a href="/datenschutz">{{ 'cookie_banner.link'|trans }}</a>.
+    <!-- Wrapper für Blur-Effekt bei offenem Cookie Banner -->
+    <div id="app-wrapper">
+        
+        <!-- 1. HEADER -->
+        <header>
+            <div class="header-inner">
+                <!-- Logo Bereich -->
+                <a href="/" class="logo-area">
+                    <!-- Kleines SVG Icon als Logo -->
+                    <img src="/images/logo.png" alt="Exelor" class="logo-img">
+                </a>
+
+                <!-- Aktionen Rechts -->
+                <div class="header-actions">
+                    <!-- 1. ECHTES Suchfeld (mit Strg+K Badge im Input) -->
+                    <div class="search-wrapper">
+                        <input type="text" class="header-search" placeholder="Suche..." aria-label="Suche">
+                        <span class="kbd-badge">Strg + K</span>
+                    </div>
+
+                    <!-- 2. Sprache -->
+                    <select class="header-select" aria-label="Sprachauswahl">
+                        <option value="de">DE</option>
+                        <option value="en">EN</option>
+                    </select>
+
+                    <!-- 3. Darkmode Toggle -->
+                    <button id="theme-toggle" class="icon-btn header-btn" aria-label="Design wechseln">
+                        <svg class="sun" style="display: var(--icon-sun-display, block);" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+
+                    <!-- 4. Auth Buttons (BEIDE sichtbar) -->
+                    {% if user is defined %}
+                        <div class="user-menu">Hallo, {{ user.name }}</div>
+                    {% else %}
+                        <div class="auth-buttons">
+                            <a href="/login" class="btn btn-outline header-btn">Login</a>
+                            <a href="/register" class="btn btn-primary header-btn">Registrieren</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+            
+        <!-- 2. SUBHEADER (Navigation mit Scroll-Pfeilen) -->
+        <nav class="subheader">
+            <!-- Pfeil Links (Initial ausgeblendet) -->
+            <button id="nav-scroll-left" class="nav-arrow nav-arrow-left" aria-label="Nach links scrollen" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+
+            <!-- Scroll Container -->
+            <div class="nav-scroll-wrapper" id="nav-scroll-wrapper">
+                <ul class="nav-tabs">
+                    <li><a href="/" class="active">Dashboard</a></li>
+                    <li><a href="#">Projekte</a></li>
+                    <li><a href="#">Frachtbriefe</a></li>
+                    <li><a href="#">Verwaltung</a></li>
+                    <li><a href="#">Benutzer</a></li>
+                    <li><a href="#">Einstellungen</a></li>
+                    <li><a href="#">Audit-Log</a></li>
+                    <li><a href="#">API-Keys</a></li>
+                    <li><a href="#">Hilfe</a></li>
+                </ul>
+            </div>
+
+            <!-- Pfeil Rechts (Initial ausgeblendet) -->
+            <button id="nav-scroll-right" class="nav-arrow nav-arrow-right" aria-label="Nach rechts scrollen" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </nav>
+
+  
+
+        <!-- 3. CONTENT -->
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- 4. FOOTER -->
+        <footer>
+            <div class="footer-inner">
+                <div class="footer-col">
+                    <h4>Exelor Framework</h4>
+                    <p style="color: var(--text-muted); max-width: 300px;">
+                        Die moderne Basis für skalierbare Webanwendungen. 
+                        Safety first, clean code always.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Rechtliches</h4>
+                    <a href="/impressum">Impressum</a>
+                    <a href="/datenschutz">Datenschutz</a>
+                    <a href="#" onclick="showCookieBanner()">Cookie-Einstellungen</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Sitemap</h4>
+                    <a href="/">Home</a>
+                    <a href="/login">Login</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.8rem;">
+                &copy; {{ "now"|date("Y") }} Exelor Framework. Alle Rechte vorbehalten.
+            </div>
+        </footer>
+    </div>
+
+    <!-- 5. COOKIE BANNER (Außerhalb Wrapper wegen Blur) -->
+    <div id="cookie-banner" class="cookie-banner">
+        <h3>Datenschutz & Cookies</h3>
+        <p style="color: var(--text-muted); margin: 1rem 0;">
+            Wir nutzen Cookies, um das Nexus-Framework sicher und benutzerfreundlich zu gestalten.
+            Laut Pflichtenheft Punkt 5 akzeptieren Sie damit unsere Richtlinien.
         </p>
-        <div>
-            <button onclick="location.href='/consent/accept'">{{ 'cookie_banner.accept'|trans }}</button>
-            <button onclick="location.href='/consent/decline'">{{ 'cookie_banner.decline'|trans }}</button>
+        <div class="cookie-buttons">
+            <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
+            <button class="btn btn-primary" onclick="handleCookie(true)">Akzeptieren</button>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script>
+        // --- Theme Logic ---
+        const toggleBtn = document.getElementById('theme-toggle');
+        toggleBtn.addEventListener('click', () => {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // --- Cookie Logic (Mockup) ---
+        const banner = document.getElementById('cookie-banner');
+        const body = document.body;
+
+        function showCookieBanner() {
+            banner.classList.add('active');
+            body.classList.add('cookie-open');
+        }
+
+        function handleCookie(accepted) {
+            banner.classList.remove('active');
+            body.classList.remove('cookie-open');
+            // Hier später AJAX Call an Consent-Service (PH 4.1.4)
+            console.log("Cookies accepted:", accepted);
+        }
+
+        // Simuliere Banner beim ersten Besuch (wenn noch kein Consent)
+        // setTimeout(showCookieBanner, 1000); 
+    </script>
+    
+    <!-- Layout Scripts (Atomar geladen via Manifest) -->
+    <script src="{{ asset('js/layout.js') }}"></script>
 </body>
 </html>

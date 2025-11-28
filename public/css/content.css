@@ -1,0 +1,72 @@
+/* =========================================
+   DATEI: content.css
+   ZWECK: Main Container, Grid-System, Cards
+   ========================================= */
+
+/* --- 1. MAIN CONTAINER --- */
+main {
+    flex: 1; /* Füllt den verfügbaren Platz zwischen Header und Footer */
+    width: 100%;
+    
+    /* Begrenzung auf lesbare Breite laut PDF (900-1200px) */
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    
+    /* Verhindert horizontales Scrollen bei breiten Tabellen */
+    overflow-x: hidden; 
+}
+
+/* --- 2. CARDS (Kacheln) --- */
+.card {
+    /* Farben aus Theme-Mapping */
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    
+    /* Design: Technisch, leicht abgerundet */
+    border-radius: 6px;
+    padding: 1.5rem;
+    
+    /* Dezenter Schatten für Tiefe */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+/* Hover-Effekt für Cards (Interaktivität) */
+.card:hover {
+    transform: translateY(-2px); /* Leichtes Anheben */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    /* Optional: Rahmen wird beim Hover leicht betont (Dunkelblau-Variation) */
+    border-color: var(--col-blue-light-2);
+}
+
+/* --- 3. GRID SYSTEME --- */
+
+/* 3-Spalten Grid (Responsive) */
+/* Bricht automatisch um, wenn Spalten schmaler als 300px werden */
+.grid-cols-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Optional: 2-Spalten Grid */
+.grid-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 1.5rem;
+}
+
+/* --- 4. TYPOGRAFIE IM CONTENT --- */
+main h1, main h2, main h3 {
+    margin-bottom: 1rem;
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+main p {
+    margin-bottom: 1rem;
+    color: var(--text-main); /* Oder muted, je nach Wunsch */
+}

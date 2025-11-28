@@ -31,25 +31,19 @@
 
 /* Dieser Container umschließt die Liste und ermöglicht das Scrollen. */
 .nav-scroll-wrapper {
-    flex: 1; /* Nimmt den gesamten verfügbaren Platz zwischen den Pfeilen ein */
+    flex: 1; /* Nimmt den Platz zwischen den Pfeilen ein */
     height: 100%;
-
-    /* FIX: Zwingt den Container, kleiner als sein Inhalt zu werden */
-    min-width: 0; 
     
-    /* Ermöglicht horizontales Scrollen, verbietet vertikales */
+    /* Zwingend nötig für korrekten Flex-Schrumpf */
+    min-width: 0;
+    
     overflow-x: auto;
     overflow-y: hidden;
-    
-    /* Sorgt für weiches Scrollen per JS oder Touch */
     scroll-behavior: smooth;
-    
-    /* Versteckt die Scrollbar in Firefox */
     scrollbar-width: none; 
     
-    /* Zentriert die Tabs, solange sie weniger Platz als den Bildschirm brauchen */
-    display: flex;
-    justify-content: center;
+    /* WICHTIG: Flexbox an, aber KEIN justify-content hier setzen! */
+    display: flex; 
 }
 
 /* Versteckt die Scrollbar in Chrome, Safari und Edge (Webkit-Browser) */
@@ -62,18 +56,19 @@
 /* Die eigentliche Liste (ul) der Navigationspunkte. */
 .nav-tabs {
     display: flex;
+    flex-wrap: nowrap; /* Niemals umbrechen */
     list-style: none;
     height: 100%;
-    
-    /* Abstand zwischen den einzelnen Links */
     gap: 2rem;
-    margin: 0;
     
-    /* Seitlicher Innenabstand, damit der erste/letzte Link nicht am Rand klebt */
-    padding: 0 1rem; 
+    /* TRICK 17: Margin Auto zentriert automatisch, wenn Platz da ist.
+       Bei Überlauf verhält es sich wie linksbündig. */
+    margin: 0 auto;
     
-    /* WICHTIG: Die Liste darf so breit werden wie ihr Inhalt (für Scrollen) */
-    width: max-content; 
+    padding: 0 1rem;
+    
+    /* Nimmt exakt die Breite des Inhalts an */
+    width: max-content;
 }
 
 /* --- 4. EINZELNER TAB --- */

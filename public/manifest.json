@@ -5,5 +5,8 @@
   "subheader.css": "/css/subheader.css",
   "content.css": "/css/content.css",
   "footer.css": "/css/footer.css",
-  "js/layout.js": "/js/layout.js"
+  "js/layout.js": "/js/layout.js",
+  "cookie-banner.css": "/css/cookie-banner.css",
+  "js/compliance.js": "/js/compliance.js",
+  "js/theme.js": "/js/theme.js"
 }

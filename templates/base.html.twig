@@ -18,9 +18,8 @@
     <link rel="stylesheet" href="{{ asset('content.css') }}">
     <link rel="stylesheet" href="{{ asset('footer.css') }}">
 
-  
-    <!-- Optional: Cookie CSS, falls du es noch nicht gemerged hast Todo: cookie-banner.css anlegen -->
-    {# <link rel="stylesheet" href="/css/cookie-banner.css"> #}
+    <!-- 4. Module & Plugins -->
+    <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}">
 
     <!-- Dark Mode Init Script (gegen Flackern) -->
     <script>
@@ -145,52 +144,31 @@
         </footer>
     </div>
 
-    <!-- 5. COOKIE BANNER (Außerhalb Wrapper wegen Blur) -->
-    <div id="cookie-banner" class="cookie-banner">
-        <h3>Datenschutz & Cookies</h3>
-        <p style="color: var(--text-muted); margin: 1rem 0;">
-            Wir nutzen Cookies, um das Nexus-Framework sicher und benutzerfreundlich zu gestalten.
-            Laut Pflichtenheft Punkt 5 akzeptieren Sie damit unsere Richtlinien.
-        </p>
-        <div class="cookie-buttons">
-            <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
-            <button class="btn btn-primary" onclick="handleCookie(true)">Akzeptieren</button>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        // --- Theme Logic ---
-        const toggleBtn = document.getElementById('theme-toggle');
-        toggleBtn.addEventListener('click', () => {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            const newTheme = isDark ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-
-        // --- Cookie Logic (Mockup) ---
-        const banner = document.getElementById('cookie-banner');
-        const body = document.body;
-
-        function showCookieBanner() {
-            banner.classList.add('active');
-            body.classList.add('cookie-open');
-        }
-
-        function handleCookie(accepted) {
-            banner.classList.remove('active');
-            body.classList.remove('cookie-open');
-            // Hier später AJAX Call an Consent-Service (PH 4.1.4)
-            console.log("Cookies accepted:", accepted);
-        }
-
-        // Simuliere Banner beim ersten Besuch (wenn noch kein Consent)
-        // setTimeout(showCookieBanner, 1000); 
-    </script>
+        
+<!-- 4. COOKIE BANNER (Außerhalb Wrapper wegen Blur) -->
+<div id="cookie-banner" class="cookie-banner">
+    <h3 style="margin-bottom: 1rem; color: var(--text-main);">Datenschutzeinstellungen</h3>
     
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5;">
+        Wir nutzen Cookies, um die technische Funktionalität unserer Website sicherzustellen ("Essentiell"). 
+        Mit Ihrer Zustimmung nutzen wir zudem Cookies, um die Nutzung unserer Seite zu analysieren und unser Angebot zu verbessern. 
+        Weitere Informationen finden Sie in unserer 
+        <a href="/datenschutz" style="text-decoration: underline;">Datenschutzerklärung</a> 
+        und im 
+        <a href="/impressum" style="text-decoration: underline;">Impressum</a>.
+    </p>
+    
+    <div class="cookie-buttons">
+        <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
+        <button class="btn btn-primary" onclick="handleCookie(true)">Alle akzeptieren</button>
+    </div>
+</div>
+
+  
+
     <!-- Layout Scripts (Atomar geladen via Manifest) -->
     <script src="{{ asset('js/layout.js') }}"></script>
+    <script src="{{ asset('js/compliance.js') }}"></script>
+    <script src="{{ asset('js/theme.js') }}"></script>
 </body>
 </html>

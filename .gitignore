@@ -10,3 +10,6 @@
 # Ordner für temporäre Dateien und Logs
 /temp/
 /log/
+
+# Node.js Abhängigkeiten
+/node_modules/

@@ -9,55 +9,65 @@
     left: 50%;
     transform: translate(-50%, -50%);
     
-    /* Design aus Theme-Variablen */
-    background-color: var(--bg-surface);
+    background: var(--bg-surface);
     color: var(--text-main);
     
-    /* Rahmen: Dunkelblau-Variation (passend zu Buttons) */
-    /*border: 2px solid var(--col-blue-light); */
-
-    /* FIX: Zurück zum GOLD für maximale Aufmerksamkeit */
+    /* Goldener Rahmen für Aufmerksamkeit */
     border: 2px solid var(--col-gold);
     
     padding: 2rem;
-    border-radius: 8px; /* Leicht abgerundet */
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
     
-    /* Starker Schatten für "Floating"-Effekt */
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    
-    z-index: 1000; /* Muss über allem liegen */
-    
+    z-index: 1000;
     max-width: 500px;
     width: 90%;
     text-align: center;
     
-    /* Initial ausgeblendet, JS schaltet Klasse .active */
     display: none;
+    
+    /* NEU: Flexbox Spalte, um die visuelle Reihenfolge zu steuern */
+    flex-direction: column;
+}
+
+.cookie-banner.active {
+    display: flex; /* Wichtig: flex statt block */
+}
+
+/* 1. Überschrift: Bleibt visuell ganz oben (Order 1) */
+.cookie-banner h3 {
+    order: 1;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+/* 2. Text mit Links: Kommt visuell in die Mitte (Order 2) */
+.cookie-text {
+    order: 2;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* 3. Buttons: Kommen visuell ganz nach unten (Order 3) */
+.cookie-buttons {
+    order: 3;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    /* Optional: Abstand nach oben sicherstellen */
+    margin-top: 0.5rem; 
 }
 
 /* --- LINKS IM BANNER (WCAG Konformität) --- */
 .cookie-banner a {
-    /* Erzwingt maximalen Kontrast (Weiß im Darkmode, Dunkelblau im Lightmode) */
     color: var(--text-main) !important;
-    
-    font-weight: 700; /* Fett, damit es sich vom Fließtext abhebt */
+    font-weight: 700;
     text-decoration: underline;
     transition: color 0.2s;
 }
 
 .cookie-banner a:hover {
-    color: var(--col-gold) !important; /* Gold beim Drüberfahren */
-}
-
-/* Sichtbarer Zustand */
-.cookie-banner.active {
-    display: block;
-}
-
-/* Layout für die Buttons */
-.cookie-buttons {
-    margin-top: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
+    color: var(--col-gold) !important;
 }

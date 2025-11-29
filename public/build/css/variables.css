@@ -1,0 +1,70 @@
+/* =========================================
+   DATEI: variables.css
+   ZWECK: Zentrale Definition aller Farben, Größen und Themes.
+   ========================================= */
+
+/* --- 1. FARBPALETTE DEFINITION (Laut Pflichtenheft 7.1.3) --- */
+:root {
+    /* Hauptfarbe 1: Dunkelblau & Shades */
+    --col-blue-main: #152836;
+    --col-blue-dark: #0f1c26; /* Darker Shade */
+    --col-blue-light: #2c3c4a; /* Lighter Shade */
+    --col-blue-light-2: #44535e; /* Lighter Shade 2 */
+
+    /* Hauptfarbe 2: Aschweiß & Shades */
+    --col-ash-main: #d9dcdf;
+    --col-ash-dark: #aeb0b2; /* Darker Shade */
+    --col-ash-light: #fbfcfc; /* Lighter Shade (fast Weiß) */
+
+    /* Akzentfarbe 1: Goldgelb (Keine Variationen) */
+    --col-gold: #f2b400;
+
+    /* LAYOUT GRÖSSEN */
+    --header-height: 120px; /* Abgestimmt auf Logo-Größe */
+    --subheader-height: 48px;
+}
+
+/* --- 2. THEME MAPPING (Light Mode Standard) --- */
+:root {
+    /* Seiten-Basis */
+    --bg-body: var(--col-ash-main);
+    --bg-surface: var(--col-ash-light); 
+    --text-main: var(--col-blue-main);
+    --text-muted: var(--col-blue-light-2);
+    --border-color: var(--col-ash-dark);
+
+    /* Header Konfiguration (Light) */
+    --bg-header: var(--col-ash-light);
+    --text-header: var(--col-blue-main);
+    --logo-window-border: transparent;
+    --logo-window-shadow: 0 4px 10px rgba(21, 40, 54, 0.2);
+
+    /* Inputs & Buttons Konfiguration (Dunkelblau-Variation) */
+    --input-bg: #ffffff;
+    --input-border: var(--col-blue-light);
+    --btn-bg: var(--col-blue-light-2);     /* Dunkelblau Lighter Shade */
+    --btn-text: #ffffff;
+}
+
+/* --- 3. THEME MAPPING (Dark Mode Override) --- */
+[data-theme="dark"] {
+    /* Seiten-Basis */
+    --bg-body: var(--col-blue-main);
+    --bg-surface: var(--col-blue-light);
+    --text-main: var(--col-ash-main);
+    --text-muted: var(--col-ash-dark);
+    --border-color: var(--col-blue-light);
+
+    /* Header Konfiguration (Dark) */
+    --bg-header: var(--col-blue-main);
+    --text-header: var(--col-ash-main);
+    /* Logo-Fenster verschmilzt fast, feiner Rand zur Absetzung */
+    --logo-window-border: 1px solid var(--col-blue-light);
+    --logo-window-shadow: 0 4px 10px rgba(0,0,0,0.5);
+
+    /* Inputs & Buttons Konfiguration */
+    --input-bg: var(--col-blue-dark);
+    --input-border: var(--col-blue-light-2);
+    --btn-bg: var(--col-blue-light-2);
+    --btn-text: #ffffff;
+}

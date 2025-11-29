@@ -1,0 +1,55 @@
+{
+  "public/css/base.css": {
+    "file": "assets/base-B3yUcZyA.css",
+    "src": "public/css/base.css",
+    "isEntry": true
+  },
+  "public/css/content.css": {
+    "file": "assets/content-BzZ64erf.css",
+    "src": "public/css/content.css",
+    "isEntry": true
+  },
+  "public/css/cookie-banner.css": {
+    "file": "assets/cookie-D8-eOdUS.css",
+    "src": "public/css/cookie-banner.css",
+    "isEntry": true
+  },
+  "public/css/footer.css": {
+    "file": "assets/footer-CAFK-jFE.css",
+    "src": "public/css/footer.css",
+    "isEntry": true
+  },
+  "public/css/header.css": {
+    "file": "assets/header-BUh8GgHw.css",
+    "src": "public/css/header.css",
+    "isEntry": true
+  },
+  "public/css/subheader.css": {
+    "file": "assets/subheader-CSPaRp0o.css",
+    "src": "public/css/subheader.css",
+    "isEntry": true
+  },
+  "public/css/variables.css": {
+    "file": "assets/variables-CHaF4Y62.css",
+    "src": "public/css/variables.css",
+    "isEntry": true
+  },
+  "public/js/compliance.js": {
+    "file": "assets/compliance-BtZnrOqS.js",
+    "name": "compliance",
+    "src": "public/js/compliance.js",
+    "isEntry": true
+  },
+  "public/js/layout.js": {
+    "file": "assets/layout-CB4k67yY.js",
+    "name": "layout",
+    "src": "public/js/layout.js",
+    "isEntry": true
+  },
+  "public/js/theme.js": {
+    "file": "assets/theme-7Fz5w_NN.js",
+    "name": "theme",
+    "src": "public/js/theme.js",
+    "isEntry": true
+  }
+}

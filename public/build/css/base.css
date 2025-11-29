@@ -1,0 +1,138 @@
+/* =========================================
+   DATEI: base.css
+   ZWECK: Reset, Typografie, globale Elemente (Buttons, Forms).
+   ========================================= */
+
+/* --- 1. RESET & BASIS TYPOGRAFIE --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    
+    /* Layout für Sticky Footer */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+    /* Sanfter Theme-Wechsel */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Wrapper für den Blur-Effekt (Cookie Banner) */
+#app-wrapper { 
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+    transition: filter 0.3s ease; 
+}
+
+/* Zustand wenn Banner offen ist: */
+body.cookie-open {
+    /* PFLICHT: Verhindert Scrollen der Seite */
+    overflow: hidden !important; 
+    height: 100vh;
+}
+
+body.cookie-open #app-wrapper { 
+    filter: blur(5px); 
+    /* Verhindert Klicks auf den Inhalt */
+    pointer-events: none; 
+    /* Verhindert Selektieren von Text im Hintergrund */
+    user-select: none;
+}
+
+/* Globale Links (Standard) */
+a { 
+    color: var(--text-main);
+    /* color: var(--col-blue-light-2); /* Lesbares Dunkelblau/Grau */
+    text-decoration: none; 
+    transition: 0.2s; 
+    font-weight: 500; 
+}
+a:hover { 
+    text-decoration: underline; 
+    color: var(--col-gold); 
+}
+
+/* --- 2. GLOBALER FOKUS (GOLD) --- */
+/* Zwingt den Browser-Standard (meist Blau) auf Gold */
+:focus-visible {
+    outline: 2px solid var(--col-gold) !important;
+    outline-offset: 2px;
+}
+
+/* --- 3. FORMS (Inputs, Selects, Textarea) --- */
+/* Design: Dunkelblau-Variation (Solid Background) */
+input, select, textarea {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+/* Fokus für Inputs */
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: var(--col-gold) !important;
+    box-shadow: 0 0 0 1px var(--col-gold) !important;
+}
+
+/* --- 4. BUTTONS (Global Standard: Outline Style) --- */
+.btn {
+    /* Layout identisch zu Inputs */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 38px;
+    padding: 0 1rem;
+    
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    
+    /* Animationen */
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+    
+    /* Mobile Tap Fix */
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* Klick-Effekt (Active) - Leichtes Eindrücken */
+.btn:active { transform: translateY(1px); }
+
+/* Fokus (Accessibility - Gold) */
+.btn:focus-visible { 
+    outline: 2px solid var(--col-gold) !important; 
+    outline-offset: 2px; 
+}
+
+/* --- Button Design: IMMER Outline, Füllen bei Hover --- */
+
+/* Gemeinsame Basis für Primary & Outline */
+.btn-primary,
+.btn-outline { 
+    background-color: transparent; 
+    /* Rahmen in der definierten Button-Farbe (Dunkelblau-Variation) */
+    border: 1px solid var(--btn-bg); 
+    /* Textfarbe passt sich dem Hintergrund an (Dunkelblau/Weiß je nach Mode) */
+    color: var(--text-main); 
+}
+
+/* Gemeinsamer Hover-Effekt: Füllen */
+.btn-primary:hover, .btn-primary:active,
+.btn-outline:hover, .btn-outline:active {
+    background-color: var(--btn-bg); /* Hintergrund wird farbig */
+    color: var(--btn-text);          /* Text wird Weiß */
+    text-decoration: none;
+}

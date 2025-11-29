@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# System-Bereiche ausschließen (Good Practice)
+Disallow: /api/
+Disallow: /admin/
+
+# Verweis auf Sitemap (wird später dynamisch generiert)
+Sitemap: /sitemap.xml

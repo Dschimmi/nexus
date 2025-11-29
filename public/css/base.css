@@ -28,11 +28,26 @@ body {
     flex: 1; 
     transition: filter 0.3s ease; 
 }
-body.cookie-open #app-wrapper { filter: blur(5px); pointer-events: none; }
+
+/* Zustand wenn Banner offen ist: */
+body.cookie-open {
+    /* PFLICHT: Verhindert Scrollen der Seite */
+    overflow: hidden !important; 
+    height: 100vh;
+}
+
+body.cookie-open #app-wrapper { 
+    filter: blur(5px); 
+    /* Verhindert Klicks auf den Inhalt */
+    pointer-events: none; 
+    /* Verhindert Selektieren von Text im Hintergrund */
+    user-select: none;
+}
 
 /* Globale Links (Standard) */
 a { 
-    color: var(--col-blue-light-2); /* Lesbares Dunkelblau/Grau */
+    color: var(--text-main);
+    /* color: var(--col-blue-light-2); /* Lesbares Dunkelblau/Grau */
     text-decoration: none; 
     transition: 0.2s; 
     font-weight: 500; 
@@ -70,44 +85,54 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 1px var(--col-gold) !important;
 }
 
-/* --- 4. BUTTONS (Global) --- */
+/* --- 4. BUTTONS (Global Standard: Outline Style) --- */
 .btn {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
+    /* Layout identisch zu Inputs */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 38px;
+    padding: 0 1rem;
+    
     border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
     text-decoration: none;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
     font-size: 0.95rem;
+    
+    /* Animationen */
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+    
+    /* Mobile Tap Fix */
+    -webkit-tap-highlight-color: transparent; 
 }
 
-/* Fokus für Buttons */
+/* Klick-Effekt (Active) - Leichtes Eindrücken */
+.btn:active { transform: translateY(1px); }
+
+/* Fokus (Accessibility - Gold) */
 .btn:focus-visible { 
     outline: 2px solid var(--col-gold) !important; 
     outline-offset: 2px; 
 }
 
-/* Primary Variation (Dunkelblau gefüllt) */
-.btn-primary { 
-    background-color: var(--btn-bg);
-    color: var(--btn-text); 
-    border: 1px solid transparent;
-}
-.btn-primary:hover { 
-    background-color: var(--col-blue-light); /* Hover etwas heller */
-    color: #ffffff;
-    text-decoration: none;
-}
+/* --- Button Design: IMMER Outline, Füllen bei Hover --- */
 
-/* Outline Variation (Dunkelblau Rahmen) */
+/* Gemeinsame Basis für Primary & Outline */
+.btn-primary,
 .btn-outline { 
-    background: transparent; 
+    background-color: transparent; 
+    /* Rahmen in der definierten Button-Farbe (Dunkelblau-Variation) */
     border: 1px solid var(--btn-bg); 
+    /* Textfarbe passt sich dem Hintergrund an (Dunkelblau/Weiß je nach Mode) */
     color: var(--text-main); 
 }
-.btn-outline:hover {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
+
+/* Gemeinsamer Hover-Effekt: Füllen */
+.btn-primary:hover, .btn-primary:active,
+.btn-outline:hover, .btn-outline:active {
+    background-color: var(--btn-bg); /* Hintergrund wird farbig */
+    color: var(--btn-text);          /* Text wird Weiß */
     text-decoration: none;
 }

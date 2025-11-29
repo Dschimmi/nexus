@@ -100,7 +100,6 @@ header {
 /* Suche, Select, Toggle, Buttons: Gleiche Höhe & Look */
 .header-search, 
 .header-select, 
-.header-btn,
 button#theme-toggle {
     height: 38px; /* Exakte Höhe für Ausrichtung */
     box-sizing: border-box;
@@ -175,15 +174,6 @@ button#theme-toggle {
 .auth-buttons {
     display: flex;
     gap: 0.5rem;
-}
-
-.header-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-    text-decoration: none;
-    margin: 0;
 }
 
 /* Button Hover: Text muss lesbar bleiben */

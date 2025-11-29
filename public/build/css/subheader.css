@@ -1,0 +1,157 @@
+/* =========================================
+   DATEI: subheader.css
+   ZWECK: Horizontale Navigation mit Pfeil-Steuerung
+   ========================================= */
+
+/* --- 1. CONTAINER --- */
+
+/* Der Hauptcontainer der Navigation. Er ist "sticky" unter dem Header. */
+.subheader {
+    background-color: var(--bg-surface);
+    height: var(--subheader-height); /* 48px */
+    
+    /* Positionierung: Klebt unter dem Header */
+    position: sticky;
+    top: var(--header-height);
+    z-index: 90;
+    
+    /* Flexbox richtet Pfeile und Wrapper nebeneinander aus */
+    display: flex;
+    align-items: center;
+    
+    /* Design: Nur unten eine Linie, oben keine (um Doppellinien zu vermeiden) */
+    border-bottom: 1px solid var(--col-gold);
+    border-top: none; 
+    
+    /* Verhindert, dass Elemente (wie die Pfeile) aus dem Container ragen */
+    overflow: hidden; 
+}
+
+/* --- 2. SCROLL WRAPPER (Versteckt Scrollbar) --- */
+
+/* Dieser Container umschließt die Liste und ermöglicht das Scrollen. */
+.nav-scroll-wrapper {
+    flex: 1; /* Nimmt den Platz zwischen den Pfeilen ein */
+    height: 100%;
+    
+    /* Zwingend nötig für korrekten Flex-Schrumpf */
+    min-width: 0;
+    
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none; 
+    
+    /* WICHTIG: Flexbox an, aber KEIN justify-content hier setzen! */
+    display: flex; 
+}
+
+/* Versteckt die Scrollbar in Chrome, Safari und Edge (Webkit-Browser) */
+.nav-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- 3. TABS LISTE --- */
+
+/* Die eigentliche Liste (ul) der Navigationspunkte. */
+.nav-tabs {
+    display: flex;
+    flex-wrap: nowrap; /* Niemals umbrechen */
+    list-style: none;
+    height: 100%;
+    gap: 2rem;
+    
+    /* TRICK 17: Margin Auto zentriert automatisch, wenn Platz da ist.
+       Bei Überlauf verhält es sich wie linksbündig. */
+    margin: 0 auto;
+    
+    padding: 0 1rem;
+    
+    /* Nimmt exakt die Breite des Inhalts an */
+    width: max-content;
+}
+
+/* --- 4. EINZELNER TAB --- */
+
+/* Der einzelne Link (a) in der Navigation. */
+.nav-tabs a {
+    text-decoration: none;
+    color: var(--text-muted); /* Standardfarbe: Dezent */
+    height: 100%;
+    
+    /* Flexbox für vertikale Zentrierung des Textes */
+    display: flex;
+    align-items: center;
+    
+    padding: 0 0.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    
+    /* Verhindert Textumbruch innerhalb eines Tabs */
+    white-space: nowrap;
+    
+    /* Vorbereitung für die aktive Linie (transparent, damit nichts springt) */
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+/* Zustand beim Überfahren mit der Maus (Hover) */
+.nav-tabs a:hover {
+    color: var(--text-main);
+}
+
+/* Zustand für den aktuell ausgewählten Tab (Active) */
+.nav-tabs a.active {
+    color: var(--text-main);
+    /* Die goldene Linie unten signalisiert "Hier bist du" */
+    border-bottom-color: var(--col-gold);
+}
+
+/* Zustand für Tastaturbedienung (Focus Visible) */
+.nav-tabs a:focus-visible {
+    outline: none;
+    /* Leichter goldener Hintergrund zur Hervorhebung */
+    background-color: rgba(242, 180, 0, 0.1);
+    border-bottom-color: var(--col-gold);
+    color: var(--text-main);
+}
+
+/* --- 5. SCROLL PFEILE --- */
+
+/* Basis-Styling für beide Pfeile (Links & Rechts) */
+.nav-arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    z-index: 10; /* Liegt über dem Scroll-Wrapper */
+    
+    /* Zentriert das Icon im Button */
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    
+    border: none;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: color 0.2s;
+}
+
+/* Hover-Effekt für die Pfeile */
+.nav-arrow:hover {
+    color: var(--col-gold);
+}
+
+/* Spezifisches Styling für den LINKEN Pfeil */
+.nav-arrow-left {
+    left: 0;
+    /* Verlauf: Hintergrundfarbe links (deckend) -> Transparent rechts */
+    background: linear-gradient(to right, var(--bg-surface) 50%, transparent);
+}
+
+/* Spezifisches Styling für den RECHTEN Pfeil */
+.nav-arrow-right {
+    right: 0;
+    /* Verlauf: Transparent links -> Hintergrundfarbe rechts (deckend) */
+    background: linear-gradient(to left, var(--bg-surface) 50%, transparent);
+}

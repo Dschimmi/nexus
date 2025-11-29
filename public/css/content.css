@@ -1,72 +1,140 @@
 /* =========================================
    DATEI: content.css
-   ZWECK: Main Container, Grid-System, Cards
+   ZWECK: Layout-Raster und Container-Styles (Textboxen)
    ========================================= */
 
-/* --- 1. MAIN CONTAINER --- */
+/* --- Helfer-Klassen (Utilities) --- */
+.text-center { text-align: center; }
+.text-gold { color: var(--col-gold); }
+.text-bold { font-weight: 700; }
+.text-muted { color: var(--text-muted); }
+.font-small { font-size: 0.9rem; }
+
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mb-4 { margin-bottom: 4rem; }
+
+/* Link mit Gold-Hover/Farbe für Content-Bereich */
+.link-gold {
+    color: var(--col-gold);
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+.link-gold:hover { text-decoration: underline; }
+
+
+/* --- 1. HAUPT CONTAINER --- */
 main {
-    flex: 1; /* Füllt den verfügbaren Platz zwischen Header und Footer */
+    flex: 1;
     width: 100%;
-    
-    /* Begrenzung auf lesbare Breite laut PDF (900-1200px) */
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
-    
-    /* Verhindert horizontales Scrollen bei breiten Tabellen */
     overflow-x: hidden; 
 }
 
-/* --- 2. CARDS (Kacheln) --- */
-.card {
-    /* Farben aus Theme-Mapping */
+/* --- 2. DIE TEXTBOX (Generisches Design) --- */
+/* Ersetzt die alte .card Klasse */
+.textbox {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
-    
-    /* Design: Technisch, leicht abgerundet */
     border-radius: 6px;
     padding: 1.5rem;
     
-    /* Dezenter Schatten für Tiefe */
+    /* Dezenter Schatten für Abhebung, kein Hover-Movement mehr */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     
+    /* Stellt sicher, dass Buttons unten bündig sein können */
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+}
+
+/* Icon Container in Textboxen */
+.textbox-icon {
+    color: var(--col-gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Button Wrapper in Textboxen (schiebt Button nach unten) */
+.textbox-actions {
+    margin-top: auto; /* Magic Trick für gleiche Höhe */
+    padding-top: 1rem;
+    width: 100%;
+}
+
+
+/* --- 3. GRID SYSTEM (Layout 1-4 Spalten) --- */
+
+/* Basis Grid Verhalten */
+[class^="grid-"] {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* .grid-4: Vier Spalten (z.B. Features) */
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* .grid-3: Drei Spalten (z.B. CTA) */
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* .grid-2: Zwei Spalten (z.B. Info-Texte) */
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* .grid-1: Eine Spalte (Volle Breite) */
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
+
+/* --- 4. RESPONSIVE ANPASSUNGEN --- */
+
+/* Tablet (< 900px): Alles wird max 2-spaltig */
+@media (max-width: 900px) {
+    .grid-4, .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile (< 600px): Alles wird 1-spaltig */
+@media (max-width: 600px) {
+    .grid-4, .grid-3, .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* --- 5. HERO TYPOGRAFIE (Bleibt spezifisch für Startseite) --- */
+.hero-section {
+    text-align: center;
+    padding: 4rem 0 3rem 0;
+}
+.hero-title {
+    font-size: 3rem;
     margin-bottom: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-
-/* Hover-Effekt für Cards (Interaktivität) */
-.card:hover {
-    transform: translateY(-2px); /* Leichtes Anheben */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    /* Optional: Rahmen wird beim Hover leicht betont (Dunkelblau-Variation) */
-    border-color: var(--col-blue-light-2);
-}
-
-/* --- 3. GRID SYSTEME --- */
-
-/* 3-Spalten Grid (Responsive) */
-/* Bricht automatisch um, wenn Spalten schmaler als 300px werden */
-.grid-cols-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-/* Optional: 2-Spalten Grid */
-.grid-cols-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 1.5rem;
-}
-
-/* --- 4. TYPOGRAFIE IM CONTENT --- */
-main h1, main h2, main h3 {
-    margin-bottom: 1rem;
+    line-height: 1.2;
     color: var(--text-main);
-    line-height: 1.3;
 }
-
-main p {
-    margin-bottom: 1rem;
-    color: var(--text-main); /* Oder muted, je nach Wunsch */
+.hero-text {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 800px;
+    margin: 0 auto 2.5rem auto;
+}
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }

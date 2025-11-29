@@ -24,4 +24,17 @@ $routes->add('consent_decline', new Route(
     defaults: ['_controller' => [ConsentController::class, 'decline']]
 ));
 
+/**
+ * ============================================================================
+ *  CATCH-ALL Fallback-Route
+ * ============================================================================
+ * ALLE unbekannten URLs landen auf der Startseite.
+ * Muss GANZ unten stehen, damit echte Routen nicht überschrieben werden.
+ */
+$routes->add('fallback', new Route(
+    path: '/{any}',
+    defaults: ['_controller' => HomepageController::class],
+    requirements: ['any' => '.*']
+));
+
 return $routes;

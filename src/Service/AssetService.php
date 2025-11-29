@@ -4,22 +4,21 @@ namespace MrWo\Nexus\Service;
 class AssetService
 {
     private array $manifest = [];
+    private bool $isProd;
 
-    /**
-     * Konstruktor lädt automatisch das passende Manifest
-     * abhängig von APP_ENV.
-     */
     public function __construct()
     {
+        // Wenn APP_ENV nicht gesetzt ist, gehen wir von 'production' aus (Standard XAMPP)
         $env = $_SERVER['APP_ENV'] ?? 'production';
+        $this->isProd = $env === 'production';
 
-        // Dev: rohes Manifest
+        // Pfade definieren
         $devManifest = __DIR__ . '/../../public/manifest.json';
+        
+        // WICHTIG: Vite 5 speichert das Manifest in .vite/manifest.json
+        $prodManifest = __DIR__ . '/../../public/build/.vite/manifest.json';
 
-        // Prod: gebündeltes/Hash-Manifest
-        $prodManifest = __DIR__ . '/../../public/build/manifest.json';
-
-        $manifestFile = $env === 'production' ? $prodManifest : $devManifest;
+        $manifestFile = $this->isProd ? $prodManifest : $devManifest;
 
         $this->loadManifest($manifestFile);
     }
@@ -37,11 +36,32 @@ class AssetService
     }
 
     /**
-     * Gibt den Pfad für einen logischen Asset-Namen zurück.
-     * Fallback: logischer Name selbst.
+     * Gibt den Web-Pfad für eine Datei zurück.
+     * Nutzt im Prod-Modus das Vite-Manifest.
      */
     public function get(string $logicalName): string
     {
-        return $this->manifest[$logicalName] ?? "/$logicalName";
+        // 1. Direkter Treffer? (Für manuelles Dev-Manifest)
+        if (isset($this->manifest[$logicalName])) {
+            return $this->manifest[$logicalName];
+        }
+
+        // 2. Vite-Manifest Suche (Prod)
+        // Vite nutzt Keys wie "public/css/header.css".
+        // Wir suchen, ob ein Key mit unserem logicalName (z.B. "header.css") endet.
+        if ($this->isProd) {
+            foreach ($this->manifest as $key => $entry) {
+                // Prüfen ob der Key mit dem gesuchten Namen endet
+                if (str_ends_with($key, $logicalName)) {
+                    // Vite liefert 'file' => 'assets/header-xyz.css'.
+                    // Wir müssen '/build/' davorhängen.
+                    return '/build/' . $entry['file'];
+                }
+            }
+        }
+
+        // 3. Fallback: Wenn nichts gefunden wurde, geben wir den Namen direkt zurück
+        // (Hilft im Dev-Modus, falls Manifest fehlt)
+        return "/$logicalName";
     }
 }

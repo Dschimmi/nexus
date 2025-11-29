@@ -1,29 +1,24 @@
 /**
- * DATEI: cookie-consent.js
- * ZWECK: Steuert das Ein-/Ausblenden des Cookie-Banners und den Blur-Effekt.
+ * DATEI: compliance.js
+ * ZWECK: Steuert Cookie-Banner, Blur-Effekt und "intelligente" Focus-Trap.
  */
 
+// Speichert, wo der Nutzer zuletzt im Banner war
+let lastFocusedElement = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Prüfen, ob der Nutzer schon entschieden hat
     const consent = localStorage.getItem('cookie_consent');
-    
-    // Wenn nein: Banner anzeigen
     if (!consent) {
         showBanner();
     }
 });
 
-// Globale Funktion für die Buttons (wird im HTML via onclick aufgerufen)
+// Globale Funktion für Buttons
 window.handleCookie = function(accepted) {
-    // 1. Speichern (Simuliert)
     const value = accepted ? 'all' : 'essential';
     localStorage.setItem('cookie_consent', value);
-    
-    // 2. Banner ausblenden
     hideBanner();
-    
-    // 3. Optional: Reload oder Event feuern
-    console.log('Cookies gesetzt auf:', value);
+    console.log('Compliance: Cookies gesetzt auf:', value);
 };
 
 // --- Helper Funktionen ---
@@ -34,8 +29,24 @@ function showBanner() {
     
     if (banner) {
         banner.classList.add('active');
-        // Fügt den Blur-Effekt auf der Seite hinzu (definiert in base.css)
         body.classList.add('cookie-open');
+        
+        // 1. Initialer Fokus auf den Haupt-Button
+        const primaryBtn = banner.querySelector('.btn-primary');
+        if (primaryBtn) {
+            primaryBtn.focus();
+            lastFocusedElement = primaryBtn; // Startpunkt merken
+        }
+        
+        // 2. Listener aktivieren
+        banner.addEventListener('keydown', handleTabKey);
+        
+        // NEU: Merken, wo der Fokus im Banner hingeht
+        banner.addEventListener('focusin', trackFocus);
+        
+        // Wächter gegen Ausbrechen
+        document.addEventListener('focusin', enforceFocus);
+        document.addEventListener('click', enforceFocus);
     }
 }
 
@@ -45,7 +56,67 @@ function hideBanner() {
     
     if (banner) {
         banner.classList.remove('active');
-        // Entfernt den Blur-Effekt
         body.classList.remove('cookie-open');
+        
+        // Aufräumen
+        banner.removeEventListener('keydown', handleTabKey);
+        banner.removeEventListener('focusin', trackFocus);
+        document.removeEventListener('focusin', enforceFocus);
+        document.removeEventListener('click', enforceFocus);
+    }
+}
+
+/**
+ * NEU: Aktualisiert die Merk-Variable, wenn der Nutzer im Banner tabbt/klickt.
+ */
+function trackFocus(e) {
+    lastFocusedElement = e.target;
+}
+
+/**
+ * Zwingt den Fokus zurück zum ZULETZT aktiven Element im Banner.
+ */
+function enforceFocus(e) {
+    const banner = document.getElementById('cookie-banner');
+    
+    // Wenn wir versuchen, das aktive Banner zu verlassen
+    if (banner.classList.contains('active') && !banner.contains(e.target)) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        // Zurück zum letzten bekannten Element (oder Fallback auf Primary)
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        } else {
+            const primaryBtn = banner.querySelector('.btn-primary');
+            if (primaryBtn) primaryBtn.focus();
+        }
+    }
+}
+
+/**
+ * Hält den Fokus beim Tabben im Kreis (Loop).
+ */
+function handleTabKey(e) {
+    const banner = document.getElementById('cookie-banner');
+    const focusables = banner.querySelectorAll('button, a[href]');
+    
+    if (focusables.length === 0) return;
+
+    const firstElement = focusables[0];
+    const lastElement = focusables[focusables.length - 1];
+
+    if (e.key === 'Tab') {
+        if (e.shiftKey) { 
+            if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+            }
+        } else {
+            if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+            }
+        }
     }
 }

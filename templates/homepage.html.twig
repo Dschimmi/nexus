@@ -4,124 +4,123 @@
 
 {% block content %}
     <!-- 1. HERO SECTION -->
-    <section style="text-align: center; padding: 4rem 0 3rem 0;">
-        <h1 style="font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.2; color: var(--text-main);">
-            Exelor – <span style="color: var(--primary);">Modernes Web-Framework</span>
+    <section class="hero-section">
+        <h1 class="hero-title">
+            Exelor – Modernes Web-Framework
         </h1>
-        <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 800px; margin: 0 auto 2.5rem auto;">
-            Exelor ist ein leichtgewichtiges, flexibles Web‑Framework für Entwickler, die schnell skalierbare Webanwendungen erstellen möchten. Es kombiniert moderne Architektur, modulare Komponenten und intuitive APIs.
+        <p class="hero-text">
+            Exelor ist ein leichtgewichtiges, flexibles Web‑Framework für Entwickler, die schnell skalierbare Webanwendungen erstellen möchten.
         </p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-            <a href="/download" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 1.5rem;">Jetzt loslegen</a>
-            <a href="/docs" class="btn btn-outline" style="font-size: 1.1rem; padding: 0.8rem 1.5rem;">Dokumentation</a>
+        <div class="hero-actions">
+            <a href="/download" class="btn btn-primary">Jetzt loslegen</a>
+            <a href="/docs" class="btn btn-outline">Dokumentation</a>
         </div>
     </section>
 
-    <!-- 2. FEATURES GRID -->
-    <section style="margin-bottom: 4rem;">
-        <h2 style="text-align: center; margin-bottom: 2rem;">Features</h2>
+    <!-- 2. FEATURES GRID (4 Spalten) -->
+    <section>
+        <h2 class="text-center mb-2">Features</h2>
         
-        <!-- Grid angepasst für 4 Elemente (2x2 oder 4x1) -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            
+        <div class="grid-4">
             <!-- Feature 1 -->
-            <div class="card">
-                <div style="color: var(--primary); margin-bottom: 1rem;">
-                    <!-- Icon: Blitz -->
+            <div class="textbox">
+                <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                 </div>
-                <h3>Leistungsstark & leichtgewichtig</h3>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                <h3>Leistungsstark</h3>
+                <p class="text-muted">
                     Minimaler Overhead, maximale Performance. Der Kern ist auf Geschwindigkeit optimiert.
                 </p>
             </div>
 
             <!-- Feature 2 -->
-            <div class="card">
-                <div style="color: var(--primary); margin-bottom: 1rem;">
-                    <!-- Icon: Puzzle -->
+            <div class="textbox">
+                <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.5 6c-2.6 0-4.7 1-5.9 2.6-.5.8-.9 1.8-1 2.9h-3.2c-.2-1.1-.5-2.1-1-2.9-1.2-1.6-3.3-2.6-5.9-2.6v14c2.6 0 4.7-1 5.9-2.6.5-.8.9-1.8 1-2.9h3.2c.2 1.1.5 2.1 1 2.9 1.2 1.6 3.3 2.6 5.9 2.6v-14z"></path></svg>
                 </div>
-                <h3>Modular & erweiterbar</h3>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                <h3>Modular</h3>
+                <p class="text-muted">
                     Passe Exelor an deine Projekte an, integriere eigene Module oder Bibliotheken nahtlos.
                 </p>
             </div>
 
             <!-- Feature 3 -->
-            <div class="card">
-                <div style="color: var(--primary); margin-bottom: 1rem;">
-                    <!-- Icon: Uhr/Speed -->
+            <div class="textbox">
+                <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
-                <h3>Schnelle Entwicklung</h3>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                <h3>Schnell</h3>
+                <p class="text-muted">
                     Intuitive Syntax und umfangreiche Dokumentation beschleunigen die Umsetzung von Projekten.
                 </p>
             </div>
 
             <!-- Feature 4 -->
-            <div class="card">
-                <div style="color: var(--primary); margin-bottom: 1rem;">
-                    <!-- Icon: Chart/Scale -->
+            <div class="textbox">
+                <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 </div>
-                <h3>Skalierbar & wartbar</h3>
-                <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                <h3>Skalierbar</h3>
+                <p class="text-muted">
                     Ideal für kleine Projekte genauso wie für komplexe Anwendungen im Enterprise-Bereich.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- 3. CONTENT BLOCKS (Why & Community) -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
-        
-        <!-- Warum Exelor? -->
+    <!-- 3. INFO GRID (2 Spalten für Textblöcke) -->
+    <!-- Hier nutzen wir .textbox-1 Logik im Grid-Sinne: Eine .grid-2 mit .textbox Kindern -->
+    <div class="grid-2">
         <section>
-            <h2 style="margin-bottom: 1rem;">Warum Exelor?</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+            <h2 class="mb-1">Warum Exelor?</h2>
+            <p class="text-muted mb-1">
                 Exelor wurde entwickelt, um die Lücke zwischen klassischen Frameworks und modernen, leichten Entwicklungsumgebungen zu schließen.
             </p>
-            <p style="color: var(--text-muted);">
-                Mit Fokus auf Performance, Skalierbarkeit und klare Struktur hilft Exelor Teams, produktiver zu arbeiten und Projekte schneller umzusetzen.
+            <p class="text-muted">
+                Mit Fokus auf Performance, Skalierbarkeit und klare Struktur hilft Exelor Teams, produktiver zu arbeiten.
             </p>
         </section>
 
-        <!-- Doku & Community -->
         <section>
-            <h2 style="margin-bottom: 1rem;">Dokumentation & Community</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+            <h2 class="mb-1">Dokumentation</h2>
+            <p class="text-muted mb-1">
                 Exelor bietet umfassende Dokumentation, Tutorials und Beispielprojekte, damit Entwickler sofort starten können.
             </p>
-            <p style="color: var(--text-muted);">
-                Zusätzlich wird eine Community aufgebaut, die Tipps, Erweiterungen und Best Practices austauscht.
-            </p>
-            <a href="/community" style="color: var(--primary); text-decoration: none; font-weight: bold; margin-top: 0.5rem; display: inline-block;">Zur Community &rarr;</a>
+            <a href="/community" class="link-gold">Zur Community &rarr;</a>
         </section>
     </div>
 
-    <!-- 4. CALL TO ACTION (Jetzt loslegen) -->
-    <section class="card" style="background-color: var(--bg-surface); border-color: var(--primary);">
-        <h2 style="text-align: center; margin-bottom: 2rem;">Jetzt loslegen</h2>
+    <!-- 4. CTA SECTION (Standardisiert) -->
+    <!-- Äußerer Rahmen: textbox (wie alle anderen), Inneres Grid: grid-3 -->
+    <section class="textbox text-center">
+        <h2 class="mb-2">Jetzt loslegen</h2>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; text-align: center;">
-            <div>
-                <h4 style="margin-bottom: 0.5rem;">Download</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Lade die aktuelle Version von Exelor herunter und starte dein Projekt.</p>
-                <a href="/download" class="btn btn-primary" style="width: 100%;">Download v1.0</a>
+        <div class="grid-3 mb-1" style="margin-bottom: 0;">
+            <!-- Spalte 1 -->
+            <div style="display: flex; flex-direction: column; height: 100%;">
+                <h4 class="mb-1">Download</h4>
+                <p class="text-muted font-small">Lade die aktuelle Version von Exelor herunter.</p>
+                <div class="textbox-actions">
+                    <a href="/download" class="btn btn-primary" style="width: 100%;">Download v1.0</a>
+                </div>
             </div>
 
-            <div>
-                <h4 style="margin-bottom: 0.5rem;">Beispiele & Tutorials</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Schaue dir praxisnahe Anwendungsbeispiele an.</p>
-                <a href="/tutorials" class="btn btn-outline" style="width: 100%;">Zu den Beispielen</a>
+            <!-- Spalte 2 -->
+            <div style="display: flex; flex-direction: column; height: 100%;">
+                <h4 class="mb-1">Tutorials</h4>
+                <p class="text-muted font-small">Schaue dir praxisnahe Anwendungsbeispiele an.</p>
+                <div class="textbox-actions">
+                    <a href="/tutorials" class="btn btn-outline" style="width: 100%;">Zu den Beispielen</a>
+                </div>
             </div>
 
-            <div>
-                <h4 style="margin-bottom: 0.5rem;">Kontakt & Feedback</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Sende Ideen oder Fragen direkt an das Entwicklerteam.</p>
-                <a href="/contact" class="btn btn-outline" style="width: 100%;">Kontakt aufnehmen</a>
+            <!-- Spalte 3 -->
+            <div style="display: flex; flex-direction: column; height: 100%;">
+                <h4 class="mb-1">Kontakt</h4>
+                <p class="text-muted font-small">Sende Ideen oder Fragen direkt an das Entwicklerteam.</p>
+                <div class="textbox-actions">
+                    <a href="/contact" class="btn btn-outline" style="width: 100%;">Kontakt aufnehmen</a>
+                </div>
             </div>
         </div>
     </section>

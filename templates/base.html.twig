@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="de">
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Nexus Framework{% endblock %}</title>
     
-        
-<!-- 1. Variablen (Fundament) -->
+    <!-- SEO: Title & Description -->
+    <title>{% block title %}Exelor – Modernes Web-Framework{% endblock %}</title>
+    <meta name="description" content="{% block description %}Das Exelor Framework bietet eine sichere, modulare Basis für skalierbare Webanwendungen.{% endblock %}">
+    
+    <!-- SEO: Canonical URL (Verhindert Duplicate Content) -->
+    <link rel="canonical" href="{{ app.request.uri|default('') }}">
+
+    <!-- 1. Variablen (Fundament) -->
     <link rel="stylesheet" href="{{ asset('variables.css') }}">
 
     <!-- 2. Basis Styles (Reset, Typo, Globale Elemente) -->
@@ -21,7 +27,7 @@
     <!-- 4. Module & Plugins -->
     <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}">
 
-    <!-- Dark Mode Init Script (gegen Flackern) -->
+    <!-- Dark Mode Init (Muss im Head bleiben gegen Flackern) -->
     <script>
         (function() {
             const saved = localStorage.getItem('theme');
@@ -34,6 +40,7 @@
         })();
     </script>
 </head>
+
 <body>
 
     <!-- Wrapper für Blur-Effekt bei offenem Cookie Banner -->
@@ -145,26 +152,30 @@
     </div>
 
         
+    
 <!-- 4. COOKIE BANNER (Außerhalb Wrapper wegen Blur) -->
-<div id="cookie-banner" class="cookie-banner">
-    <h3 style="margin-bottom: 1rem; color: var(--text-main);">Datenschutzeinstellungen</h3>
-    
-    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5;">
-        Wir nutzen Cookies, um die technische Funktionalität unserer Website sicherzustellen ("Essentiell"). 
-        Mit Ihrer Zustimmung nutzen wir zudem Cookies, um die Nutzung unserer Seite zu analysieren und unser Angebot zu verbessern. 
-        Weitere Informationen finden Sie in unserer 
-        <a href="/datenschutz" style="text-decoration: underline;">Datenschutzerklärung</a> 
-        und im 
-        <a href="/impressum" style="text-decoration: underline;">Impressum</a>.
-    </p>
-    
-    <div class="cookie-buttons">
-        <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
-        <button class="btn btn-primary" onclick="handleCookie(true)">Alle akzeptieren</button>
-    </div>
-</div>
+    <div id="cookie-banner" class="cookie-banner">
+        <!-- Visuelle Position 1 (durch CSS order: 1) -->
+        <h3 style="margin-bottom: 0;">Datenschutzeinstellungen</h3>
+        
+        <!-- Visuelle Position 3 (durch CSS order: 3) -->
+        <!-- Technisch ZUERST für Tab-Reihenfolge -->
+        <div class="cookie-buttons">
+            <button class="btn btn-primary" onclick="handleCookie(true)">Alle akzeptieren</button>
+            <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
+        </div>
 
-  
+        <!-- Visuelle Position 2 (durch CSS order: 2) -->
+        <!-- Technisch ZULETZT für Tab-Reihenfolge -->
+        <p class="cookie-text">
+            Wir nutzen Cookies, um die technische Funktionalität unserer Website sicherzustellen ("Essentiell"). 
+            Mit Ihrer Zustimmung nutzen wir zudem Cookies, um die Nutzung unserer Seite zu analysieren und unser Angebot zu verbessern. 
+            Weitere Informationen finden Sie in unserer 
+            <a href="/datenschutz">Datenschutzerklärung</a> 
+            und im 
+            <a href="/impressum">Impressum</a>.
+        </p>
+    </div>
 
     <!-- Layout Scripts (Atomar geladen via Manifest) -->
     <script src="{{ asset('js/layout.js') }}"></script>

@@ -115,6 +115,15 @@ button#theme-toggle {
     transition: border-color 0.2s, background-color 0.2s;
 }
 
+/* --- THEME TOGGLE ICONS --- */
+/* Standard (Light Mode): Zeige Mond, Verstecke Sonne */
+.theme-icon-moon { display: block; }
+.theme-icon-sun { display: none; }
+
+/* Dark Mode: Zeige Sonne, Verstecke Mond */
+[data-theme="dark"] .theme-icon-moon { display: none; }
+[data-theme="dark"] .theme-icon-sun { display: block; }
+
 /* --- HOVER EFFEKT (Goldener Rahmen) --- */
 .header-search:hover, .header-search:focus,
 .header-select:hover, .header-select:focus,

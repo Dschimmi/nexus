@@ -37,7 +37,7 @@
 /* 1. Überschrift: Bleibt visuell ganz oben (Order 1) */
 .cookie-banner h3 {
     order: 1;
-    margin-bottom: 1rem;
+    margin-bottom: 0; /* Inline-Style ersetzt */
     color: var(--text-main);
 }
 

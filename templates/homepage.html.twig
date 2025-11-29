@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Exelor – Modernes Web-Framework{% endblock %}
+{% block title %}{{ 'home.hero.title'|trans }}{% endblock %}
 
 {% block content %}
     <!-- 1. HERO SECTION -->
     <section class="hero-section">
         <h1 class="hero-title">
-            Exelor – Modernes Web-Framework
+            {{ 'home.hero.title'|trans }}
         </h1>
         <p class="hero-text">
-            Exelor ist ein leichtgewichtiges, flexibles Web‑Framework für Entwickler, die schnell skalierbare Webanwendungen erstellen möchten.
+            {{ 'home.hero.text'|trans }}
         </p>
         <div class="hero-actions">
-            <a href="/download" class="btn btn-primary">Jetzt loslegen</a>
-            <a href="/docs" class="btn btn-outline">Dokumentation</a>
+            <a href="/download" class="btn btn-primary">{{ 'home.hero.btn_start'|trans }}</a>
+            <a href="/docs" class="btn btn-outline">{{ 'home.hero.btn_docs'|trans }}</a>
         </div>
     </section>
 
     <!-- 2. FEATURES GRID (4 Spalten) -->
     <section>
-        <h2 class="text-center mb-2">Features</h2>
+        <h2 class="text-center mb-2">{{ 'home.features.title'|trans }}</h2>
         
         <div class="grid-4">
             <!-- Feature 1 -->
@@ -27,9 +27,9 @@
                 <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                 </div>
-                <h3>Leistungsstark</h3>
+                <h3>{{ 'home.feat1.title'|trans }}</h3>
                 <p class="text-muted">
-                    Minimaler Overhead, maximale Performance. Der Kern ist auf Geschwindigkeit optimiert.
+                    {{ 'home.feat1.text'|trans }}
                 </p>
             </div>
 
@@ -38,9 +38,9 @@
                 <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.5 6c-2.6 0-4.7 1-5.9 2.6-.5.8-.9 1.8-1 2.9h-3.2c-.2-1.1-.5-2.1-1-2.9-1.2-1.6-3.3-2.6-5.9-2.6v14c2.6 0 4.7-1 5.9-2.6.5-.8.9-1.8 1-2.9h3.2c.2 1.1.5 2.1 1 2.9 1.2 1.6 3.3 2.6 5.9 2.6v-14z"></path></svg>
                 </div>
-                <h3>Modular</h3>
+                <h3>{{ 'home.feat2.title'|trans }}</h3>
                 <p class="text-muted">
-                    Passe Exelor an deine Projekte an, integriere eigene Module oder Bibliotheken nahtlos.
+                    {{ 'home.feat2.text'|trans }}
                 </p>
             </div>
 
@@ -49,9 +49,9 @@
                 <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
-                <h3>Schnell</h3>
+                <h3>{{ 'home.feat3.title'|trans }}</h3>
                 <p class="text-muted">
-                    Intuitive Syntax und umfangreiche Dokumentation beschleunigen die Umsetzung von Projekten.
+                    {{ 'home.feat3.text'|trans }}
                 </p>
             </div>
 
@@ -60,69 +60,73 @@
                 <div class="textbox-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 </div>
-                <h3>Skalierbar</h3>
+                <h3>{{ 'home.feat4.title'|trans }}</h3>
                 <p class="text-muted">
-                    Ideal für kleine Projekte genauso wie für komplexe Anwendungen im Enterprise-Bereich.
+                    {{ 'home.feat4.text'|trans }}
                 </p>
             </div>
         </div>
     </section>
 
     <!-- 3. INFO GRID (2 Spalten für Textblöcke) -->
-    <!-- Hier nutzen wir .textbox-1 Logik im Grid-Sinne: Eine .grid-2 mit .textbox Kindern -->
     <div class="grid-2">
         <section>
-            <h2 class="mb-1">Warum Exelor?</h2>
+            <h2 class="mb-1">{{ 'home.why.title'|trans }}</h2>
             <p class="text-muted mb-1">
-                Exelor wurde entwickelt, um die Lücke zwischen klassischen Frameworks und modernen, leichten Entwicklungsumgebungen zu schließen.
+                {{ 'home.why.text1'|trans }}
             </p>
             <p class="text-muted">
-                Mit Fokus auf Performance, Skalierbarkeit und klare Struktur hilft Exelor Teams, produktiver zu arbeiten.
+                {{ 'home.why.text2'|trans }}
             </p>
         </section>
 
         <section>
-            <h2 class="mb-1">Dokumentation</h2>
+            <h2 class="mb-1">{{ 'home.docs.title'|trans }}</h2>
             <p class="text-muted mb-1">
-                Exelor bietet umfassende Dokumentation, Tutorials und Beispielprojekte, damit Entwickler sofort starten können.
+                {{ 'home.docs.text1'|trans }}
             </p>
-            <a href="/community" class="link-gold">Zur Community &rarr;</a>
+            <p class="text-muted">
+                {{ 'home.docs.text2'|trans }}
+            </p>
+            <a href="/community" class="link-gold">{{ 'home.docs.link'|trans }}</a>
         </section>
     </div>
 
-    <!-- 4. CTA SECTION (Standardisiert) -->
-    <!-- Äußerer Rahmen: textbox (wie alle anderen), Inneres Grid: grid-3 -->
+    
+<!-- 4. CTA SECTION -->
     <section class="textbox text-center">
-        <h2 class="mb-2">Jetzt loslegen</h2>
+        <h2 class="mb-2">{{ 'home.cta.title'|trans }}</h2>
         
-        <div class="grid-3 mb-1" style="margin-bottom: 0;">
+        <div class="grid-3 mb-1">
             <!-- Spalte 1 -->
-            <div style="display: flex; flex-direction: column; height: 100%;">
-                <h4 class="mb-1">Download</h4>
-                <p class="text-muted font-small">Lade die aktuelle Version von Exelor herunter.</p>
+            <div class="flex-col-full">
+                <h4 class="mb-1">{{ 'home.cta.col1.title'|trans }}</h4>
+                <p class="text-muted font-small">{{ 'home.cta.col1.text'|trans }}</p>
                 <div class="textbox-actions">
-                    <a href="/download" class="btn btn-primary" style="width: 100%;">Download v1.0</a>
+                    <a href="/download" class="btn btn-primary" style="width: 100%;">{{ 'home.cta.col1.btn'|trans }}</a>
                 </div>
             </div>
 
             <!-- Spalte 2 -->
-            <div style="display: flex; flex-direction: column; height: 100%;">
-                <h4 class="mb-1">Tutorials</h4>
-                <p class="text-muted font-small">Schaue dir praxisnahe Anwendungsbeispiele an.</p>
+            <div class="flex-col-full">
+                <h4 class="mb-1">{{ 'home.cta.col2.title'|trans }}</h4>
+                <p class="text-muted font-small">{{ 'home.cta.col2.text'|trans }}</p>
                 <div class="textbox-actions">
-                    <a href="/tutorials" class="btn btn-outline" style="width: 100%;">Zu den Beispielen</a>
+                    <a href="/tutorials" class="btn btn-outline" style="width: 100%;">{{ 'home.cta.col2.btn'|trans }}</a>
                 </div>
             </div>
 
             <!-- Spalte 3 -->
-            <div style="display: flex; flex-direction: column; height: 100%;">
-                <h4 class="mb-1">Kontakt</h4>
-                <p class="text-muted font-small">Sende Ideen oder Fragen direkt an das Entwicklerteam.</p>
+            <div class="flex-col-full">
+                <h4 class="mb-1">{{ 'home.cta.col3.title'|trans }}</h4>
+                <p class="text-muted font-small">{{ 'home.cta.col3.text'|trans }}</p>
                 <div class="textbox-actions">
-                    <a href="/contact" class="btn btn-outline" style="width: 100%;">Kontakt aufnehmen</a>
+                    <a href="/contact" class="btn btn-outline" style="width: 100%;">{{ 'home.cta.col3.btn'|trans }}</a>
                 </div>
             </div>
         </div>
     </section>
+
+  
 
 {% endblock %}

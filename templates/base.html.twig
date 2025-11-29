@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="de">
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO: Title & Description -->
-    <title>{% block title %}Exelor – Modernes Web-Framework{% endblock %}</title>
-    <meta name="description" content="{% block description %}Das Exelor Framework bietet eine sichere, modulare Basis für skalierbare Webanwendungen.{% endblock %}">
+    <title>{% block title %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}">
     
-    <!-- SEO: Canonical URL (Verhindert Duplicate Content) -->
+    <!-- SEO: Canonical URL -->
     <link rel="canonical" href="{{ app.request.uri|default('') }}">
 
-    <!-- 1. Variablen (Fundament) -->
+    <!-- 1. Variablen -->
     <link rel="stylesheet" href="{{ asset('variables.css') }}">
 
-    <!-- 2. Basis Styles (Reset, Typo, Globale Elemente) -->
+    <!-- 2. Basis Styles -->
     <link rel="stylesheet" href="{{ asset('base.css') }}">
 
     <!-- 3. Layout-Module -->
@@ -27,7 +26,7 @@
     <!-- 4. Module & Plugins -->
     <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}">
 
-    <!-- Dark Mode Init (Muss im Head bleiben gegen Flackern) -->
+    <!-- Dark Mode Init -->
     <script>
         (function() {
             const saved = localStorage.getItem('theme');
@@ -40,10 +39,9 @@
         })();
     </script>
 </head>
-
 <body>
 
-    <!-- Wrapper für Blur-Effekt bei offenem Cookie Banner -->
+    <!-- Wrapper für Blur-Effekt -->
     <div id="app-wrapper">
         
         <!-- 1. HEADER -->
@@ -51,16 +49,14 @@
             <div class="header-inner">
                 <!-- Logo Bereich -->
                 <a href="/" class="logo-area">
-                    <!-- Kleines SVG Icon als Logo -->
-                    <img src="/images/logo.png" alt="Exelor" class="logo-img">
+                    <img src="/images/logo.png" alt="{{ 'brand.name'|trans }}" class="logo-img">
                 </a>
 
-                <!-- Aktionen Rechts -->
                 <div class="header-actions">
-                    <!-- 1. ECHTES Suchfeld (mit Strg+K Badge im Input) -->
+                    <!-- 1. Suche -->
                     <div class="search-wrapper">
-                        <input type="text" class="header-search" placeholder="Suche..." aria-label="Suche">
-                        <span class="kbd-badge">Strg + K</span>
+                        <input type="text" class="header-search" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="Suche">
+                        <span class="kbd-badge">{{ 'header.search_shortcut'|trans }}</span>
                     </div>
 
                     <!-- 2. Sprache -->
@@ -71,52 +67,42 @@
 
                     <!-- 3. Darkmode Toggle -->
                     <button id="theme-toggle" class="icon-btn header-btn" aria-label="Design wechseln">
-                        <svg class="sun" style="display: var(--icon-sun-display, block);" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <!-- Sonne (Sichtbar im Dark Mode) -->
+                        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        
+                        <!-- Mond (Sichtbar im Light Mode) -->
+                        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </button>
 
-                    <!-- 4. Auth Buttons (BEIDE sichtbar) -->
+                    <!-- 4. Auth Buttons -->
                     {% if user is defined %}
-                        <div class="user-menu">Hallo, {{ user.name }}</div>
+                        <div class="user-menu">{{ 'header.greeting'|trans({'%name%': user.name}) }}</div>
                     {% else %}
                         <div class="auth-buttons">
-                            <a href="/login" class="btn btn-outline header-btn">Login</a>
-                            <a href="/register" class="btn btn-primary header-btn">Registrieren</a>
+                            <a href="/login" class="btn btn-outline header-btn">{{ 'header.login'|trans }}</a>
+                            <a href="/register" class="btn btn-primary header-btn">{{ 'header.register'|trans }}</a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </header>
 
-            
-        <!-- 2. SUBHEADER (Navigation mit Scroll-Pfeilen) -->
+        <!-- 2. SUBHEADER (Navigation) -->
         <nav class="subheader">
-            <!-- Pfeil Links (Initial ausgeblendet) -->
-            <button id="nav-scroll-left" class="nav-arrow nav-arrow-left" aria-label="Nach links scrollen" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <button id="nav-scroll-left" class="nav-arrow nav-arrow-left" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
 
-            <!-- Scroll Container -->
             <div class="nav-scroll-wrapper" id="nav-scroll-wrapper">
                 <ul class="nav-tabs">
-                    <li><a href="/" class="active">Dashboard</a></li>
-                    <li><a href="#">Projekte</a></li>
-                    <li><a href="#">Frachtbriefe</a></li>
-                    <li><a href="#">Verwaltung</a></li>
-                    <li><a href="#">Benutzer</a></li>
-                    <li><a href="#">Einstellungen</a></li>
-                    <li><a href="#">Audit-Log</a></li>
-                    <li><a href="#">API-Keys</a></li>
-                    <li><a href="#">Hilfe</a></li>
+                    <li><a href="/" class="active">{{ 'nav.home'|trans|default('Startseite') }}</a></li>
                 </ul>
             </div>
 
-            <!-- Pfeil Rechts (Initial ausgeblendet) -->
-            <button id="nav-scroll-right" class="nav-arrow nav-arrow-right" aria-label="Nach rechts scrollen" style="display: none;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <button id="nav-scroll-right" class="nav-arrow nav-arrow-right" style="display: none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
         </nav>
-
-  
 
         <!-- 3. CONTENT -->
         <main>
@@ -127,57 +113,44 @@
         <footer>
             <div class="footer-inner">
                 <div class="footer-col">
-                    <h4>Exelor Framework</h4>
-                    <p style="color: var(--text-muted); max-width: 300px;">
-                        Die moderne Basis für skalierbare Webanwendungen. 
-                        Safety first, clean code always.
+                    <h4>{{ 'brand.name'|trans }}</h4>
+                    <p class="footer-slogan">
+                        {{ 'brand.slogan'|trans }}
                     </p>
                 </div>
                 <div class="footer-col">
                     <h4>Rechtliches</h4>
-                    <a href="/impressum">Impressum</a>
-                    <a href="/datenschutz">Datenschutz</a>
+                    <a href="/impressum">{{ 'footer.imprint'|trans }}</a>
+                    <a href="/datenschutz">{{ 'footer.privacy'|trans }}</a>
                     <a href="#" onclick="showCookieBanner()">Cookie-Einstellungen</a>
                 </div>
                 <div class="footer-col">
-                    <h4>Sitemap</h4>
-                    <a href="/">Home</a>
-                    <a href="/login">Login</a>
+                    <h4>{{ 'footer.sitemap'|trans }}</h4>
+                    <a href="/">{{ 'nav.home'|trans|default('Startseite') }}</a>
+                    <a href="/login">{{ 'header.login'|trans }}</a>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.8rem;">
-                &copy; {{ "now"|date("Y") }} Exelor Framework. Alle Rechte vorbehalten.
+            <div class="footer-copyright">
+                {{ 'footer.copyright'|trans|replace({'%year%': "now"|date("Y")}) }}
             </div>
         </footer>
     </div>
 
-        
-    
-<!-- 4. COOKIE BANNER (Außerhalb Wrapper wegen Blur) -->
+    <!-- 5. COOKIE BANNER -->
     <div id="cookie-banner" class="cookie-banner">
-        <!-- Visuelle Position 1 (durch CSS order: 1) -->
-        <h3 style="margin-bottom: 0;">Datenschutzeinstellungen</h3>
+        <h3>{{ 'cookie.title'|trans }}</h3>
         
-        <!-- Visuelle Position 3 (durch CSS order: 3) -->
-        <!-- Technisch ZUERST für Tab-Reihenfolge -->
         <div class="cookie-buttons">
-            <button class="btn btn-primary" onclick="handleCookie(true)">Alle akzeptieren</button>
-            <button class="btn btn-outline" onclick="handleCookie(false)">Nur Essentielle</button>
+            <button class="btn btn-primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
+            <button class="btn btn-outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
         </div>
 
-        <!-- Visuelle Position 2 (durch CSS order: 2) -->
-        <!-- Technisch ZULETZT für Tab-Reihenfolge -->
         <p class="cookie-text">
-            Wir nutzen Cookies, um die technische Funktionalität unserer Website sicherzustellen ("Essentiell"). 
-            Mit Ihrer Zustimmung nutzen wir zudem Cookies, um die Nutzung unserer Seite zu analysieren und unser Angebot zu verbessern. 
-            Weitere Informationen finden Sie in unserer 
-            <a href="/datenschutz">Datenschutzerklärung</a> 
-            und im 
-            <a href="/impressum">Impressum</a>.
+            {{ 'cookie.text'|trans|raw }}
         </p>
     </div>
-
-    <!-- Layout Scripts (Atomar geladen via Manifest) -->
+    
+    <!-- Scripts -->
     <script src="{{ asset('js/layout.js') }}"></script>
     <script src="{{ asset('js/compliance.js') }}"></script>
     <script src="{{ asset('js/theme.js') }}"></script>

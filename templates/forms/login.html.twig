@@ -1,0 +1,53 @@
+{#
+    Generisches Login-Formular.
+    
+    Erwartete Variablen:
+    - page_title: (string) Titel der Seite
+    - form_action: (string) Ziel-URL für das Formular
+    - error: (string|null) Optionale Fehlermeldung (sollte bereits übersetzt sein)
+    - last_username: (string) Vorbelegter Benutzername bei Fehler
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ page_title|default('Login') }} – {{ parent() }}{% endblock %}
+
+{% block content %}
+<section class="std-page-container">
+    <div class="login-wrapper">
+        <h1 class="login-title">{{ page_title|default('Login') }}</h1>
+
+        {# Fehlermeldung anzeigen #}
+        {% if error is defined and error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form action="{{ form_action }}" method="post" class="login-form">
+            <div class="form-group">
+                <label for="username" class="form-label">{{ 'login.username_label'|trans }}</label>
+                <input type="text" 
+                       id="username" 
+                       name="username" 
+                       value="{{ last_username|default('') }}" 
+                       class="form-input" 
+                       required 
+                       autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">{{ 'login.password_label'|trans }}</label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       class="form-input" 
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                {{ 'login.submit_btn'|trans }}
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

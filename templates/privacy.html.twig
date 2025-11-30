@@ -1,0 +1,32 @@
+{#
+    Template für die Datenschutzerklärung.
+    Erbt vom Basis-Layout und stellt die Datenschutzinformationen strukturiert dar.
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'nav.privacy'|trans }} – {{ parent() }}{% endblock %}
+{% block description %}{{ 'nav.privacy'|trans }} von {{ 'brand.name'|trans }}{% endblock %}
+
+{% block content %}
+<section class="std-page-container">
+    <h1>{{ 'nav.privacy'|trans }}</h1>
+    
+    <div class="std-content">
+        {# Abschnitt 1: Einführung #}
+        <h2>{{ 'privacy.intro_title'|trans }}</h2>
+        
+        <h3>{{ 'privacy.general_title'|trans }}</h3>
+        <p>
+            {{ 'privacy.general_text'|trans }}
+        </p>
+
+        <h3>{{ 'privacy.collection_title'|trans }}</h3>
+        <p>
+            <strong>{{ 'privacy.responsible_q'|trans }}</strong><br>
+            {{ 'privacy.responsible_a'|trans }}
+        </p>
+        
+        {# Platzhalter für weitere dynamische Abschnitte #}
+    </div>
+</section>
+{% endblock %}

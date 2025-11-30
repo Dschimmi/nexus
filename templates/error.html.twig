@@ -1,15 +1,87 @@
+{#
+    Template: error.html.twig
+    Zweck:    Zentrale Fehlerseite für 404 (Not Found) und 500 (Server Error).
+    Logik:    Unterscheidet zwischen Development-Modus (Details) und Production-Modus (User-freundlich).
+#}
 {% extends 'base.html.twig' %}
 
+{# 
+    Bestimme den Fehlercode. 
+    Priorität: status_code (Symfony Standard) -> error_type (Unser Custom 404) -> 500 (Fallback) 
+#}
+{% set code = status_code|default(error_type|default(500)) %}
+
+{% block title %}Fehler {{ code }} – {{ parent() }}{% endblock %}
+
 {% block content %}
-    <h1>Fehler {{ status_code }}</h1>
-    <p>{{ status_text }}</p>
-    
-    {# Dieser Teil wird nur im Entwicklungsmodus angezeigt #}
-    {% if app_env == 'development' and exception is defined %}
-        <h2>Details:</h2>
-        <pre>
-            <strong>Meldung:</strong> {{ exception.message }}
-            <strong>Datei:</strong> {{ exception.file }} (Zeile {{ exception.line }})
-        </pre>
-    {% endif %}
+<section class="std-page-container">
+    {# Container zentrieren via Utility-Class aus content.css #}
+    <div class="textbox text-center">
+
+        {# 
+            ===========================================================================
+            FALL 1: Development Modus
+            Anzeige von Stacktraces und technischen Details für Entwickler.
+            ===========================================================================
+        #}
+        {% if app_env|default('production') == 'development' and exception is defined %}
+            <h1>Fehler {{ code }} (DEV)</h1>
+            <p class="mb-2">{{ status_text|default('Ein Fehler ist aufgetreten') }}</p>
+            
+            <div class="text-muted" style="text-align: left;">
+                <p><strong>Meldung:</strong> {{ exception.message }}</p>
+                <p><strong>Datei:</strong> {{ exception.file }} (Zeile {{ exception.line }})</p>
+            </div>
+
+        {# 
+            ===========================================================================
+            FALL 2: Production Modus - 404 (Seite nicht gefunden)
+            User-freundliche Anzeige mit Auto-Redirect.
+            ===========================================================================
+        #}
+        {% elseif code == '404' or code == 404 %}
+            {# Nutzung der .hero-title Klasse für große Darstellung #}
+            <h1 class="hero-title text-gold">404</h1>
+            
+            <p class="text-bold mb-1">
+                {{ 'error.404.text'|trans }}
+            </p>
+            
+            <p class="text-muted mb-2">
+                (Automatische Weiterleitung in 3 Sekunden)
+            </p>
+
+            <div class="textbox-actions">
+                <a href="/" class="btn btn-primary">
+                    {{ 'nav.home'|trans }}
+                </a>
+            </div>
+
+            {# JavaScript für den automatischen Redirect nach 3 Sekunden #}
+            <script>
+                setTimeout(function() {
+                    window.location.href = '/';
+                }, 3000);
+            </script>
+
+        {# 
+            ===========================================================================
+            FALL 3: Production Modus - Sonstige Fehler (z.B. 500)
+            Generische Fehlermeldung, um keine Interna preiszugeben.
+            ===========================================================================
+        #}
+        {% else %}
+            <h1>Ein Fehler ist aufgetreten</h1>
+            
+            <p class="mb-2">
+                {{ status_text|default('Es gab ein unerwartetes Problem. Bitte versuchen Sie es später erneut.') }}
+            </p>
+            
+            <div class="textbox-actions">
+                <a href="/" class="btn btn-outline">{{ 'nav.home'|trans }}</a>
+            </div>
+        {% endif %}
+
+    </div>
+</section>
 {% endblock %}

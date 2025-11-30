@@ -1,0 +1,23 @@
+{#
+    Template für dynamische Dummy-Seiten.
+    Zeigt den vom Admin erstellten HTML-Inhalt an.
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ page_title }} – {{ parent() }}{% endblock %}
+{% block description %}{{ page_title }} – {{ 'brand.name'|trans }}{% endblock %}
+
+{% block content %}
+<section class="std-page-container">
+    {# Der Titel aus den Metadaten der Datei #}
+    <h1>{{ page_title }}</h1>
+
+    {# 
+       Der Inhalt kommt aus einer vertrauenswürdigen Quelle (Admin-Backend).
+       Daher ist |raw hier notwendig und zulässig, um die HTML-Formatierung darzustellen.
+    #}
+    <div class="std-content">
+        {{ page_content|raw }}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,86 @@
+{#
+    Admin Dashboard Template.
+    Ermöglicht die Konfiguration der Module und verlinkt zur Seitenverwaltung.
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'admin.dashboard_title'|trans }} – {{ parent() }}{% endblock %}
+
+{% block content %}
+{# Admin-spezifisches CSS laden #}
+<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+
+<section class="std-page-container">
+    
+    {# Header Bereich mit Begrüßung und Logout #}
+    <div class="dashboard-header">
+        <h1>{{ 'admin.dashboard_title'|trans }}</h1>
+        
+        <div class="user-info">
+            <p class="user-greeting">
+                {{ 'admin.welcome'|trans({'%name%': user.username|default('Admin')}) }}
+            </p>
+            <a href="/admin/logout" class="btn btn-outline btn-sm">
+                {{ 'admin.logout_btn'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <div class="std-content">
+        {# 1. Modul-Konfiguration #}
+        <div class="dashboard-card">
+            <h2>{{ 'admin.modules_title'|trans }}</h2>
+            
+            <form action="/admin/config" method="post">
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="module_user_management" value="1" 
+                               {% if modules.module_user_management %}checked{% endif %}>
+                        <span class="checkbox-text">{{ 'admin.module_user'|trans }}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="module_site_search" value="1" 
+                               {% if modules.module_site_search %}checked{% endif %}>
+                        <span class="checkbox-text">{{ 'admin.module_search'|trans }}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="module_cookie_banner" value="1" 
+                               {% if modules.module_cookie_banner %}checked{% endif %}>
+                        <span class="checkbox-text">{{ 'admin.module_cookie'|trans }}</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="module_language_selection" value="1" 
+                               {% if modules.module_language_selection %}checked{% endif %}>
+                        <span class="checkbox-text">{{ 'admin.module_lang'|trans }}</span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        {{ 'admin.save_btn'|trans }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {# 2. Seiten-Verwaltung #}
+        <div class="dashboard-card">
+            <h2>{{ 'admin.pages_title'|trans }}</h2>
+            <p>
+                <a href="/admin/pages/create" class="btn btn-outline">
+                    {{ 'admin.pages_create_link'|trans }}
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

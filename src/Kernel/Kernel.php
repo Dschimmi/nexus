@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Throwable;
 use Tracy\Debugger;
+use Twig\Environment;
 
 /**
  * Der zentrale Kernel der Anwendung.
@@ -78,12 +79,22 @@ class Kernel
             // Logge den 404-Fehler mit geringerer Priorität.
             Debugger::log($e, Debugger::WARNING);
 
-            // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
+            // Im DEV-Modus soll Tracy den Fehler anzeigen.
             if ($this->appEnv === 'development') {
                 throw $e;
             }
-            // Im PROD-Modus geben wir eine einfache 404-Seite aus.
-            $response = new Response('Seite nicht gefunden', 404);
+
+            // Im PROD-Modus: Elegante 404-Seite rendern (mit Auto-Redirect via Template).
+            // Wir holen Twig direkt aus dem Container.
+            /** @var Environment $twig */
+            $twig = $this->container->get(Environment::class);
+            
+            $content = $twig->render('error.html.twig', [
+                'error_type' => '404'
+            ]);
+
+            $response = new Response($content, 404);
+
         } catch (Throwable $e) {
 
             // Logge den 500-Fehler mit höchster Priorität.

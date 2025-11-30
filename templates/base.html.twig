@@ -54,16 +54,20 @@
 
                 <div class="header-actions">
                     <!-- 1. Suche -->
+                    {% if config('module_site_search') %}
                     <div class="search-wrapper">
                         <input type="text" class="header-search" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="Suche">
                         <span class="kbd-badge">{{ 'header.search_shortcut'|trans }}</span>
                     </div>
+                    {% endif %}
 
                     <!-- 2. Sprache -->
+                    {% if config('module_language_selection') %}
                     <select class="header-select" aria-label="Sprachauswahl">
                         <option value="de">DE</option>
                         <option value="en">EN</option>
                     </select>
+                    {% endif %}
 
                     <!-- 3. Darkmode Toggle -->
                     <button id="theme-toggle" class="icon-btn header-btn" aria-label="Design wechseln">
@@ -77,7 +81,7 @@
                     <!-- 4. Auth Buttons -->
                     {% if user is defined %}
                         <div class="user-menu">{{ 'header.greeting'|trans({'%name%': user.name}) }}</div>
-                    {% else %}
+                    {% elseif config('module_user_management') %}
                         <div class="auth-buttons">
                             <a href="/login" class="btn btn-outline header-btn">{{ 'header.login'|trans }}</a>
                             <a href="/register" class="btn btn-primary header-btn">{{ 'header.register'|trans }}</a>
@@ -118,12 +122,20 @@
                         {{ 'brand.slogan'|trans }}
                     </p>
                 </div>
+                    
+                    
                 <div class="footer-col">
-                    <h4>Rechtliches</h4>
+                    <h4>{{ 'footer.legal'|trans }}</h4>
                     <a href="/impressum">{{ 'footer.imprint'|trans }}</a>
                     <a href="/datenschutz">{{ 'footer.privacy'|trans }}</a>
-                    <a href="#" onclick="showCookieBanner()">Cookie-Einstellungen</a>
+                    {% if config('module_cookie_banner') %}
+                        <a href="#" onclick="showCookieBanner()">{{ 'footer.cookie_settings'|trans }}</a>
+                    {% endif %}
                 </div>
+
+  
+
+  
                 <div class="footer-col">
                     <h4>{{ 'footer.sitemap'|trans }}</h4>
                     <a href="/">{{ 'nav.home'|trans|default('Startseite') }}</a>
@@ -137,6 +149,7 @@
     </div>
 
     <!-- 5. COOKIE BANNER -->
+    {% if config('module_cookie_banner') %}
     <div id="cookie-banner" class="cookie-banner">
         <h3>{{ 'cookie.title'|trans }}</h3>
         
@@ -149,6 +162,7 @@
             {{ 'cookie.text'|trans|raw }}
         </p>
     </div>
+    {% endif %}
     
     <!-- Scripts -->
     <script src="{{ asset('js/layout.js') }}"></script>

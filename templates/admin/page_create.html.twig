@@ -1,0 +1,84 @@
+{#
+    Formular zur Erstellung neuer Dummy-Seiten.
+    Nutzt Standard-Komponenten aus content.css (.textbox).
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'admin.page_create_title'|trans }} – {{ parent() }}{% endblock %}
+
+{% block content %}
+<section class="std-page-container">
+    
+    {# Header: Flex-Layout inline ist hier vertretbar für die Ausrichtung #}
+    <div class="mb-2" style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{{ 'admin.page_create_title'|trans }}</h1>
+        <a href="/admin" class="btn btn-outline btn-sm">Zurück zum Dashboard</a>
+    </div>
+
+    {# Inhalt in generischer Textbox #}
+    <div class="textbox">
+        <form action="/admin/pages/create" method="post">
+            
+            {# Titel #}
+            <div class="mb-1">
+                <label for="title" class="form-label text-bold">
+                    {{ 'admin.page_label_title'|trans }}
+                </label>
+                <input type="text" id="title" name="title" class="form-input" style="width: 100%;" required oninput="generateSlug()">
+            </div>
+
+            {# Slug (URL) #}
+            <div class="mb-1">
+                <label for="slug" class="form-label text-bold">
+                    {{ 'admin.page_label_slug'|trans }}
+                </label>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="text-muted">exelor.de/</span>
+                    <input type="text" id="slug" name="slug" class="form-input" 
+                           style="flex-grow: 1;"
+                           required pattern="[a-z0-9-]+" title="Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt.">
+                </div>
+            </div>
+
+            {# Inhalt #}
+            <div class="mb-2">
+                <label for="content" class="form-label text-bold">
+                    {{ 'admin.page_label_content'|trans }}
+                </label>
+                <textarea id="content" name="content" rows="15" 
+                          class="form-input" 
+                          style="width: 100%; font-family: monospace;"
+                          required></textarea>
+            </div>
+
+            {# Actions #}
+            <div class="textbox-actions">
+                <button type="submit" class="btn btn-primary">
+                    {{ 'admin.page_btn_save'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    /**
+     * Generiert einen URL-freundlichen Slug aus dem Titel.
+     */
+    function generateSlug() {
+        const title = document.getElementById('title').value;
+        const slugInput = document.getElementById('slug');
+        
+        let slug = title.toLowerCase()
+            .replace(/ä/g, 'ae')
+            .replace(/ö/g, 'oe')
+            .replace(/ü/g, 'ue')
+            .replace(/ß/g, 'ss')
+            .replace(/[^a-z0-9\s-]/g, '') 
+            .trim()
+            .replace(/\s+/g, '-'); 
+
+        slugInput.value = slug;
+    }
+</script>
+{% endblock %}

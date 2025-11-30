@@ -1,0 +1,6 @@
+{
+    "module_user_management": false,
+    "module_site_search": false,
+    "module_cookie_banner": true,
+    "module_language_selection": true
+}

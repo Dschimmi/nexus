@@ -11,19 +11,10 @@
 <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
 <section class="std-page-container">
-    
-    {# Header Bereich mit Begrüßung und Logout #}
-    <div class="dashboard-header">
+
+    {# Titel Bereich (Begrüßung ist jetzt im globalen Header) #}
+    <div class="mb-2">
         <h1>{{ 'admin.dashboard_title'|trans }}</h1>
-        
-        <div class="user-info">
-            <p class="user-greeting">
-                {{ 'admin.welcome'|trans({'%name%': user.username|default('Admin')}) }}
-            </p>
-            <a href="/admin/logout" class="btn btn-outline btn-sm">
-                {{ 'admin.logout_btn'|trans }}
-            </a>
-        </div>
     </div>
 
     <div class="std-content">

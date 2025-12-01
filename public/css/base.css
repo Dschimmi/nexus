@@ -136,3 +136,33 @@ input:focus, select:focus, textarea:focus {
     color: var(--btn-text);          /* Text wird Weiß */
     text-decoration: none;
 }
+
+/* --- ALERTS & FLASH MESSAGES --- */
+.alert {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    font-weight: 500;
+}
+
+/* Erfolg (Grün) */
+.alert-success {
+    background-color: #dcfce7;
+    color: #14532d;
+    border-color: #bbf7d0;
+}
+
+/* Fehler (Rot) */
+.alert-error, .alert-danger {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+    border-color: #fecaca;
+}
+
+/* Info (Blau) */
+.alert-info {
+    background-color: #e0f2fe;
+    color: #0c4a6e;
+    border-color: #bae6fd;
+}

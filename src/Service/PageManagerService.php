@@ -147,4 +147,45 @@ class PageManagerService
             $priority
         );
     }
+    /**
+     * Liest alle vorhandenen Dummy-Seiten aus.
+     * Extrahiert den Titel aus dem HTML-Kommentar der Datei.
+     * 
+     * @return array Liste der Seiten [['slug' => '...', 'title' => '...'], ...]
+     */
+    public function getPages(): array
+    {
+        $pages = [];
+        
+        // Verzeichnis scannen
+        if (!is_dir($this->pagesDir)) {
+            return [];
+        }
+
+        $files = scandir($this->pagesDir);
+        
+        foreach ($files as $file) {
+            // Nur HTML-Dateien beachten
+            if ($file === '.' || $file === '..' || pathinfo($file, PATHINFO_EXTENSION) !== 'html') {
+                continue;
+            }
+
+            $slug = pathinfo($file, PATHINFO_FILENAME);
+            $filepath = $this->pagesDir . '/' . $file;
+            $content = file_get_contents($filepath);
+
+            // Titel extrahieren (Format: <!-- TITLE: Mein Titel -->)
+            $title = ucfirst($slug); // Fallback
+            if (preg_match('/<!-- TITLE: (.*?) -->/', $content, $matches)) {
+                $title = $matches[1];
+            }
+
+            $pages[] = [
+                'slug'  => $slug,
+                'title' => $title
+            ];
+        }
+
+        return $pages;
+    }    
 }

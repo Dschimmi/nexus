@@ -144,3 +144,28 @@ main {
     justify-content: center;
     flex-wrap: wrap;
 }
+
+/* =========================================
+   ERROR STATE OVERRIDES
+   (Muss hier stehen, um Standard .textbox zu überschreiben)
+   ========================================= */
+
+/* 1. Light Mode: Helles Rot */
+.textbox.alert-error {
+    background-color: #fee2e2 !important;
+    color: #7f1d1d !important;
+    border-color: #fecaca !important;
+}
+
+/* 2. Dark Mode: Dunkles Rot */
+[data-theme="dark"] .textbox.alert-error {
+    background-color: #450a0a !important; /* Tiefes Dunkelrot */
+    color: #fecaca !important; /* Helles Rot für Text */
+    border-color: #7f1d1d !important;
+}
+
+/* Überschriften erben die rote Textfarbe */
+.textbox.alert-error h1,
+.textbox.alert-error .hero-title {
+    color: inherit !important;
+}

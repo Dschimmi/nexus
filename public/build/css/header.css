@@ -115,6 +115,15 @@ button#theme-toggle {
     transition: border-color 0.2s, background-color 0.2s;
 }
 
+/* --- THEME TOGGLE ICONS --- */
+/* Standard (Light Mode): Zeige Mond, Verstecke Sonne */
+.theme-icon-moon { display: block; }
+.theme-icon-sun { display: none; }
+
+/* Dark Mode: Zeige Sonne, Verstecke Mond */
+[data-theme="dark"] .theme-icon-moon { display: none; }
+[data-theme="dark"] .theme-icon-sun { display: block; }
+
 /* --- HOVER EFFEKT (Goldener Rahmen) --- */
 .header-search:hover, .header-search:focus,
 .header-select:hover, .header-select:focus,
@@ -180,6 +189,72 @@ button#theme-toggle {
 a.header-btn:hover {
     text-decoration: none;
     /* Farben kommen aus .btn Klassen */
+}
+
+/* --- USER MENU DROPDOWN --- */
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+    height: 100%; /* Passt sich der Header-Höhe an */
+    display: flex;
+    align-items: center;
+}
+
+/* Der Button, der den Namen anzeigt */
+.user-dropdown-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--c-text-main);
+    font-weight: 500;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.user-dropdown-btn:hover {
+    background-color: var(--c-bg-surface);
+    color: var(--c-accent);
+}
+
+/* Der Container mit den Links (initial versteckt) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* Klappt direkt unter dem Header auf */
+    background-color: var(--c-bg-card);
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid var(--c-border);
+    border-radius: 6px;
+    padding: 0.5rem 0;
+    z-index: 1000;
+}
+
+/* Die Links im Dropdown */
+.dropdown-content a {
+    color: var(--c-text-main);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+    font-size: 0.95rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--c-bg-surface);
+    color: var(--c-accent);
+}
+
+/* Dropdown anzeigen bei Hover über den Container */
+.user-dropdown:hover .dropdown-content {
+    display: block;
 }
 
 /* =========================================

@@ -75,7 +75,7 @@ class AdminController
     {
         $identifier = $request->request->get('username', '');
         $password = $request->request->get('password', '');
-
+        
         // Prüfung der Credentials an den Service delegieren.
         if ($this->authService->login($identifier, $password)) {
             // Bei Erfolg: Redirect zum Dashboard.

@@ -84,7 +84,9 @@ return function(ContainerBuilder $container) {
     $container->register('twig.app_extension', AppExtension::class)
         ->addArgument(new Reference('translator_service'))
         ->addArgument(new Reference('asset_service'))
-        ->addArgument(new Reference('config_service')) // Neu: ConfigService injiziert
+        ->addArgument(new Reference('config_service'))
+        ->addArgument(new Reference('session_service'))
+        ->addArgument(new Reference(PageManagerService::class)) // Neu: Für 'get_dummy_pages()'
         ->addTag('twig.extension');
 
     // Der zentrale Twig Environment Service

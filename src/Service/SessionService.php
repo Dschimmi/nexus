@@ -33,9 +33,16 @@ class SessionService
         }
 
         if (session_status() === PHP_SESSION_NONE) {
+            // Prüfen, ob wir über HTTPS laufen
+            $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+
             // Sicherheits-Flags setzen (PH 4.1.2)
             ini_set('session.cookie_httponly', '1');
-            ini_set('session.cookie_secure', '1'); // Voraussetzung: HTTPS aktiv (PH 5.2)
+            
+            // Secure-Flag nur setzen, wenn wir wirklich HTTPS haben!
+            // Sonst verwirft der Browser das Cookie bei lokalen HTTP-Tests.
+            ini_set('session.cookie_secure', $isHttps ? '1' : '0');
+            
             ini_set('session.cookie_samesite', 'Strict');
             ini_set('session.use_strict_mode', '1');
 

@@ -142,4 +142,12 @@ return [
 
     // --- SYSTEM / ERRORS ---
     'error.404.text'       => 'Seite nicht gefunden. Sie werden weitergeleitet...', // Message shown before redirecting from a 404 page
+
+    // --- KONTAKTSEITE ---
+        'contact.title'    => 'Kontakt',                    // H1 Title
+        'contact.intro'    => 'Haben Sie Fragen oder Anregungen? Wir freuen uns auf Ihre Nachricht.', // Intro text
+        'contact.email'    => 'E-Mail',                     // Label for Email
+        'contact.phone'    => 'Telefon',                    // Label for Phone
+        'contact.address'  => 'Anschrift',                  // Label for Address
+        'contact.cta'      => 'Schreiben Sie uns',          // Button or call to action text    
 ];

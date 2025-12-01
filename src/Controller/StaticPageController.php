@@ -41,4 +41,13 @@ class StaticPageController
     {
         return new Response($this->twig->render('privacy.html.twig'));
     }
+    /**
+     * Zeigt die Kontaktseite an.
+     *
+     * @return Response
+     */
+    public function contact(): Response
+    {
+        return new Response($this->twig->render('contact.html.twig'));
+    }
 }

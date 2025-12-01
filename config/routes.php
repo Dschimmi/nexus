@@ -39,6 +39,12 @@ $routes->add('privacy', new Route(
     defaults: ['_controller' => [StaticPageController::class, 'privacy']]
 ));
 
+// Kontakt
+$routes->add('contact', new Route(
+    path: '/kontakt',
+    defaults: ['_controller' => [StaticPageController::class, 'contact']]
+));
+
 // --- ADMIN ROUTEN ---
 
 // Admin Dashboard (oder Login-Maske, wenn nicht eingeloggt)

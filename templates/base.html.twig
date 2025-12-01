@@ -161,7 +161,8 @@
                     <a href="/impressum">{{ 'footer.imprint'|trans }}</a>
                     <a href="/datenschutz">{{ 'footer.privacy'|trans }}</a>
                     {% if config('module_cookie_banner') %}
-                        <a href="#" onclick="showCookieBanner()">{{ 'footer.cookie_settings'|trans }}</a>
+                         {# 'event' übergeben damit JS preventDefault machen kann #}
+                        <a href="#" onclick="showCookieBanner(event)">{{ 'footer.cookie_settings'|trans }}</a>
                     {% endif %}
                 </div>
 
@@ -183,13 +184,18 @@
     <!-- 5. COOKIE BANNER -->
     {% if config('module_cookie_banner') %}
     <div id="cookie-banner" class="cookie-banner">
-        <h3>{{ 'cookie.title'|trans }}</h3>
+        {# 1. Titel (Visuell oben) #}
+        <h3 class="cookie-title">{{ 'cookie.title'|trans }}</h3>
         
+        {# 2. Buttons (Im DOM hier, damit Fokus schnell hier landet. Visuell unten) #}
         <div class="cookie-buttons">
+            {# Primary Links (Autofokus via JS setzt hier an) #}
             <button class="btn btn-primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
+            {# Secondary Rechts #}
             <button class="btn btn-outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
         </div>
 
+        {# 3. Text (Im DOM unten, Visuell in der Mitte) #}
         <p class="cookie-text">
             {{ 'cookie.text'|trans|raw }}
         </p>

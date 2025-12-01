@@ -1,73 +1,84 @@
-/* =========================================
-   DATEI: cookie-banner.css
-   ZWECK: Styling für das Consent-Modal
-   ========================================= */
-
+/* Container: Fixiert, mittig, solid */
 .cookie-banner {
+    display: none; /* Initial versteckt */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
-    background: var(--bg-surface);
-    color: var(--text-main);
-    
-    /* Goldener Rahmen für Aufmerksamkeit */
-    border: 2px solid var(--col-gold);
-    
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-    
-    z-index: 1000;
-    max-width: 500px;
     width: 90%;
-    text-align: center;
+    max-width: 500px;
     
-    display: none;
+    background-color: var(--bg-surface); /* Solide Farbe */
     
-    /* NEU: Flexbox Spalte, um die visuelle Reihenfolge zu steuern */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 6px;
+    padding: 2rem;
+    z-index: 9999;
+    
+    /* Flexbox für visuelle Umsortierung */
     flex-direction: column;
+    gap: 1rem;
 }
 
-.cookie-banner.active {
-    display: flex; /* Wichtig: flex statt block */
+/* Sichtbarer Zustand */
+.cookie-banner.show {
+    display: flex;
 }
 
-/* 1. Überschrift: Bleibt visuell ganz oben (Order 1) */
-.cookie-banner h3 {
+/* --- VISUELLE REIHENFOLGE (Order) --- */
+
+/* 1. Titel ganz oben */
+.cookie-title {
     order: 1;
-    margin-bottom: 0; /* Inline-Style ersetzt */
+    margin: 0;
+    font-size: 1.25rem;
     color: var(--text-main);
 }
 
-/* 2. Text mit Links: Kommt visuell in die Mitte (Order 2) */
+/* 2. Text in der Mitte (obwohl im DOM ganz unten) */
 .cookie-text {
     order: 2;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
     font-size: 0.95rem;
+    color: var(--text-muted);
     line-height: 1.5;
+    margin: 0;
+    margin-bottom: 0.5rem;
 }
 
-/* 3. Buttons: Kommen visuell ganz nach unten (Order 3) */
+/* 3. Buttons ganz unten (obwohl im DOM weiter oben) */
 .cookie-buttons {
     order: 3;
     display: flex;
     gap: 1rem;
-    justify-content: center;
-    /* Optional: Abstand nach oben sicherstellen */
-    margin-top: 0.5rem; 
+    margin-top: 0.5rem;
 }
 
-/* --- LINKS IM BANNER (WCAG Konformität) --- */
-.cookie-banner a {
-    color: var(--text-main) !important;
-    font-weight: 700;
-    text-decoration: underline;
-    transition: color 0.2s;
+/* Buttons Styling */
+.cookie-buttons .btn {
+    flex: 1; /* Gleich breit */
 }
 
-.cookie-banner a:hover {
-    color: var(--col-gold) !important;
+/* Blur-Effekt */
+.blur-content {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* --- ACCESSIBILITY / FOCUS STATES --- */
+
+/* Genereller Fokus-Stil für Buttons im Banner */
+.cookie-buttons .btn:focus {
+    outline: 2px solid var(--c-accent, #f2b400); /* Goldener Ring */
+    outline-offset: 2px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    z-index: 10; /* Damit der Ring über dem Nachbarn liegt */
+}
+
+/* Speziell für den Primary Button, damit er sich abhebt */
+.cookie-buttons .btn-primary:focus {
+    background-color: var(--c-text-main); /* Dunkler als Hover */
+    border-color: var(--c-text-main);
+    color: var(--c-bg-surface);
 }

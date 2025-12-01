@@ -1,0 +1,50 @@
+{#
+    Statische Kontaktseite.
+    Zeigt Kontaktmöglichkeiten an.
+#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'contact.title'|trans }} – {{ parent() }}{% endblock %}
+{% block description %}{{ 'contact.intro'|trans }} – {{ 'brand.name'|trans }}{% endblock %}
+
+{% block content %}
+<section class="std-page-container">
+    <h1 class="mb-2">{{ 'contact.title'|trans }}</h1>
+    
+    <div class="textbox">
+        <p class="mb-2 text-muted" style="font-size: 1.1rem;">
+            {{ 'contact.intro'|trans }}
+        </p>
+
+        <div class="grid-3" style="margin-bottom: 0;">
+            {# E-Mail #}
+            <div>
+                {# Kein text-gold, Standard h3 für Kontrast #}
+                <h3 class="mb-1">{{ 'contact.email'|trans }}</h3>
+                <p>
+                    <a href="mailto:info@exelor.de">info@exelor.de</a>
+                </p>
+            </div>
+
+            {# Telefon #}
+            <div>
+                <h3 class="mb-1">{{ 'contact.phone'|trans }}</h3>
+                <p>
+                    +49 (0) 123 44 55 66<br>
+                    <span class="text-muted font-small">(Mo-Fr, 9-17 Uhr)</span>
+                </p>
+            </div>
+
+            {# Anschrift #}
+            <div>
+                <h3 class="mb-1">{{ 'contact.address'|trans }}</h3>
+                <p>
+                    Max Mustermann<br>
+                    Musterstraße 1<br>
+                    12345 Musterstadt
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

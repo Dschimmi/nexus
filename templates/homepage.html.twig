@@ -12,8 +12,8 @@
             {{ 'home.hero.text'|trans }}
         </p>
         <div class="hero-actions">
-            <a href="/download" class="btn btn-primary">{{ 'home.hero.btn_start'|trans }}</a>
-            <a href="/docs" class="btn btn-outline">{{ 'home.hero.btn_docs'|trans }}</a>
+            {# Ziel geändert auf Kontakt, da Download noch nicht existiert #}
+            <a href="/kontakt" class="btn btn-primary">{{ 'home.hero.btn_start'|trans }}</a>
         </div>
     </section>
 
@@ -88,45 +88,21 @@
             <p class="text-muted">
                 {{ 'home.docs.text2'|trans }}
             </p>
-            <a href="/community" class="link-gold">{{ 'home.docs.link'|trans }}</a>
+            {# Link entfernt, da Seite nicht existiert #}
         </section>
     </div>
 
-    
-<!-- 4. CTA SECTION -->
+    <!-- 4. CTA SECTION (Vereinfacht auf Kontakt) -->
     <section class="textbox text-center">
         <h2 class="mb-2">{{ 'home.cta.title'|trans }}</h2>
         
-        <div class="grid-3 mb-1">
-            <!-- Spalte 1 -->
-            <div class="flex-col-full">
-                <h4 class="mb-1">{{ 'home.cta.col1.title'|trans }}</h4>
-                <p class="text-muted font-small">{{ 'home.cta.col1.text'|trans }}</p>
-                <div class="textbox-actions">
-                    <a href="/download" class="btn btn-primary" style="width: 100%;">{{ 'home.cta.col1.btn'|trans }}</a>
-                </div>
-            </div>
-
-            <!-- Spalte 2 -->
-            <div class="flex-col-full">
-                <h4 class="mb-1">{{ 'home.cta.col2.title'|trans }}</h4>
-                <p class="text-muted font-small">{{ 'home.cta.col2.text'|trans }}</p>
-                <div class="textbox-actions">
-                    <a href="/tutorials" class="btn btn-outline" style="width: 100%;">{{ 'home.cta.col2.btn'|trans }}</a>
-                </div>
-            </div>
-
-            <!-- Spalte 3 -->
-            <div class="flex-col-full">
-                <h4 class="mb-1">{{ 'home.cta.col3.title'|trans }}</h4>
-                <p class="text-muted font-small">{{ 'home.cta.col3.text'|trans }}</p>
-                <div class="textbox-actions">
-                    <a href="/contact" class="btn btn-outline" style="width: 100%;">{{ 'home.cta.col3.btn'|trans }}</a>
-                </div>
+        <div style="max-width: 600px; margin: 0 auto;">
+            <h4 class="mb-1">{{ 'home.cta.col3.title'|trans }}</h4>
+            <p class="text-muted mb-2">{{ 'home.cta.col3.text'|trans }}</p>
+            <div class="textbox-actions" style="justify-content: center;">
+                <a href="/kontakt" class="btn btn-primary">{{ 'home.cta.col3.btn'|trans }}</a>
             </div>
         </div>
     </section>
-
-  
 
 {% endblock %}

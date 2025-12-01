@@ -57,6 +57,11 @@ class Kernel
         // Starte die Session über den Service aus dem Container.
         $this->container->get('session_service')->start();
 
+        // Wir stellen das 'app' Objekt global für Twig bereit (für app.request.pathInfo etc.)
+        /** @var Environment $twig */
+        $twig = $this->container->get(Environment::class);
+        $twig->addGlobal('app', ['request' => $request]);
+
         // Code zur Spracherkennung (wird hier eingefügt, sobald er benötigt wird).
 
         try {

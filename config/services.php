@@ -90,9 +90,16 @@ return function(ContainerBuilder $container) {
         ->addTag('twig.extension');
 
     // Der zentrale Twig Environment Service
+    // Umsetzung ADR 011: Environment-Awareness für Cache & Debugging
     $container->register(Environment::class, Environment::class)
-        ->addArgument(new Reference('twig.loader')) // Benötigt den Loader
-        ->addMethodCall('addExtension', [new Reference('twig.app_extension')]) // Fügt unsere Extension hinzu
+        ->addArgument(new Reference('twig.loader')) // 1. Argument: Loader
+        ->addArgument([                             // 2. Argument: Optionen
+            'debug' => $getEnv('APP_ENV') === 'development',
+            'cache' => ($getEnv('APP_ENV') === 'development') ? false : $projectDir . '/var/cache/twig',
+            'auto_reload' => true,
+            'strict_variables' => ($getEnv('APP_ENV') === 'development'),
+        ])
+        ->addMethodCall('addExtension', [new Reference('twig.app_extension')])
         ->setPublic(true);
 
     // =========================================================================

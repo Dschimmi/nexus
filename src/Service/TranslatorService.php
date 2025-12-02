@@ -12,10 +12,16 @@ class TranslatorService
 {
     private array $translations = [];
     private string $currentLocale = 'de'; // Default Sprache
+    private string $translationsDir;
 
-    public function __construct(SessionService $session)
+    /**
+     * @param SessionService $session    (Aktuell noch ungenutzt, für spätere User-Sprache)
+     * @param string         $projectDir Der absolute Pfad zum Projektverzeichnis.
+     */
+    public function __construct(SessionService $session, string $projectDir)
     {
         // Später: Locale aus Session laden ($session->get('locale'))
+        $this->translationsDir = $projectDir . '/translations';
         $this->loadTranslations();
     }
 
@@ -24,8 +30,13 @@ class TranslatorService
      */
     private function loadTranslations(): void
     {
-        // Pfad zur Sprachdatei (z.B. translations/de.php)
-        $path = dirname(__DIR__, 2) . '/translations/' . $this->currentLocale . '.php';
+        $path = $this->translationsDir . '/' . $this->currentLocale . '.php';
+
+        // --- DEBUG START (Temporär) ---
+        // Wir geben den Pfad und das Ergebnis der Prüfung aus.
+        fwrite(STDERR, "\n[DEBUG] Prüfe Pfad: " . $path . "\n");
+        fwrite(STDERR, "[DEBUG] file_exists: " . (file_exists($path) ? 'JA' : 'NEIN') . "\n");
+        // --- DEBUG END ---
 
         if (file_exists($path)) {
             $this->translations = require $path;

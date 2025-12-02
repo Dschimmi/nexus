@@ -50,6 +50,7 @@ return function(ContainerBuilder $container) {
     // Der Service für Übersetzungen
     $container->register('translator_service', TranslatorService::class)
         ->addArgument(new Reference('session_service')) // Benötigt den Session-Service
+        ->addArgument($projectDir) // Projektpfad injizieren für Testbarkeit
         ->setPublic(true);
 
     // Der Service für Assets (Manifest, Dev/Prod automatisch)

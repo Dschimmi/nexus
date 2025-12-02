@@ -1,0 +1,59 @@
+name: CI Pipeline
+
+# Wann soll die Pipeline laufen?
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+# Was soll passieren?
+jobs:
+  build-and-test:
+    name: Build & Test (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+
+    # Wir testen gegen verschiedene PHP-Versionen (Matrix)
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.2', '8.3']
+
+    steps:
+      # 1. Code auschecken
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. PHP Umgebung einrichten
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl, pdo, pdo_sqlite
+          coverage: none # Coverage erst später aktivieren, spart Zeit
+
+      # 3. Abhängigkeiten installieren
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # 4. Verzeichnisstruktur für Tests vorbereiten
+      # (Falls wir File-Tests ohne vfsStream hätten, hier wichtig)
+      - name: Prepare Filesystem
+        run: |
+          mkdir -p public/build
+          mkdir -p public/pages
+          touch config/modules.json
+
+      # 5. Umgebungsvariablen für Tests setzen
+      # Wir simulieren die .env Variablen direkt in der Pipeline
+      - name: Create .env for Testing
+        run: |
+          echo "APP_ENV=test" >> .env
+          echo "ADMIN_USER=admin" >> .env
+          echo "ADMIN_EMAIL=admin@localhost" >> .env
+          # Ein echter Hash für 'testpass'
+          echo "ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=4,p=1$NEF6R28u...' " >> .env
+
+      # 6. Tests ausführen
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testdox

@@ -32,12 +32,6 @@ class TranslatorService
     {
         $path = $this->translationsDir . '/' . $this->currentLocale . '.php';
 
-        // --- DEBUG START (Temporär) ---
-        // Wir geben den Pfad und das Ergebnis der Prüfung aus.
-        fwrite(STDERR, "\n[DEBUG] Prüfe Pfad: " . $path . "\n");
-        fwrite(STDERR, "[DEBUG] file_exists: " . (file_exists($path) ? 'JA' : 'NEIN') . "\n");
-        // --- DEBUG END ---
-
         if (file_exists($path)) {
             $this->translations = require $path;
         }

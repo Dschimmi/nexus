@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Dies ist die zentrale Konfigurationsdatei für PHPUnit -->
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="vendor/autoload.php"
-    colors="true"
->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+    
     <testsuites>
-        <!-- Definiert eine "Test-Suite" namens "App". -->
-        <testsuite name="App">
-            <!-- Sagt PHPUnit, es soll in diesem Ordner nach Testdateien suchen. -->
-            <directory>tests</directory>
+        <testsuite name="Unit">
+            <!-- Hier liegen unsere neuen Tests -->
+            <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>

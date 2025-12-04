@@ -63,10 +63,18 @@
 
                     <!-- 2. Sprache -->
                     {% if config('module_language_selection') %}
-                    <select class="header-select" aria-label="Sprachauswahl">
-                        <option value="de">DE</option>
-                        <option value="en">EN</option>
-                    </select>
+                    <div class="custom-dropdown">
+                        <button class="custom-dropdown-btn" aria-label="Sprache wählen">
+                            {# Icon: Weltkugel #}
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            {# Icon: Pfeil klein #}
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="custom-dropdown-content">
+                            <a href="?lang=de">Deutsch</a>
+                            <a href="?lang=en">English</a>
+                        </div>
+                    </div>
                     {% endif %}
 
                     <!-- 3. Darkmode Toggle -->
@@ -80,22 +88,24 @@
 
                     <!-- 4. Auth Buttons -->
                     {% if user is defined %}
-                        {# Eingeloggter Zustand: Dropdown Menü #}
-                        <div class="user-dropdown">
-                            <button class="user-dropdown-btn">
+                        {# Eingeloggter Zustand: Custom Dropdown #}
+                        <div class="custom-dropdown">
+                            <button class="custom-dropdown-btn">
                                 {{ 'header.greeting'|trans({'%name%': user.username}) }}
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
-                            <div class="dropdown-content">
+                            <div class="custom-dropdown-content">
                                 <a href="/admin">Admin Dashboard</a>
                                 <a href="/admin/logout">{{ 'header.logout'|trans|default('Abmelden') }}</a>
                             </div>
                         </div>
                     {% elseif config('module_user_management') %}
-                        {# Ausgeloggter Zustand: Login/Register (nur wenn Modul aktiv) #}
+                        {# Ausgeloggter Zustand: Login Buttons #}
                         <div class="auth-buttons">
-                            <a href="/login" class="btn btn-outline header-btn">{{ 'header.login'|trans }}</a>
-                            <a href="/register" class="btn btn-primary header-btn">{{ 'header.register'|trans }}</a>
+                            {# Login führt zum Admin-Bereich #}
+                            <a href="/admin" class="btn btn-outline header-btn">{{ 'header.login'|trans }}</a>
+                            {# Registrieren führt zum Kontaktformular (Account anfragen) #}
+                            <a href="/kontakt" class="btn btn-primary header-btn">{{ 'header.register'|trans }}</a>
                         </div>
                     {% endif %}
                 </div>

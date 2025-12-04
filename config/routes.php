@@ -82,6 +82,20 @@ $routes->add('admin_page_create', new Route(
     methods: ['GET', 'POST']
 ));
 
+// Seiten verwalten (Liste)
+$routes->add('admin_pages_list', new Route(
+    path: '/admin/pages',
+    defaults: ['_controller' => [AdminController::class, 'listPages']],
+    methods: ['GET']
+));
+
+// Seiten löschen (POST)
+$routes->add('admin_pages_delete', new Route(
+    path: '/admin/pages/delete',
+    defaults: ['_controller' => [AdminController::class, 'deletePages']],
+    methods: ['POST']
+));
+
 /**
  * ============================================================================
  *  DYNAMISCHE SEITEN (Dummy-Pages)

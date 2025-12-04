@@ -99,6 +99,7 @@ return [
     'admin.save_btn'          => 'Einstellungen speichern',   // Save button text
     'admin.pages_title'       => 'Seiten-Verwaltung',         // Heading for pages section
     'admin.pages_create_link' => 'Neue Dummy-Seite erstellen',// Link to create a new page
+    'admin.pages_btn_manage'  => 'Seiten verwalten',          // Button to go to list view
 
     // --- ADMIN PAGE CREATION ---
     'admin.page_create_title'  => 'Neue Seite erstellen',      // Title of the creation form
@@ -108,6 +109,17 @@ return [
     'admin.page_btn_save'      => 'Seite veröffentlichen',     // Submit button text
     'admin.page_success'       => 'Seite erfolgreich erstellt.', // Success flash message
     'admin.page_error'         => 'Fehler beim Erstellen der Seite.', // Generic error message
+
+    // --- ADMIN PAGE MANAGEMENT ---
+    'admin.pages_list_title'   => 'Seiten verwalten',          // Headline for the list view
+    'admin.pages_col_select'   => 'Auswahl',                   // Column header for checkboxes
+    'admin.pages_col_title'    => 'Titel',                     // Column header for page title
+    'admin.pages_col_slug'     => 'URL-Pfad',                  // Column header for slug
+    'admin.pages_btn_create'   => 'Neue Seite erstellen',      // Button to go to create form
+    'admin.pages_btn_delete'   => 'Markierte löschen',         // Delete action button
+    'admin.pages_empty'        => 'Keine Seiten vorhanden.',   // Text when list is empty
+    'admin.pages_delete_ok'    => 'Seite(n) erfolgreich gelöscht.', // Success flash message
+    'admin.pages_delete_err'   => 'Fehler beim Löschen.',      // Error flash message
 
     // --------------
     // --- FOOTER ---

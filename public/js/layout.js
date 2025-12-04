@@ -60,3 +60,20 @@ function initSubheaderScroll() {
     // Initialer Check
     checkArrows();
 }
+
+/* =========================================
+   GLOBAL SHORTCUTS
+   ========================================= */
+
+document.addEventListener('keydown', function(event) {
+    // Strg + K (oder Cmd + K auf Mac) abfangen
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        const searchInput = document.querySelector('.header-search');
+        
+        // Nur wenn das Suchfeld tatsächlich existiert (Modul aktiviert)
+        if (searchInput) {
+            event.preventDefault(); // Browser-Verhalten unterdrücken
+            searchInput.focus();    // Fokus in unser Feld setzen
+        }
+    }
+});

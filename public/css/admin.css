@@ -38,24 +38,6 @@
     margin-bottom: 1rem;
 }
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    user-select: none;
-}
-
-.checkbox-label input[type="checkbox"] {
-    width: 1.25rem;
-    height: 1.25rem;
-    cursor: pointer;
-}
-
-.checkbox-text {
-    font-size: 1rem;
-}
-
 /* Buttons Container */
 .form-actions {
     margin-top: 1.5rem;

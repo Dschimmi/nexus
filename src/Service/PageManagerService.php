@@ -187,5 +187,41 @@ class PageManagerService
         }
 
         return $pages;
-    }    
+    }
+    
+    /**
+     * Löscht eine Liste von Dummy-Seiten basierend auf ihren Slugs.
+     * Aktualisiert anschließend die Sitemap.
+     * 
+     * @param array $slugs Liste der Slugs (Strings), die gelöscht werden sollen.
+     * @return int Anzahl der erfolgreich gelöschten Dateien.
+     */
+    public function deletePages(array $slugs): int
+    {
+        $deletedCount = 0;
+
+        foreach ($slugs as $slug) {
+            // Sicherheit: Slug bereinigen (nur a-z, 0-9, -)
+            $cleanSlug = preg_replace('/[^a-z0-9-]/', '', strtolower($slug));
+            
+            if (empty($cleanSlug)) {
+                continue;
+            }
+
+            $filepath = $this->pagesDir . '/' . $cleanSlug . '.html';
+
+            if (file_exists($filepath)) {
+                if (unlink($filepath)) {
+                    $deletedCount++;
+                }
+            }
+        }
+
+        // Sitemap nur aktualisieren, wenn tatsächlich etwas gelöscht wurde
+        if ($deletedCount > 0) {
+            $this->updateSitemap();
+        }
+
+        return $deletedCount;
+    }
 }

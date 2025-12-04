@@ -1,5 +1,5 @@
 {
-    "module_user_management": false,
+    "module_user_management": true,
     "module_site_search": true,
     "module_cookie_banner": true,
     "module_language_selection": true

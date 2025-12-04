@@ -143,6 +143,10 @@ class AdminController
      * @param Request $request Der HTTP-Request.
      * @return Response Das Formular oder ein Redirect.
      */
+    /**
+     * Handhabt das Erstellen neuer Dummy-Seiten.
+     * Unterstützt GET (Formular anzeigen) und POST (Seite speichern).
+     */
     public function createPage(Request $request): Response
     {
         // Zugriffsschutz
@@ -170,18 +174,74 @@ class AdminController
                 return new RedirectResponse('/admin');
 
             } catch (\RuntimeException $e) {
-                // Fehler beim Speichern (z.B. Rechteproblem oder ungültiger Slug).
-                // Formular erneut rendern und Fehlermeldung anzeigen.
+                // Fehler beim Speichern: Formular erneut rendern und Fehlermeldung anzeigen.
                 return new Response($this->twig->render('admin/page_create.html.twig', [
                     'error'        => $e->getMessage(),
                     'last_title'   => $title,
                     'last_slug'    => $slug,
-                    'last_content' => $content
+                    'last_content' => $content,
+                    'user'         => $this->authService->getUser() // User-Daten für Header übergeben
                 ]));
             }
         }
 
         // GET-Request: Leeres Formular anzeigen.
-        return new Response($this->twig->render('admin/page_create.html.twig'));
+        return new Response($this->twig->render('admin/page_create.html.twig', [
+            'user' => $this->authService->getUser() // User-Daten für Header übergeben
+        ]));
+    }
+
+    /**
+     * Zeigt eine Liste aller Dummy-Seiten zur Verwaltung an.
+     */
+    public function listPages(): Response
+    {
+        // Zugriffsschutz
+        if (!$this->authService->isAdmin()) {
+            return new RedirectResponse('/admin');
+        }
+
+        // Seiten laden
+        $pages = $this->pageManager->getPages();
+
+        return new Response($this->twig->render('admin/pages_list.html.twig', [
+            'pages' => $pages,
+            'user'  => $this->authService->getUser() // Damit der Header stimmt
+        ]));
+    }
+
+    /**
+     * Löscht ausgewählte Seiten (POST-Request).
+     */
+    public function deletePages(Request $request): Response
+    {
+        // Zugriffsschutz
+        if (!$this->authService->isAdmin()) {
+            return new RedirectResponse('/admin');
+        }
+
+        // Slugs aus dem Formular holen (erwartet name="slugs[]")
+        $payload = $request->request->all();
+        $slugs = $payload['slugs'] ?? [];
+
+        if (!empty($slugs) && is_array($slugs)) {
+            $count = $this->pageManager->deletePages($slugs);
+            
+            if ($count > 0) {
+                $this->session->addFlash(
+                    'success', 
+                    $this->translator->translate('admin.pages_delete_ok') . " ($count)"
+                );
+            }
+        } else {
+            // Optional: Info, dass nichts ausgewählt war
+            $this->session->addFlash(
+                'info', 
+                'Keine Seiten ausgewählt.'
+            );
+        }
+
+        // Zurück zur Liste
+        return new RedirectResponse('/admin/pages');
     }
 }

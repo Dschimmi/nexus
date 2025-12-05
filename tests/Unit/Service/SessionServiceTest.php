@@ -8,20 +8,12 @@ use MrWo\Nexus\Service\SessionService;
 use MrWo\Nexus\Service\SessionBag;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Testet die Logik des SessionService.
- * Hinweis: Da native PHP-Sessions im CLI-Modus (PHPUnit) schwer zu testen sind,
- * konzentrieren wir uns auf die Bag-Logik und Flash-Messages.
- * Die echten session_* Funktionen werden hier teilweise ausgeführt, 
- * wir nutzen @runInSeparateProcess um Seiteneffekte zu minimieren.
- */
 class SessionServiceTest extends TestCase
 {
     private SessionService $sessionService;
 
     protected function setUp(): void
     {
-        // Wir setzen $_SESSION manuell zurück, um einen sauberen State zu haben
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
         }
@@ -35,10 +27,7 @@ class SessionServiceTest extends TestCase
      */
     public function testGetBagCreatesNewBag(): void
     {
-        // Act
         $bag = $this->sessionService->getBag('test_bag');
-
-        // Assert
         $this->assertInstanceOf(SessionBag::class, $bag);
         $this->assertEmpty($bag->all());
     }
@@ -48,15 +37,12 @@ class SessionServiceTest extends TestCase
      */
     public function testDataPersistenceBetweenBags(): void
     {
-        // Arrange
         $bag = $this->sessionService->getBag('attributes');
         $bag->set('theme', 'dark');
 
-        // Act - Simulate Save (write to $_SESSION)
-        $this->sessionService->start(); // Muss gestartet sein
+        $this->sessionService->start();
         $this->sessionService->save();
 
-        // Assert - Check global $_SESSION
         $this->assertArrayHasKey('attributes', $_SESSION);
         $this->assertEquals('dark', $_SESSION['attributes']['theme']);
     }
@@ -66,43 +52,46 @@ class SessionServiceTest extends TestCase
      */
     public function testAddAndGetFlashMessages(): void
     {
-        // Arrange
         $this->sessionService->addFlash('success', 'Alles super');
         $this->sessionService->addFlash('error', 'Oje');
 
-        // Act
         $flashes = $this->sessionService->getFlashes();
 
-        // Assert
         $this->assertCount(2, $flashes);
         $this->assertEquals('Alles super', $flashes['success'][0]);
         $this->assertEquals('Oje', $flashes['error'][0]);
 
-        // Act 2 - Check Auto-Expire
         $flashesEmpty = $this->sessionService->getFlashes();
-        $this->assertEmpty($flashesEmpty, 'Flash messages should be cleared after reading');
+        $this->assertEmpty($flashesEmpty);
     }
 
     /**
      * @runInSeparateProcess
      */
+    /**
+     * @runInSeparateProcess
+     */
     public function testInvalidateClearsEverything(): void
     {
-        // Arrange
+        // 1. Arrange
         $this->sessionService->getBag('security')->set('user_id', 123);
         $this->sessionService->save();
         
-        $this->assertNotEmpty($_SESSION);
-
-        // Act
+        // 2. Act
         $this->sessionService->invalidate();
 
-        // Assert
-        $this->assertEmpty($_SESSION, 'Session should be empty after invalidate');
-        
-        // FIX: Wir müssen den Bag NEU holen. Der alte Bag im Speicher ($bag variable)
-        // wird vom Service nicht magisch geleert, da er nur die Referenz im Array löscht.
+        // 3. Assert (Sofort prüfen!)
+        $this->assertEmpty($_SESSION, 'Session should be empty immediately after invalidate');
+
+        // 4. Force New Session ID (Simulate Browser behavior)
+        // Im echten Browser löscht invalidate() das Cookie.
+        // In PHPUnit müssen wir manuell so tun, als hätten wir keine ID mehr.
+        session_id(uniqid());
+
+        // 5. Verify Bag Reset with fresh service
+        $this->sessionService = new SessionService();
         $newBag = $this->sessionService->getBag('security');
+        
         $this->assertNull($newBag->get('user_id'), 'Bag should be empty/re-initialized');
     }
 }

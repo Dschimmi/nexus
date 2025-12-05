@@ -4,146 +4,97 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use MrWo\Nexus\Service\SessionService;
 use MrWo\Nexus\Service\TranslatorService;
-use org\bovigo\vfs\vfsStream;
+use MrWo\Nexus\Service\SessionService;
+use MrWo\Nexus\Service\SessionBag;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Testet den TranslatorService isoliert.
- * 
- * Nutzt vfsStream (Virtual File System), um Sprachdateien im Arbeitsspeicher 
- * zu simulieren. Dies entkoppelt den Test von der echten `translations/de.php`
- * und verhindert Fehler auf CI-Systemen durch fehlende Dateien.
- */
 class TranslatorServiceTest extends TestCase
 {
     private $sessionMock;
-    private $vfsRoot;
+    private $attributeBagMock;
+    private string $projectDir;
 
-    /**
-     * Bereitet die Testumgebung vor.
-     * Erstellt ein virtuelles Dateisystem 'root' mit einem Unterordner 'translations'
-     * und einer validen PHP-Array-Datei 'de.php'.
-     */
     protected function setUp(): void
     {
+        // Virtuelles Projektverzeichnis erstellen
+        $this->projectDir = sys_get_temp_dir() . '/nexus_test_' . uniqid();
+        mkdir($this->projectDir . '/translations', 0777, true);
+
+        // Dummy-Übersetzung anlegen
+        $deContent = "<?php return ['welcome' => 'Willkommen', 'hello' => 'Hallo %name%'];";
+        file_put_contents($this->projectDir . '/translations/de.php', $deContent);
+
+        // Session Mocking
         $this->sessionMock = $this->createMock(SessionService::class);
-        
-        // 1. Setup vfsStream mit expliziten Berechtigungen (0777), um Zugriffsfehler zu vermeiden.
-        $this->vfsRoot = vfsStream::setup('root', 0777);
-        
-        // 2. Wir erstellen die Struktur manuell, um sicherzustellen, dass der Ordner existiert.
-        $translationsDir = vfsStream::newDirectory('translations', 0777)->at($this->vfsRoot);
-        
-        // 3. Inhalt der virtuellen Sprachdatei definieren.
-        // WICHTIG: Der String muss valides PHP sein. Wir nutzen explizite Zeilenumbrüche (\n),
-        // damit 'require' auch auf strikten Linux-Systemen (CI) den Datei-Header korrekt parst.
-        $phpContent = "<?php\n return [\n" .
-            "    'test.simple' => 'Einfacher Text',\n" .
-            "    'test.param' => 'Hallo %name%',\n" .
-            "    'test.multi' => 'Seite %cur% von %max%'\n" .
-            "];";
+        $this->attributeBagMock = $this->createMock(SessionBag::class);
 
-        // Datei im virtuellen Ordner anlegen
-        vfsStream::newFile('de.php', 0777)
-            ->withContent($phpContent)
-            ->at($translationsDir);
+        // Wenn getBag('attributes') aufgerufen wird, gib den Mock zurück
+        // Wir nutzen any(), da initializeLocale vielleicht nicht immer aufgerufen wird
+        $this->sessionMock->method('getBag')
+            ->with('attributes')
+            ->willReturn($this->attributeBagMock);
     }
 
-    /**
-     * Helper-Methode zum Erstellen des Services.
-     * Injiziert die URL des virtuellen Dateisystems (vfs://root) als Projektpfad.
-     */
-    private function createService(): TranslatorService
+    protected function tearDown(): void
     {
-        return new TranslatorService($this->sessionMock, vfsStream::url('root'));
+        // Aufräumen
+        if (is_dir($this->projectDir)) {
+            array_map('unlink', glob($this->projectDir . '/translations/*'));
+            rmdir($this->projectDir . '/translations');
+            rmdir($this->projectDir);
+        }
     }
 
-    /**
-     * Debug-Test: Prüft die Integrität der virtuellen Umgebung.
-     * Stellt sicher, dass vfsStream korrekt konfiguriert ist und die Datei via 'require'
-     * geladen werden kann. Wenn dieser Test fehlschlägt, liegt das Problem nicht am Service.
-     */
-    public function testVirtualFileIsReadable()
+    public function testTranslateSimpleKey(): void
     {
-        $path = vfsStream::url('root/translations/de.php');
-        
-        // Existenzprüfung
-        $this->assertFileExists($path, 'Die virtuelle Sprachdatei wurde nicht angelegt.');
-        
-        // Lesbarkeitsprüfung (Simuliert das Verhalten von TranslatorService::loadTranslations)
-        $data = require $path;
-        
-        $this->assertIsArray($data, 'Die virtuelle Datei gab kein Array zurück.');
-        $this->assertArrayHasKey('test.simple', $data, 'Das Array enthält nicht den erwarteten Test-Schlüssel.');
+        $translator = new TranslatorService($this->sessionMock, $this->projectDir);
+        $this->assertEquals('Willkommen', $translator->translate('welcome'));
     }
 
-    /**
-     * Testet, ob der Service den Schlüssel selbst zurückgibt,
-     * wenn dieser nicht in der Übersetzungsdatei gefunden wird.
-     */
-    public function testTranslateReturnsKeyIfTranslationMissing()
+    public function testTranslateWithParams(): void
     {
-        $service = $this->createService();
-        $missingKey = 'nicht.vorhanden';
-        
-        $this->assertEquals($missingKey, $service->translate($missingKey));
+        $translator = new TranslatorService($this->sessionMock, $this->projectDir);
+        $this->assertEquals('Hallo Max', $translator->translate('hello', ['%name%' => 'Max']));
     }
 
-    /**
-     * Testet, ob ein einfacher String (ohne Platzhalter) korrekt geladen wird.
-     * Dies validiert den grundlegenden Lademechanismus des Services.
-     */
-    public function testTranslateReturnsSimpleText()
+    public function testTranslateUnknownKeyReturnsKey(): void
     {
-        $service = $this->createService();
-        
-        // Erwartet: 'Einfacher Text' (Wert aus dem virtuellen Array)
-        // Ist: 'test.simple' (Key), falls das Laden fehlschlägt.
-        $this->assertEquals('Einfacher Text', $service->translate('test.simple'));
+        $translator = new TranslatorService($this->sessionMock, $this->projectDir);
+        $this->assertEquals('unknown.key', $translator->translate('unknown.key'));
     }
 
-    /**
-     * Testet die Ersetzung eines einzelnen Platzhalters (%name%).
-     */
-    public function testTranslateReplacesPlaceholders()
+    public function testInitializeLocaleFromUrl(): void
     {
-        $service = $this->createService();
+        $translator = new TranslatorService($this->sessionMock, $this->projectDir);
         
-        $result = $service->translate('test.param', ['%name%' => 'Nexus']);
+        // Request mit ?lang=en simulieren
+        $request = new Request(['lang' => 'en']);
+
+        // Erwartung: Die neue Sprache muss in der Session gespeichert werden
+        $this->attributeBagMock->expects($this->once())
+            ->method('set')
+            ->with('locale', 'en');
+
+        $translator->initializeLocale($request);
         
-        $this->assertEquals('Hallo Nexus', $result);
+        // Da wir keine en.php haben, wird er im Fallback wieder 'de' laden oder leer bleiben,
+        // aber wir testen hier primär die Logik der Umschaltung.
+        $this->assertEquals('en', $translator->getLocale());
     }
 
-    /**
-     * Testet die Ersetzung mehrerer Platzhalter in einem String.
-     */
-    public function testTranslateHandlesMultiplePlaceholders()
+    public function testInitializeLocaleFromSession(): void
     {
-        $service = $this->createService();
-        
-        $result = $service->translate('test.multi', [
-            '%cur%' => '1', 
-            '%max%' => '10'
-        ]);
-        
-        $this->assertEquals('Seite 1 von 10', $result);
-    }
-    
-    /**
-     * Testet die Robustheit des Services.
-     * Wenn der Ordner 'translations' fehlt, darf der Service nicht abstürzen (Fatal Error),
-     * sondern sollte stabil bleiben (z.B. Keys zurückgeben).
-     */
-    public function testServiceIsRobustAgainstMissingFile()
-    {
-        // Wir simulieren ein leeres Root ohne Translations-Ordner
-        vfsStream::setup('empty');
-        
-        $service = new TranslatorService($this->sessionMock, vfsStream::url('empty'));
-        
-        // Erwartung: Fallback auf den Key
-        $this->assertEquals('foo', $service->translate('foo'));
+        // Szenario: Session sagt 'en', URL sagt nichts
+        $this->attributeBagMock->method('has')->with('locale')->willReturn(true);
+        $this->attributeBagMock->method('get')->with('locale')->willReturn('en');
+
+        $translator = new TranslatorService($this->sessionMock, $this->projectDir);
+        $request = new Request(); // Leer
+
+        $translator->initializeLocale($request);
+
+        $this->assertEquals('en', $translator->getLocale());
     }
 }

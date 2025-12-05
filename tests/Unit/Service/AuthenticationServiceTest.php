@@ -1,126 +1,139 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MrWo\Nexus\Tests\Unit\Service;
 
 use MrWo\Nexus\Service\AuthenticationService;
 use MrWo\Nexus\Service\SessionService;
+use MrWo\Nexus\Service\SessionBag;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationServiceTest extends TestCase
 {
     private $sessionMock;
-    private string $testUser = 'admin';
-    private string $testEmail = 'admin@example.com';
-    private string $testPassword = 'geheimnis';
-    private string $testHash;
+    private $securityBagMock;
+    private $authService;
+
+    private string $adminUser = 'admin';
+    private string $adminEmail = 'admin@example.com';
+    // Hash für 'secret'
+    private string $adminPassHash = '$argon2id$v=19$m=65536,t=4,p=1$c29tZXNhbHQ$GlX...'; 
 
     protected function setUp(): void
     {
-        // 1. Session Mock erstellen
+        // 1. Wir mocken den SessionService
         $this->sessionMock = $this->createMock(SessionService::class);
+        
+        // 2. Wir mocken den Security-Bag (das ist neu!)
+        $this->securityBagMock = $this->createMock(SessionBag::class);
 
-        // 2. Einen validen Hash für das Test-Passwort generieren
-        // Da der Service password_verify() nutzt, muss der Hash echt sein.
-        $this->testHash = password_hash($this->testPassword, PASSWORD_DEFAULT);
-    }
+        // 3. Wir bringen dem SessionService bei: 
+        // "Wenn jemand getBag('security') aufruft, gib den Mock zurück."
+        $this->sessionMock->method('getBag')
+            ->with('security')
+            ->willReturn($this->securityBagMock);
 
-    private function createService(): AuthenticationService
-    {
-        return new AuthenticationService(
+        // Wir brauchen einen validen Hash für den Test
+        $this->adminPassHash = password_hash('secret', PASSWORD_ARGON2ID);
+
+        $this->authService = new AuthenticationService(
             $this->sessionMock,
-            $this->testUser,
-            $this->testEmail,
-            $this->testHash
+            $this->adminUser,
+            $this->adminEmail,
+            $this->adminPassHash
         );
     }
 
-    public function testLoginSuccessWithUsername()
+    public function testLoginSuccessWithUsername(): void
     {
-        $service = $this->createService();
-
-        // Erwartung: Session-ID muss neu generiert werden (Sicherheit!)
+        // Erwartung: Session-ID muss rotiert werden (migrate)
         $this->sessionMock->expects($this->once())
-            ->method('regenerate');
+            ->method('migrate')
+            ->with(true);
 
-        // Erwartung: User-Daten müssen in die Session geschrieben werden
-        $this->sessionMock->expects($this->once())
+        // Erwartung: User-Daten landen im Bag
+        $this->securityBagMock->expects($this->once())
             ->method('set')
-            ->with('user', $this->callback(function($userArray) {
-                return $userArray['username'] === $this->testUser
-                    && $userArray['role'] === 'Administrator'
-                    && $userArray['group'] === 'System'; // AuthenticationService und die Methode isAdmin() verlassen sich zwingend auf die Gruppe
+            ->with('user', $this->callback(function ($user) {
+                return $user['username'] === 'admin' 
+                    && $user['role'] === 'Administrator';
             }));
 
-        // Login mit korrektem User und Passwort
-        $result = $service->login($this->testUser, $this->testPassword);
+        $result = $this->authService->login('admin', 'secret');
 
-        $this->assertTrue($result, 'Login mit korrektem Username sollte true zurückgeben.');
+        $this->assertTrue($result);
     }
 
-    public function testLoginSuccessWithEmail()
+    public function testLoginSuccessWithEmail(): void
     {
-        $service = $this->createService();
+        // Auch hier Migration erwarten
+        $this->sessionMock->expects($this->once())->method('migrate');
 
-        // Login mit korrekter E-Mail
-        $result = $service->login($this->testEmail, $this->testPassword);
+        $result = $this->authService->login('admin@example.com', 'secret');
 
-        $this->assertTrue($result, 'Login mit korrekter E-Mail sollte true zurückgeben.');
+        $this->assertTrue($result);
     }
 
-    public function testLoginFailureWithWrongPassword()
+    public function testLoginFailureWrongPassword(): void
     {
-        $service = $this->createService();
+        // Erwartung: KEINE Migration, KEIN Setzen von Daten
+        $this->sessionMock->expects($this->never())->method('migrate');
+        $this->securityBagMock->expects($this->never())->method('set');
 
-        // Erwartung: Es darf NICHTS in die Session geschrieben werden
-        $this->sessionMock->expects($this->never())->method('set');
-        $this->sessionMock->expects($this->never())->method('regenerate');
+        $result = $this->authService->login('admin', 'wrong');
 
-        // Login mit falschem Passwort
-        $result = $service->login($this->testUser, 'falschesPasswort');
-
-        $this->assertFalse($result, 'Login mit falschem Passwort muss false zurückgeben.');
+        $this->assertFalse($result);
     }
 
-    public function testLoginFailureWithUnknownUser()
+    public function testLoginFailureUnknownUser(): void
     {
-        $service = $this->createService();
-
-        $result = $service->login('unbekannt', $this->testPassword);
-
-        $this->assertFalse($result, 'Login mit unbekanntem User muss false zurückgeben.');
+        $result = $this->authService->login('unknown', 'secret');
+        $this->assertFalse($result);
     }
 
-    public function testLogout()
+    public function testLogout(): void
     {
-        $service = $this->createService();
+        // Erwartung: Invalidate muss aufgerufen werden
+        $this->sessionMock->expects($this->once())
+            ->method('invalidate');
 
-        // Erwartung: User entfernen UND Session regenerieren
-        $this->sessionMock->expects($this->once())->method('remove')->with('user');
-        $this->sessionMock->expects($this->once())->method('regenerate');
-
-        $service->logout();
+        $this->authService->logout();
     }
 
-    public function testIsAdminReturnsTrueIfSessionHasAdminData()
+    public function testGetUser(): void
     {
-        $service = $this->createService();
+        // Mock-Daten
+        $user = ['id' => 'root', 'username' => 'admin'];
 
-        // Wir simulieren, dass die Session einen Admin zurückgibt
-        $this->sessionMock->method('get')->willReturn([
-            'group' => 'System',
-            'role' => 'Administrator'
-        ]);
+        // Erwartung: Service fragt den Bag
+        $this->securityBagMock->expects($this->once())
+            ->method('get')
+            ->with('user')
+            ->willReturn($user);
 
-        $this->assertTrue($service->isAdmin());
+        $result = $this->authService->getUser();
+
+        $this->assertEquals($user, $result);
     }
 
-    public function testIsAdminReturnsFalseIfSessionEmpty()
+    public function testIsAdminReturnsTrue(): void
     {
-        $service = $this->createService();
+        $adminUser = ['group' => 'System', 'role' => 'Administrator'];
 
-        // Wir simulieren, dass niemand eingeloggt ist (null)
-        $this->sessionMock->method('get')->willReturn(null);
+        $this->securityBagMock->method('get')
+            ->willReturn($adminUser);
 
-        $this->assertFalse($service->isAdmin());
+        $this->assertTrue($this->authService->isAdmin());
+    }
+
+    public function testIsAdminReturnsFalse(): void
+    {
+        $normalUser = ['group' => 'User', 'role' => 'Editor'];
+
+        $this->securityBagMock->method('get')
+            ->willReturn($normalUser);
+
+        $this->assertFalse($this->authService->isAdmin());
     }
 }

@@ -99,8 +99,10 @@ class SessionServiceTest extends TestCase
 
         // Assert
         $this->assertEmpty($_SESSION, 'Session should be empty after invalidate');
-        // Prüfen ob interner Cache auch leer ist
-        $bag = $this->sessionService->getBag('security');
-        $this->assertNull($bag->get('user_id'), 'Bag should be empty/re-initialized');
+        
+        // FIX: Wir müssen den Bag NEU holen. Der alte Bag im Speicher ($bag variable)
+        // wird vom Service nicht magisch geleert, da er nur die Referenz im Array löscht.
+        $newBag = $this->sessionService->getBag('security');
+        $this->assertNull($newBag->get('user_id'), 'Bag should be empty/re-initialized');
     }
 }

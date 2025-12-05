@@ -21,6 +21,8 @@ class TranslatorService
         string $projectDir
     ) {
         $this->translationsDir = $projectDir . '/translations';
+        // Initial laden (Default 'de'), damit der Service sofort nutzbar ist
+        $this->loadTranslations();
     }
 
     /**

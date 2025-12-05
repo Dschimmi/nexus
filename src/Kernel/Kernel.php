@@ -55,14 +55,18 @@ class Kernel
         $configureContainer($this->container);
 
         // Starte die Session über den Service aus dem Container.
-        $this->container->get('session_service')->start();
+        $sessionService = $this->container->get('session_service');
+        $sessionService->start();
 
         // Wir stellen das 'app' Objekt global für Twig bereit (für app.request.pathInfo etc.)
         /** @var Environment $twig */
         $twig = $this->container->get(Environment::class);
         $twig->addGlobal('app', ['request' => $request]);
 
-        // Code zur Spracherkennung (wird hier eingefügt, sobald er benötigt wird).
+        // Initialisiere die Sprache (i18n) basierend auf der Session/Config
+        /** @var TranslatorService $translator */
+        $translator = $this->container->get('translator_service');
+        $translator->initializeLocale($request);
 
         try {
             // Finde die passende Route für die Anfrage.
@@ -72,7 +76,7 @@ class Kernel
             $controllerResolver = new ContainerControllerResolver($this->container);
             $controller = $controllerResolver->getController($request);
             
-            // Ermittle die benötigten Argumente für die Controller-Methode (z.B. Request-Objekt, Services).
+            // Ermittle die benötigten Argumente für die Controller-Methode.
             $argumentResolver = new ArgumentResolver();
             $arguments = $argumentResolver->getArguments($request, $controller);
 
@@ -89,8 +93,7 @@ class Kernel
                 throw $e;
             }
 
-            // Im PROD-Modus: Elegante 404-Seite rendern (mit Auto-Redirect via Template).
-            // Wir holen Twig direkt aus dem Container.
+            // Im PROD-Modus: Elegante 404-Seite rendern.
             /** @var Environment $twig */
             $twig = $this->container->get(Environment::class);
             
@@ -105,13 +108,18 @@ class Kernel
             // Logge den 500-Fehler mit höchster Priorität.
             Debugger::log($e, Debugger::ERROR);
 
-            // Im DEV-Modus soll Tracy den Fehler anzeigen, also werfen wir ihn einfach weiter.
+            // Im DEV-Modus soll Tracy den Fehler anzeigen.
             if ($this->appEnv === 'development') {
                 throw $e;
             }
             // Im PROD-Modus geben wir eine einfache 500-Seite aus.
             $response = new Response('Ein Fehler ist aufgetreten', 500);
+        } finally {
+            // WICHTIG: Session-Daten zurückschreiben, egal ob Erfolg oder Fehler.
+            // Ohne diesen Aufruf gehen Flash-Messages im Fehlerfall verloren.
+            $sessionService->save();
         }
+
         return $response;
     }
 

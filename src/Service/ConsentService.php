@@ -3,26 +3,23 @@
 namespace MrWo\Nexus\Service;
 
 /**
-     * Verwaltet die Zustimmung des Benutzers zu verschiedenen Cookie-Kategorien.
-     * Speichert die Zustimmung persistent in der Session.
-     */
+ * Verwaltet die Zustimmung des Benutzers zu verschiedenen Cookie-Kategorien.
+ * Speichert die Zustimmung persistent im Attribute-Bag der Session.
+ */
 class ConsentService
 {
-    /**
-     * Der Schlüssel, unter dem die Zustimmungen in der Session gespeichert werden.
-     */
     private const SESSION_KEY = 'user_consents';
-    /**
-     * @var SessionService Der Session-Service zur Speicherung der Daten.
-     */
-    private SessionService $sessionService;
+
+    public function __construct(
+        private SessionService $sessionService
+    ) {}
 
     /**
-     * @param SessionService $sessionService Der zu injizierende Session-Service.
+     * Helper: Zugriff auf den Attribute-Bag.
      */
-    public function __construct(SessionService $sessionService)
+    private function getAttributes(): SessionBag
     {
-        $this->sessionService = $sessionService;
+        return $this->sessionService->getBag('attributes');
     }
 
     /**
@@ -30,7 +27,7 @@ class ConsentService
      */
     public function hasConsent(string $category): bool
     {
-        $consents = $this->sessionService->get(self::SESSION_KEY, []);
+        $consents = $this->getAttributes()->get(self::SESSION_KEY, []);
         return $consents[$category] ?? false;
     }
 
@@ -39,9 +36,12 @@ class ConsentService
      */
     public function grantConsent(string $category): void
     {
-        $consents = $this->sessionService->get(self::SESSION_KEY, []);
+        $attributes = $this->getAttributes();
+        $consents = $attributes->get(self::SESSION_KEY, []);
+        
         $consents[$category] = true;
-        $this->sessionService->set(self::SESSION_KEY, $consents);
+        
+        $attributes->set(self::SESSION_KEY, $consents);
     }
 
     /**
@@ -49,8 +49,11 @@ class ConsentService
      */
     public function revokeConsent(string $category): void
     {
-        $consents = $this->sessionService->get(self::SESSION_KEY, []);
+        $attributes = $this->getAttributes();
+        $consents = $attributes->get(self::SESSION_KEY, []);
+        
         $consents[$category] = false;
-        $this->sessionService->set(self::SESSION_KEY, $consents);
+        
+        $attributes->set(self::SESSION_KEY, $consents);
     }
 }

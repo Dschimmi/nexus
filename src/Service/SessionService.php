@@ -7,24 +7,40 @@ namespace MrWo\Nexus\Service;
 use Tracy\Debugger;
 
 /**
- * Zentraler Service für das Session-Management.
- * Setzt Sicherheitsvorgaben (Fingerprinting, Timeouts, Secure Cookies) technisch um.
- * Kennt keine Fachlogik (User, Rollen), nur Key-Value-Speicher.
+ * Nexus Session Service 2.0 (Enterprise Edition).
+ * 
+ * Implementiert strikte Daten-Isolation via "Bags", gehärtete Sicherheit
+ * (Fingerprinting, Locking, Migration) und abstrahierten Zugriff.
+ * 
+ * @see PHN 4.1.2
  */
 class SessionService
 {
-    private const SESSION_LIFETIME = 1800;   // 30 Minuten Inaktivität
-    private const ABSOLUTE_LIFETIME = 28800; // 8 Stunden absolute Laufzeit (8 * 60 * 60)
+    // Konfiguration (Timeouts in Sekunden)
+    private const SESSION_LIFETIME = 1800;   // 30 Min Inaktivität
+    private const ABSOLUTE_LIFETIME = 43200; // 12 Std Hard-Limit
     
-    private const FINGERPRINT_KEY = '__fingerprint';
-    private const LAST_ACTIVITY_KEY = '__last_activity';
-    private const CREATED_AT_KEY = '__created_at';
-
+    // Interne Keys (versteckt vor Bags)
+    private const KEY_META = '__nexus_meta';
+    
     private bool $started = false;
+    
+    // Cache für Bags (Lazy Loading)
+    private array $bags = [];
 
     /**
-     * Startet die Session sicher mit definierten Parametern.
-     * Führt Fingerprinting und Timeout-Checks durch.
+     * Konstruktor. Prüft, ob PHP bereits eine Session gestartet hat.
+     */
+    public function __construct()
+    {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $this->started = true;
+        }
+    }
+
+    /**
+     * Startet die Session (oder resumed sie).
+     * Führt Sicherheitschecks (Fingerprint, Timeout) aus.
      */
     public function start(): void
     {
@@ -32,163 +48,167 @@ class SessionService
             return;
         }
 
+        // Sicherheits-Flags setzen, falls noch keine Session läuft
         if (session_status() === PHP_SESSION_NONE) {
-            // Prüfen, ob wir über HTTPS laufen
-            $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
-
-            // Sicherheits-Flags setzen (PH 4.1.2)
-            ini_set('session.cookie_httponly', '1');
-            
-            // Secure-Flag nur setzen, wenn wir wirklich HTTPS haben!
-            // Sonst verwirft der Browser das Cookie bei lokalen HTTP-Tests.
-            ini_set('session.cookie_secure', $isHttps ? '1' : '0');
-            
-            ini_set('session.cookie_samesite', 'Strict');
-            ini_set('session.use_strict_mode', '1');
-
+            $this->configureCookieParams();
             session_start();
         }
 
         $this->started = true;
-
-        // Sicherheitsprüfungen durchführen
         $this->validateSession();
     }
 
     /**
-     * Regeneriert die Session-ID.
-     * MUSS bei jedem Login/Logout oder Rechteänderung aufgerufen werden (PH 9.1.1.6.1).
+     * Zugriff auf einen isolierten Daten-Container ("Bag").
+     * Lädt den Bag lazy aus der Session oder erstellt einen neuen.
+     * 
+     * @param string $name Name des Bags (z.B. 'attributes', 'security', 'flash')
      */
-    public function regenerate(): void
+    public function getBag(string $name): SessionBag
+    {
+        $this->start();
+        
+        if (!isset($this->bags[$name])) {
+            $data = $_SESSION[$name] ?? [];
+            $this->bags[$name] = new SessionBag($name, $data);
+        }
+        
+        return $this->bags[$name];
+    }
+
+    /**
+     * Speichert alle Änderungen aus den Bags in die Session zurück.
+     * Muss am Ende des Requests aufgerufen werden.
+     */
+    public function save(): void
     {
         if (!$this->started) {
-            $this->start();
+            return;
         }
-        // true = alte Session-Datei löschen
-        session_regenerate_id(true);
+
+        // Alle Bags serialisieren
+        foreach ($this->bags as $name => $bag) {
+            $_SESSION[$name] = $bag->all();
+        }
+
+        // Metadaten aktualisieren (Last Activity)
+        $_SESSION[self::KEY_META]['last_activity'] = time();
+
+        // Schreiben & File-Lock freigeben
+        session_write_close();
+        $this->started = false;
     }
 
     /**
-     * Setzt einen Wert in die Session.
+     * Regeneriert die Session-ID (Schutz gegen Session Fixation).
+     * Muss zwingend nach Login/Logout aufgerufen werden!
+     * 
+     * @param bool $destroy Wenn true, werden alte Session-Daten gelöscht.
      */
-    public function set(string $key, mixed $value): void
+    public function migrate(bool $destroy = false): void
     {
         $this->start();
-        $_SESSION[$key] = $value;
+        session_regenerate_id($destroy);
     }
 
     /**
-     * Holt einen Wert aus der Session.
+     * Zerstört die Session komplett (Logout).
+     * Löscht Server-Daten und Client-Cookie.
      */
-    public function get(string $key, mixed $default = null): mixed
-    {
-        $this->start();
-        return $_SESSION[$key] ?? $default;
-    }
-
-    /**
-     * Entfernt einen Wert aus der Session.
-     */
-    public function remove(string $key): void
-    {
-        $this->start();
-        unset($_SESSION[$key]);
-    }
-
-    /**
-     * Zerstört die komplette Session (Logout).
-     */
-    public function destroy(): void
+    public function invalidate(): void
     {
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
-            $_SESSION = [];
-            $this->started = false;
+        }
+        
+        $_SESSION = [];
+        $this->bags = [];
+        $this->started = false;
+
+        // Cookie löschen
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
         }
     }
 
     /**
-     * Fügt eine "Flash-Message" hinzu (Nachricht, die nur für den nächsten Request gültig ist).
-     * 
-     * @param string $type Der Typ der Nachricht (z.B. 'success', 'error', 'info').
-     * @param string $message Der Inhalt der Nachricht.
+     * Shortcut: Fügt eine Flash-Message zum 'flash'-Bag hinzu.
      */
     public function addFlash(string $type, string $message): void
     {
-        $this->start();
-        if (!isset($_SESSION['__flashes'])) {
-            $_SESSION['__flashes'] = [];
-        }
-        $_SESSION['__flashes'][] = ['type' => $type, 'message' => $message];
+        $this->getBag('flash')->add($type, $message);
     }
 
     /**
-     * Gibt alle Flash-Messages zurück und löscht sie sofort aus der Session.
-     * 
-     * @return array Ein Array von Arrays [['type' => '...', 'message' => '...'], ...]
+     * Shortcut: Holt alle Flash-Messages und leert den Bag (Auto-Expire).
      */
     public function getFlashes(): array
     {
-        $this->start();
-        $flashes = $_SESSION['__flashes'] ?? [];
-        
-        // "Flash": Nach dem Lesen sofort löschen (Consume-once)
-        unset($_SESSION['__flashes']);
-        
+        $bag = $this->getBag('flash');
+        $flashes = $bag->all();
+        $bag->clear();
         return $flashes;
     }
 
-    /**
-     * Interne Sicherheitsvalidierung (Fingerprint & Timeout).
-     */
+    // --- Interne Sicherheitslogik ---
+
     private function validateSession(): void
     {
-        $clientIp = $_SERVER['REMOTE_ADDR'] ?? '';
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $meta = $_SESSION[self::KEY_META] ?? [];
+        $now = time();
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
-        // 1. IP-Präfix generieren (Anonymisierung für mobile Netze, z.B. nur die ersten 3 Blöcke bei IPv4)
-        $ipPrefix = implode('.', array_slice(explode('.', $clientIp), 0, 3)); 
+        // Anonymisierter Fingerprint (IPv4 /24) zur Vermeidung von False-Positives
+        $ipParts = explode('.', $ip);
+        $anonymizedIp = (count($ipParts) === 4) ? implode('.', array_slice($ipParts, 0, 3)) . '.0' : $ip;
+        $fingerprint = hash('sha256', $anonymizedIp . $ua);
+
+        // Neue Session initialisieren
+        if (empty($meta)) {
+            $_SESSION[self::KEY_META] = [
+                'created_at' => $now,
+                'last_activity' => $now,
+                'fingerprint' => $fingerprint
+            ];
+            return;
+        }
+
+        // 1. Fingerprint Check (Hijacking Schutz)
+        if (!hash_equals($meta['fingerprint'], $fingerprint)) {
+            Debugger::log('Session Hijacking Attempt blocked.', Debugger::WARNING);
+            $this->invalidate();
+            return;
+        }
+
+        // 2. Idle Timeout Check
+        if (($now - $meta['last_activity']) > self::SESSION_LIFETIME) {
+            $this->invalidate();
+            return;
+        }
+
+        // 3. Absolute Timeout Check (Hard Limit)
+        if (($now - $meta['created_at']) > self::ABSOLUTE_LIFETIME) {
+            $this->invalidate();
+            return;
+        }
+    }
+
+    private function configureCookieParams(): void
+    {
+        $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
         
-        $currentFingerprint = hash('sha256', $ipPrefix . $userAgent);
-        $currentTime = time();
-
-        // Prüfen, ob dies eine neue Session ist
-        if (!isset($_SESSION[self::FINGERPRINT_KEY])) {
-            // Initialisierung
-            $_SESSION[self::FINGERPRINT_KEY] = $currentFingerprint;
-            $_SESSION[self::LAST_ACTIVITY_KEY] = $currentTime;
-            $_SESSION[self::CREATED_AT_KEY] = $currentTime; // Startzeitpunkt festhalten
-            return;
-        }
-
-        // 2. Fingerprint Check
-        if (!hash_equals($_SESSION[self::FINGERPRINT_KEY], $currentFingerprint)) {
-            Debugger::log('Session fingerprint mismatch. Destroying session.', Debugger::WARNING);
-            $this->destroy();
-            $this->start(); 
-            return;
-        }
-
-        // 3. Timeout Check (Inaktivität)
-        if (($currentTime - $_SESSION[self::LAST_ACTIVITY_KEY]) > self::SESSION_LIFETIME) {
-            $this->destroy();
-            $this->start();
-            return;
-        }
-
-        // 4. Absolute Timeout Check (8 Stunden)
-        // Prüfen, ob der Erstellungszeitpunkt existiert (Fallback für alte Sessions)
-        if (!isset($_SESSION[self::CREATED_AT_KEY])) {
-             $_SESSION[self::CREATED_AT_KEY] = $currentTime;
-        }
-
-        if (($currentTime - $_SESSION[self::CREATED_AT_KEY]) > self::ABSOLUTE_LIFETIME) {
-            $this->destroy();
-            $this->start();
-            return;
-        }
-
-        // Timestamp der letzten Aktivität aktualisieren
-        $_SESSION[self::LAST_ACTIVITY_KEY] = $currentTime;
+        session_set_cookie_params([
+            'lifetime' => 0, // Bis Browser geschlossen wird
+            'path' => '/',
+            'domain' => '', // Current Domain
+            'secure' => $isHttps,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
     }
 }

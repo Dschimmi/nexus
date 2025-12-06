@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Service für Übersetzungen (i18n).
- * Verwaltet die aktuelle Sprache und lädt Übersetzungen.
+ * Lädt die aktive Sprache direkt aus der Session beim Start.
  */
 class TranslatorService
 {
     private array $translations = [];
-    private string $currentLocale = 'de'; // Fallback
+    private string $currentLocale = 'de'; // Default
     private string $translationsDir;
 
     public function __construct(
@@ -21,35 +21,14 @@ class TranslatorService
         string $projectDir
     ) {
         $this->translationsDir = $projectDir . '/translations';
-        // Initial laden (Default 'de'), damit der Service sofort nutzbar ist
-        $this->loadTranslations();
-    }
-
-    /**
-     * Ermittelt die Sprache für den aktuellen Request und lädt die Texte.
-     * Reihenfolge:
-     * 1. URL-Parameter (?lang=en) -> Setzt Session
-     * 2. Session (Attribute Bag)
-     * 3. Browser-Header (Accept-Language) -> Optional (hier vereinfacht weggelassen)
-     * 4. Default ('de')
-     */
-    public function initializeLocale(Request $request): void
-    {
-        // Zugriff auf den Attribute-Bag für User-Einstellungen
+        
+        // Sprache direkt aus Session laden (falls vorhanden)
         $attributes = $this->session->getBag('attributes');
-
-        // 1. URL-Switch
-        $queryLocale = $request->query->get('lang');
-        if ($queryLocale && in_array($queryLocale, ['de', 'en'])) {
-            $this->currentLocale = $queryLocale;
-            $attributes->set('locale', $queryLocale);
-        } 
-        // 2. Session Check
-        elseif ($attributes->has('locale')) {
+        if ($attributes->has('locale')) {
             $this->currentLocale = $attributes->get('locale');
         }
 
-        // 3. Texte laden
+        // Texte laden
         $this->loadTranslations();
     }
 
@@ -63,8 +42,8 @@ class TranslatorService
         if (file_exists($path)) {
             $this->translations = require $path;
         } else {
-            // Fallback auf 'de', falls Datei fehlt
-            $pathDe = $this->translationsDir . '/de.php';
+            // Fallback auf 'english', falls Datei fehlt
+            $pathDe = $this->translationsDir . '/en.php';
             if (file_exists($pathDe)) {
                 $this->translations = require $pathDe;
             }

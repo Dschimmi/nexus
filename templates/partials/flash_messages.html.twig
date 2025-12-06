@@ -1,0 +1,11 @@
+{# templates/partials/flash_messages.html.twig #}
+{% for type, messages in get_flashes() %}
+    {% for message in messages %}
+        {# Bootstrap Mapping: error -> danger #}
+        <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            {# Optional: Schließen-Button, falls JS aktiv #}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endfor %}

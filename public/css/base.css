@@ -6,6 +6,14 @@
 /* --- 1. RESET & BASIS TYPOGRAFIE --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+    /* PFLICHT: Reserviert IMMER Platz für die Scrollbar.
+       Verhindert das "Springen" des Layouts (Layout Shift), wenn man zwischen
+       kurzen (kein Scroll) und langen Seiten (Scroll) wechselt. */
+    /* scrollbar-gutter: stable; */
+    overflow-y: scroll;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-body);

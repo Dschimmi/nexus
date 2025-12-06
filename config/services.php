@@ -117,6 +117,11 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('consent_service')) // Benötigt den Consent-Service
         ->setPublic(true);
 
+    // Der Controller für die Sprachumschaltung
+    $container->register(MrWo\Nexus\Controller\LanguageController::class, MrWo\Nexus\Controller\LanguageController::class)
+        ->addArgument(new Reference('session_service')) // Benötigt Session Service zum Schreiben des Attribute Bags
+        ->setPublic(true);
+
     // Der Controller für statische Seiten (Impressum, Datenschutz)
     $container->register(StaticPageController::class, StaticPageController::class)
         ->addArgument(new Reference(Environment::class)) // Benötigt Twig

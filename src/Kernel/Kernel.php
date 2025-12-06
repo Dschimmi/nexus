@@ -66,7 +66,6 @@ class Kernel
         // Initialisiere die Sprache (i18n) basierend auf der Session/Config
         /** @var TranslatorService $translator */
         $translator = $this->container->get('translator_service');
-        $translator->initializeLocale($request);
 
         try {
             // Finde die passende Route für die Anfrage.

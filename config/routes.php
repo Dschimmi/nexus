@@ -96,6 +96,14 @@ $routes->add('admin_pages_delete', new Route(
     methods: ['POST']
 ));
 
+// Sprach-Umschalter (PRG-Pattern)
+// Erlaubt nur POST, um State-Changes via GET zu verhindern.
+$routes->add('language_switch', new Route(
+    path: '/language/switch',
+    defaults: ['_controller' => [MrWo\Nexus\Controller\LanguageController::class, 'switch']],
+    methods: ['POST']
+));
+
 /**
  * ============================================================================
  *  DYNAMISCHE SEITEN (Dummy-Pages)

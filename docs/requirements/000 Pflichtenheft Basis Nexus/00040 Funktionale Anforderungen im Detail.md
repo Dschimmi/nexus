@@ -1,3 +1,14 @@
+## 4. Funktionale Anforderungen im Detail
+`(Spezifikation der einzelnen Funktionen, unterteilt in die im Lastenheft genannten Kategorien.)`
+
+### 4.1. Basisframework (Core Application Scaffolding)
+Das Basisframework enthält ausschließlich die Komponenten, die für den Betrieb einer sicheren, performanten und DSGVO-konformen Webanwendung zwingend erforderlich sind, ohne jegliche anwendungsspezifische Logik wie eine Benutzer- oder Inhaltsverwaltung. Es ist die technische Grundlage, auf der alle späteren Module aufsetzen.
+
+#### 4.1.1. Seiten-Rendering und Template-Management
+Spezifikation: Das Framework stellt einen Mechanismus bereit, um Anfragen über die Routing-Komponente (siehe 3.3.2) an einen Controller zu leiten, der ein Twig-Template (siehe 3.3.3) rendert und als HTML-Seite ausliefert. Es existiert keine datenbankgestützte Inhaltsverwaltung im Basisframework. Die Templates selbst sind flexibel und können von späteren Modulen dynamisch mit Inhalten befüllt werden.
+
+Begründung: Erfüllt die Kernanforderung, statische und templetisierte HTML-Seiten anzeigen zu können. Dies bildet das Fundament für jede Art von Web-Anwendung, von der einfachen Landing-Page bis zum komplexen Portal.
+
 #### 4.1.2. Sichere Session-Verwaltung (Service-Spezifikation)
 
 Spezifikation: Die Session-Verwaltung ist eine kritische Sicherheitskomponente des Basisframeworks. Sie darf nicht als einfacher Wrapper um die globale $_SESSION-Variable implementiert sein, sondern muss als objektorientierter Service (SessionService) realisiert werden, der Daten strukturiert, isoliert und schützt. Dieser Service gewährleistet eine saubere Isolation, Manipulationssicherheit, Austauschbarkeit des Speichers und vollständige Kontrolle über Laufzeiten, Fingerprinting und Sicherheitsmechanismen (Session-Hijacking,  Fixation-Schutz u.a.). Die folgenden Anforderungen definieren den verbindlichen Mindeststandard für Implementierungen.
@@ -106,10 +117,14 @@ Das Basisframework muss die technischen Grundvoraussetzungen für eine effektive
 Begründung:
 Die Implementierung dieser On-Page-SEO-Grundlagen ist entscheidend, um die Sichtbarkeit und den Erfolg der mit Nexus erstellten Webprojekte in Suchmaschinen zu gewährleisten. Während die nicht-funktionalen Anforderungen bereits eine SEO-freundliche technische Basis schaffen, stellen diese Funktionen die notwendigen Werkzeuge zur Verfügung, um den Inhalt der Seite gezielt für Suchmaschinen aufzubereiten.
 
-4.2.1. Userverwaltung und Rechteverwaltung
+### 4.2. Erweiterungsmodule
+Die hier definierten Erweiterungsmodule sind standardisierte, wiederverwendbare Funktionsblöcke, die auf dem Basisframework (4.1) aufsetzen. Sie sind optional und können je nach Anforderung der Zielanwendung aktiviert und konfiguriert werden. Sie nutzen die vom Basisframework bereitgestellten Schnittstellen und Mechanismen (z.B. Events, DI-Container).
+
+
+#### 4.2.1. Userverwaltung und Rechteverwaltung
 weitgehend gestrichen - siehe Pflichtenheft "Userverwaltung". Arbeitsversion in: C:\xampp\htdocs\_ConceptSnippets\251204 UserVerwaltung.docx
 
-Folgende Grundvoraussetzungen MUSS die Userverwaltung erfüllen um integriert zu werden: 
+Spezifikation: Dieses Modul stellt eine vollständige Benutzer- und Rechteverwaltung bereit. Folgende Grundvoraussetzungen MUSS die Userverwaltung erfüllen um integriert zu werden: 
 - Anwendungs-Services (in der Application-Schicht) für die grundlegenden Prozesse: Benutzerregistrierung, Logout und Passwort-Reset.
 - Der Login-Prozess muss die Authentifizierung des Benutzers sowohl über die Kombination Benutzername + Passwort als auch über E-Mail-Adresse + Passwort ermöglichen.
 - Ein kontextbezogenes, rollenbasiertes Zugriffskontrollsystem (RBAC). Die Berechtigungen eines Benutzers leiten sich immer aus der Kombination seiner Gruppe und seiner Rolle ab. Dies ermöglicht es, dass ein Benutzer in Gruppe "A" die Rolle "Admin" haben kann, während ein anderer Benutzer in Gruppe "B" ebenfalls die Rolle "Admin" mit potenziell anderen Rechten innehat.
@@ -117,5 +132,100 @@ Folgende Grundvoraussetzungen MUSS die Userverwaltung erfüllen um integriert zu
 - Eine nahtlose Integration in den Session-Service (4.1.2) des Basisframeworks, um den Login-Status sicher zu verwalten und die Session-ID nach dem Login zu regenerieren.
 
 Begründung: Dies ist eine der zentralen Anforderungen aus dem Lastenheft, um die "dezentral organisierte Userverwaltung" des IST-Zustands abzulösen. Die Hinzunahme der Gruppe ermöglicht eine flexible Rechtevergabe pro Kontext, ohne die Komplexität einer vollwertigen Mandantenfähigkeit zu benötigen. Die Möglichkeit, sich mit Benutzername oder E-Mail-Adresse anzumelden, erhöht die Benutzerfreundlichkeit.
+
+#### 4.2.2. Formular- und Datenmanagement (eigenständiges Modul)
+Todo: Pflichtenheft Formular- und Datenmanagement erstellen. - siehe Pflichtenheft "Formular- und Datenmanagement". Arbeitsversion in: 
+
+Hier der Originaltext als Basis für das separate Dokument:
+
+Abhängigkeiten: Dieses Modul ist eine eigenständige Erweiterung und setzt ausschließlich auf dem Nexus-Basisframework (PH: 4.1) auf. Es besteht keine Abhängigkeit zu weiteren Modulen.
+Spezifikation: Das Modul bietet eine zentrale Lösung für die Erstellung, Validierung und Verarbeitung von Web-Formularen sowie die Generierung von Dokumenten. Es umfasst:
+•	Einen Form-Builder-Service, der es Entwicklern ermöglicht, Formulare programmgesteuert zu definieren (Felder, Typen, Labels, Validierungsregeln).
+Einen Validierungs-Service, der serverseitige Überprüfungen von Formulareingaben durchführt (z.B. Pflichtfelder, E-Mail-Format, Längenbeschränkungen).
+•	Eine Integration in die Template-Engine Twig, um die Formulare einfach im Frontend rendern zu können, inklusive der Anzeige von Validierungsfehlern.
+•	Einen PDF-Generierungs-Service. Dieser Service stellt eine Schnittstelle bereit, um aus übergebenen Daten (z.B. validierten Formulareingaben) eine PDF-Datei zu erzeugen. Die konkrete Implementierung erfolgt über eine etablierte Bibliothek (z.B. TCPDF oder Dompdf).
+•	Die automatische Integration des CSRF-Schutzes aus dem Basisframework (PH: 4.1.5) in alle erstellten Formulare, um die Sicherheit zu gewährleisten.
+Begründung: Dieses Modul schafft eine standardisierte und wiederverwendbare Lösung für alle Arten von Formulareingaben, unabhängig davon, ob ein Benutzer angemeldet ist oder nicht. Es ermöglicht die einfache Umsetzung von öffentlichen Formularen, wie z.B. einem Kontaktformular, ohne dass das Userverwaltungs-Modul installiert sein muss. Gleichzeitig bildet es die technische Grundlage, um den im LH (IST-Zustand, S. 2) erwähnten "Frachtbriefgenerator" als modernes Spezialmodul (siehe PH: 4.3) neu zu implementieren und die Anforderung "Formulargenerierung und PDF-Erstellung" (LH: Anwendungsfälle, S. 5) zu erfüllen.
+
+#### 4.2.3. Marketing-Integrationen (eigenständiges Modul)
+Todo: Pflichtenheft Marketing-Integrationen erstellen. - siehe Pflichtenheft "Marketing-Integrationen". Arbeitsversion in: 
+
+Abhängigkeiten:
+Dieses Modul ist eine eigenständige Erweiterung und setzt ausschließlich auf dem Nexus-Basisframework (PH: 4.1) auf. Es besteht keine Abhängigkeit zu weiteren Modulen. Es interagiert direkt mit dem Service für Benutzerzustimmungen (PH: 4.1.4).
+Spezifikation:
+Das Modul stellt eine zentrale und datenschutzkonforme Schnittstelle zur Einbindung von externen Marketing- und Analyse-Skripten (z.B. Google Analytics, Google Ads Conversion Tracking, Meta Pixel) bereit. Es umfasst:
+•	Einen Script-Management-Service, der es erlaubt, Skripte und Tracking-Pixel über eine Konfigurationsdatei zu registrieren.
+•	Eine zwingende Verknüpfung jedes Skripts mit einer Zustimmungskategorie (z.B. marketing, statistics).
+•	Der Service stellt sicher, dass Skripte nur dann im Frontend gerendert werden, wenn der Benutzer über den Consent-Manager des Basisframeworks die explizite Zustimmung für die entsprechende Kategorie erteilt hat.
+•	Eine Twig-Funktion (z.B. render_tracking_scripts('head')), die im Template aufgerufen werden kann, um die freigegebenen Skripte an der korrekten Stelle im HTML-Dokument auszugeben.
+Begründung:
+Dieses Modul zentralisiert die Verwaltung von Drittanbieter-Skripten und stellt deren DSGVO-konforme Einbindung sicher, wie es die Anforderung „Marketing-Integrationen mit Zustimmungssteuerung“ (LH: S. 3) fordert. Es verhindert, dass Tracking-Codes unkontrolliert im Quellcode verteilt werden und koppelt die Marketing-Funktionalität sauber von der Kernanwendung ab.
+
+#### 4.2.4. Optionale Service Provider
+Zusätzlich zu den funktionalen Modulen stellt das Nexus-Ökosystem eine Reihe von optionalen "Service Providern" bereit. Hierbei handelt es sich um Pakete, die reine Backend-Funktionalität und Dienste zur Verfügung stellen, die von anderen Modulen genutzt werden können, ohne eine feste Abhängigkeit zu erzeugen.
+
+##### 4.2.4.1. Erweiterte Sicherheitsfunktionen (Service Provider)
+Todo: Pflichtenheft "Erweiterte Sicherheitsfunktionen" erstellen. - siehe Pflichtenheft "Erweiterte Sicherheitsfunktionen". Arbeitsversion in: 
+
+Abhängigkeiten:
+Dieser Service Provider setzt ausschließlich auf dem Nexus-Basisframework (PH: 4.1) auf. Er wird typischerweise in Projekten eingesetzt, die auch das User-Modul (PH: 4.2.1) verwenden, ist aber nicht fest daran gekoppelt.
+
+Spezifikation:
+Dieser Provider registriert spezialisierte Sicherheitsdienste im DI-Container der Anwendung. Andere Module können diese Dienste optional nutzen, wenn sie verfügbar sind. Enthaltene Dienste können sein:
+- Ein TwoFactorServiceInterface, das die Logik für Time-based One-Time Passwords (TOTP) kapselt.
+- Ein AuditTrailLoggerInterface, der eine revisionssichere Protokollierung von sicherheitsrelevanten Aktionen ermöglicht.
+- Ein ContentSecurityPolicyBuilderInterface, der die dynamische Erstellung von CSP-Headern vereinfacht.
+
+Begründung:
+Durch die Kapselung dieser fortgeschrittenen Funktionen in einem optionalen Service Provider wird das Basisframework schlank gehalten. Die Funktionalität wird zentral bereitgestellt und kann von jedem Modul per Dependency Injection genutzt werden, ohne dass eine direkte Kopplung entsteht. Dies maximiert die Flexibilität und Sicherheit für High-Security-Anwendungen, wie in der Anforderung "erweiterte Security-Module" (LH: S. 3) vorgesehen.
+
+### 4.3. Spezialmodule
+Grundsatz:
+Spezialmodule sind anwendungsspezifische, fakultative Module, die konkrete Fachanforderungen umsetzen. Im Gegensatz zu den generischen Erweiterungsmodulen (PH: 4.2) sind sie nicht auf maximale Wiederverwendbarkeit in unterschiedlichen Kontexten ausgelegt, sondern stellen die Implementierung der spezifischen Altanwendungen auf der neuen, einheitlichen "Nexus"-Plattform dar. Sie nutzen das Basisframework und die Erweiterungsmodule als technische Grundlage.
+
+#### 4.3.1. CMR-Frachtbriefgenerator
+Todo: Pflichtenheft "CMR-Frachtbriefgenerator" erstellen. - siehe Pflichtenheft "CMR-Frachtbriefgenerator". Arbeitsversion in: 
+
+Abhängigkeiten:
+Dieses Modul setzt auf dem Nexus-Basisframework (PH: 4.1) auf. Es erfordert die Installation der folgenden Erweiterungsmodule:
+- Userverwaltung und Rechteverwaltung (PH: 4.2.1)
+- Formular- und Datenmanagement (PH: 4.2.2)
+
+Spezifikation:
+Dieses Modul bildet die Funktionalität des bestehenden "Frachtbriefgenerators" (LH: IST-Zustand, S. 2) nach.
+- Es stellt ein geschütztes Web-Formular zur Erfassung aller relevanten Frachtbriefdaten bereit. Der Zugriff wird über das Modul "Userverwaltung und Rechteverwaltung" gesteuert.
+- Die Erstellung und Validierung des Formulars erfolgt über den Form-Builder-Service des Moduls "Formular- und Datenmanagement".
+. Nach erfolgreicher Validierung werden die Formulardaten an den PDF-Generierungs-Service übergeben, um ein standardisiertes CMR-Frachtbrief-Dokument im PDF-Format zu erzeugen, das dem Benutzer zum Download angeboten wird.
+- Es definiert eigene Domain-Entitäten wie Frachtbrief und Transporteur.
+
+Begründung:
+Die Neuimplementierung als Spezialmodul auf der "Nexus"-Basis stellt sicher, dass die Anwendung von zentralen Sicherheitsmechanismen, einer einheitlichen Benutzerverwaltung und standardisierten Prozessen profitiert. Dies reduziert den Wartungsaufwand und erhöht die Sicherheit im Vergleich zur alten, isolierten Lösung.
+
+#### 4.3.2. Forum- und Communityfunktionen
+Todo: Pflichtenheft "Forum- und Communityfunktionen" erstellen. - siehe Pflichtenheft "Forum- und Communityfunktionen". Arbeitsversion in: 
+
+Abhängigkeiten:
+Dieses Modul setzt auf dem Nexus-Basisframework (PH: 4.1) auf und erfordert die Installation der folgenden Erweiterungsmodule:
+- Userverwaltung und Rechteverwaltung (PH: 4.2.1)
+- Optional: Formular- und Datenmanagement (PH: 4.2.2) für erweiterte Editor-Funktionen.
+
+Spezifikation:
+Dieses Modul ersetzt das bestehende phpBB-Forum (LH: IST-Zustand, S. 2) durch eine native, voll integrierte Lösung.
+- Es nutzt das Modul "Userverwaltung und Rechteverwaltung" als Grundlage für Benutzerprofile, Login und die Vergabe von Community-spezifischen Rollen (z.B. "Moderator", "Mitglied") innerhalb einer "Forum"-Gruppe.
+- Es definiert eigene Domain-Entitäten wie Forum, Thread und Post.
+- Es stellt Controller und Views für die Anzeige von Foren, die Leseansicht von Threads und das Erstellen von neuen Beiträgen und Antworten bereit.
+
+Begründung:
+Die native Integration löst das Problem der "nicht vollwertigen Anbindung" des alten Forums. Eine gemeinsame Benutzerbasis und eine einheitliche technische Plattform verbessern die User Experience, vereinfachen die Administration und schließen potenzielle Sicherheitslücken, die durch die lose Kopplung der Altsysteme entstanden sind.
+
+#### 4.3.3. Weitere Spezialmodule (Integrationsprojekte)
+Todo: Pflichtenheft für die weiteren Spezialmodule erstellen. 
+
+Abgrenzung und Vorgehen:
+Die weiteren im Lastenheft (LH: IST-Zustand, S. 2) genannten Altsysteme, insbesondere das selbst entwickelte CMS inklusive des Partnerportals, werden nicht im Rahmen der initialen Entwicklung des "Nexus"-Frameworks umgesetzt.
+Aufgrund ihrer spezifischen Komplexität, potenziell abweichender Schnittstellen zu Drittsystemen und der Notwendigkeit einer Datenmigration werden diese als eigenständige, nachgelagerte Integrationsprojekte behandelt. Diese Projekte starten erst, nachdem das "Nexus"-Basisframework (PH: 4.1) sowie die generischen Erweiterungsmodule (PH: 4.2) fertiggestellt, getestet und als stabile Plattform freigegeben wurden.
+
+Begründung:
+Diese Vorgehensweise stellt sicher, dass der Fokus des Kernprojekts "Nexus" auf der Schaffung einer robusten, sicheren und gut dokumentierten technologischen Basis liegt. Die komplexen Anforderungen der spezifischen Altanwendungen werden in dedizierten Projekten mit eigenen Zeit- und Ressourcenplänen behandelt, was das Risiko für das Kernprojekt minimiert und eine qualitativ hochwertige Integration gewährleistet.
 
 ---

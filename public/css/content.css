@@ -41,6 +41,20 @@ main {
     overflow-x: hidden; 
 }
 
+.std-page-container {
+    display: flex;
+    flex-direction: column;     /* Stapelt die Inhalte */
+    justify-content: center; /* Zentriert Kinder horizontal */
+    align-items: center;     /* Zentriert Kinder vertikal (optional) */
+    /* min-height: 100vh;       /* Volle Viewport-Höhe (für vertikale Zentrierung) */
+    margin: 0;               /* Entfernt Standard-Margins */
+}
+
+.login-wrapper {
+    max-width: 300px;
+    width: 100%; /* Optional: Verhindert Überlauf */
+}
+
 /* --- 2. DIE TEXTBOX (Generisches Design) --- */
 /* Ersetzt die alte .card Klasse */
 .textbox {

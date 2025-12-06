@@ -57,8 +57,12 @@ class AuthenticationService
      */
     public function logout(): void
     {
-        // Session komplett zerstören (sicherer als nur User löschen)
-        $this->session->invalidate();
+        // 1. User-Daten löschen (Logout)
+        $this->session->getBag('security')->clear();
+        
+        // 2. Session-ID wechseln (Sicherheit), aber Attribute (Sprache) behalten
+        // migrate(true) löscht die ALTE Session-Datei, aber behält $_SESSION im RAM für die NEUE ID.
+        $this->session->migrate(true);
     }
 
     /**

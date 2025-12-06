@@ -71,7 +71,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('config', fn(string $key) => $this->configService->isEnabled($key)),
 
             // Holt Flash-Messages aus der Session und löscht sie dabei
-            new TwigFunction('flashes', fn() => $this->session->getFlashes()),
+            // ALT: new TwigFunction('flashes', fn() => $this->session->getFlashes()),
+            new TwigFunction('get_flashes', [$this->session, 'getFlashes']),
 
             // Holt die Liste der Dummy-Seiten (Neu)
             new TwigFunction('get_dummy_pages', fn() => $this->pageManager->getPages()),

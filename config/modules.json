@@ -1,6 +1,6 @@
 {
     "module_user_management": true,
-    "module_site_search": true,
+    "module_site_search": false,
     "module_cookie_banner": true,
     "module_language_selection": true
 }

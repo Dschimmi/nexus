@@ -192,6 +192,35 @@ a.header-btn:hover {
 }
 
 /* =========================================
+   5. DROPDOWN LINK BUTTON (Sprachwahl)
+   ========================================= */
+.dropdown-link-btn {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: normal;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    display: block;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-link-btn:hover {
+    background-color: var(--bg-header, #f1f5f9);
+    color: var(--c-accent, #f2b400);
+    text-decoration: none;
+}
+
+.dropdown-link-btn:focus-visible {
+    outline: 2px solid var(--c-accent, #f2b400);
+    outline-offset: -2px;
+}
+
+/* =========================================
    4. RESPONSIVE DESIGN (Mobile)
    ========================================= */
 

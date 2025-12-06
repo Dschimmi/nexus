@@ -9,7 +9,7 @@
     <meta name="description" content="{% block description %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}">
     
     <!-- SEO: Canonical URL -->
-    <link rel="canonical" href="{{ app.request.uri|default('') }}">
+    <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}">
 
     <!-- 1. Variablen -->
     <link rel="stylesheet" href="{{ asset('variables.css') }}">
@@ -71,8 +71,15 @@
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </button>
                         <div class="custom-dropdown-content">
-                            <a href="?lang=de">Deutsch</a>
-                            <a href="?lang=en">English</a>
+                            {# PRG-Pattern: Formular statt GET-Link für saubere URLs #}
+                            <form action="/language/switch" method="post" style="margin:0;">
+                                <input type="hidden" name="lang" value="de">
+                                <button type="submit" class="dropdown-link-btn">Deutsch</button>
+                            </form>
+                            <form action="/language/switch" method="post" style="margin:0;">
+                                <input type="hidden" name="lang" value="en">
+                                <button type="submit" class="dropdown-link-btn">English</button>
+                            </form>
                         </div>
                     </div>
                     {% endif %}
@@ -145,15 +152,12 @@
 
         <!-- 3. CONTENT -->
         <main>
-            {# Globale Flash-Messages (z.B. nach Speichern im Admin) #}
-            {% for flash in flashes() %}
-                <div class="alert alert-{{ flash.type }}">
-                    {{ flash.message }}
-                </div>
-            {% endfor %}
+    {# Globale Flash-Messages (Zentrales Partial) #}
+    {% include 'partials/flash_messages.html.twig' %}
 
-            {% block content %}{% endblock %}
-        </main>
+    {# Seiteninhalt wird hier eingefügt #}
+    {% block content %}{% endblock %}
+</main>
 
         <!-- 4. FOOTER -->
         <footer>
@@ -182,7 +186,7 @@
                 <div class="footer-col">
                     <h4>{{ 'footer.sitemap'|trans }}</h4>
                     <a href="/">{{ 'nav.home'|trans|default('Startseite') }}</a>
-                    <a href="/login">{{ 'header.login'|trans }}</a>
+                    <a href="/admin">{{ 'header.login'|trans }}</a>
                 </div>
             </div>
             <div class="footer-copyright">
@@ -192,25 +196,7 @@
     </div>
 
     <!-- 5. COOKIE BANNER -->
-    {% if config('module_cookie_banner') %}
-    <div id="cookie-banner" class="cookie-banner">
-        {# 1. Titel (Visuell oben) #}
-        <h3 class="cookie-title">{{ 'cookie.title'|trans }}</h3>
-        
-        {# 2. Buttons (Im DOM hier, damit Fokus schnell hier landet. Visuell unten) #}
-        <div class="cookie-buttons">
-            {# Primary Links (Autofokus via JS setzt hier an) #}
-            <button class="btn btn-primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
-            {# Secondary Rechts #}
-            <button class="btn btn-outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
-        </div>
-
-        {# 3. Text (Im DOM unten, Visuell in der Mitte) #}
-        <p class="cookie-text">
-            {{ 'cookie.text'|trans|raw }}
-        </p>
-    </div>
-    {% endif %}
+    {% include 'partials/cookie_banner.html.twig' %}
     
     <!-- Scripts -->
     <script src="{{ asset('js/layout.js') }}"></script>

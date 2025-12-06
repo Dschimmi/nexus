@@ -94,10 +94,18 @@ class AuthenticationServiceTest extends TestCase
 
     public function testLogout(): void
     {
-        // Erwartung: Invalidate muss aufgerufen werden
-        $this->sessionMock->expects($this->once())
-            ->method('invalidate');
+        // 1. Erwartung: Security Bag wird geleert
+        // Da wir im setUp() schon gesagt haben, dass getBag('security') den Mock zurückgibt,
+        // müssen wir hier nur erwarten, dass auf dem Mock clear() aufgerufen wird.
+        $this->securityBagMock->expects($this->once())
+            ->method('clear');
 
+        // 2. Erwartung: Session ID wird migriert (statt invalidate)
+        $this->sessionMock->expects($this->once())
+            ->method('migrate')
+            ->with(true);
+
+        // Act
         $this->authService->logout();
     }
 

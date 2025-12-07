@@ -6,11 +6,17 @@ namespace MrWo\Nexus\Tests\Unit\Service;
 
 use MrWo\Nexus\Service\SessionService;
 use MrWo\Nexus\Service\SessionBag;
+use MrWo\Nexus\Service\ConfigService;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Testet die Logik des SessionService.
+ * Mockt den ConfigService, um Abhängigkeiten zu isolieren.
+ */
 class SessionServiceTest extends TestCase
 {
     private SessionService $sessionService;
+    private $configMock;
 
     protected function setUp(): void
     {
@@ -19,7 +25,18 @@ class SessionServiceTest extends TestCase
         }
         $_SESSION = [];
         
-        $this->sessionService = new SessionService();
+        // ConfigService Mock erstellen
+        $this->configMock = $this->createMock(ConfigService::class);
+        
+        // Standardwerte für den Mock definieren (damit der Konstruktor nicht crasht)
+        $this->configMock->method('get')->willReturnMap([
+            ['session.lifetime', null, 1800],
+            ['session.absolute_lifetime', null, 43200],
+            ['app.secret', null, 'test_secret'],
+            ['app.name', null, 'TestApp'],
+        ]);
+        
+        $this->sessionService = new SessionService($this->configMock);
     }
 
     /**
@@ -68,9 +85,6 @@ class SessionServiceTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    /**
-     * @runInSeparateProcess
-     */
     public function testInvalidateClearsEverything(): void
     {
         // 1. Arrange
@@ -84,12 +98,10 @@ class SessionServiceTest extends TestCase
         $this->assertEmpty($_SESSION, 'Session should be empty immediately after invalidate');
 
         // 4. Force New Session ID (Simulate Browser behavior)
-        // Im echten Browser löscht invalidate() das Cookie.
-        // In PHPUnit müssen wir manuell so tun, als hätten wir keine ID mehr.
         session_id(uniqid());
 
-        // 5. Verify Bag Reset with fresh service
-        $this->sessionService = new SessionService();
+        // 5. Verify Bag Reset with fresh service (und neuem Mock)
+        $this->sessionService = new SessionService($this->configMock);
         $newBag = $this->sessionService->getBag('security');
         
         $this->assertNull($newBag->get('user_id'), 'Bag should be empty/re-initialized');

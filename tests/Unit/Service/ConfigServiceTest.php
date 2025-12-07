@@ -5,90 +5,108 @@ declare(strict_types=1);
 namespace MrWo\Nexus\Tests\Unit\Service;
 
 use MrWo\Nexus\Service\ConfigService;
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Testet den ConfigService.
+ * Fokus: Laden von Defaults aus ENV, Lesen/Schreiben der JSON-Datei.
+ */
 class ConfigServiceTest extends TestCase
 {
     private string $projectDir;
+    private string $configFile;
 
+    /**
+     * Bereitet die Testumgebung vor.
+     * Erstellt ein temporäres Verzeichnis und setzt ENV-Variablen.
+     */
     protected function setUp(): void
     {
-        // Virtuelles Dateisystem erstellen
-        vfsStream::setup('root');
-        $this->projectDir = vfsStream::url('root');
+        $this->projectDir = sys_get_temp_dir() . '/nexus_config_test_' . uniqid();
+        mkdir($this->projectDir . '/config', 0777, true);
+        $this->configFile = $this->projectDir . '/config/modules.json';
 
-        // Den 'config' Ordner erstellen, da der Service diesen erwartet
-        mkdir($this->projectDir . '/config');
+        // ENV-Variablen für den Test isolieren/setzen
+        $_ENV['APP_NAME'] = 'TestApp';
+        $_ENV['SESSION_LIFETIME'] = '999';
     }
 
-    public function testLoadDefaultsIfFileDoesNotExist()
+    /**
+     * Räumt nach dem Test auf.
+     */
+    protected function tearDown(): void
     {
-        // Wir erstellen KEINE modules.json
-        $service = new ConfigService($this->projectDir);
-
-        // Prüfung auf Standardwerte (siehe ConfigService.php $defaults)
-        // Cookie Banner sollte standardmäßig an sein
-        $this->assertTrue($service->isEnabled('module_cookie_banner'), 'Default für Cookie-Banner sollte TRUE sein.');
+        if (file_exists($this->configFile)) {
+            unlink($this->configFile);
+        }
+        if (is_dir($this->projectDir . '/config')) {
+            rmdir($this->projectDir . '/config');
+        }
+        if (is_dir($this->projectDir)) {
+            rmdir($this->projectDir);
+        }
         
-        // User Management sollte standardmäßig aus sein
-        $this->assertFalse($service->isEnabled('module_user_management'), 'Default für User-Management sollte FALSE sein.');
+        // ENV aufräumen
+        unset($_ENV['APP_NAME'], $_ENV['SESSION_LIFETIME']);
     }
 
-    public function testLoadExistingConfig()
+    /**
+     * Prüft, ob Defaults korrekt aus der Umgebung geladen werden,
+     * wenn keine Konfigurationsdatei existiert.
+     */
+    public function testLoadDefaultsFromEnv(): void
     {
-        // Wir legen eine Konfigurationsdatei an, die vom Standard abweicht
-        $configData = [
-            'module_user_management' => true,
-            'module_cookie_banner' => false
-        ];
+        $config = new ConfigService($this->projectDir);
+
+        $this->assertEquals('TestApp', $config->get('app.name'));
+        $this->assertEquals(999, $config->get('session.lifetime'));
         
-        file_put_contents(
-            $this->projectDir . '/config/modules.json',
-            json_encode($configData)
-        );
-
-        $service = new ConfigService($this->projectDir);
-
-        // Prüfung: Wurden die Werte aus der Datei übernommen?
-        $this->assertTrue($service->isEnabled('module_user_management'), 'User-Management sollte durch Datei aktiviert sein.');
-        $this->assertFalse($service->isEnabled('module_cookie_banner'), 'Cookie-Banner sollte durch Datei deaktiviert sein.');
+        // Prüfen eines internen Defaults (Fallback)
+        $this->assertEquals(true, $config->get('module_cookie_banner'));
     }
 
-    public function testSetSavesConfigToFile()
+    /**
+     * Prüft, ob Werte aus einer existierenden Datei die Defaults überschreiben.
+     */
+    public function testLoadExistingConfigOverridesDefaults(): void
     {
-        $service = new ConfigService($this->projectDir);
+        // Datei anlegen, die den Namen überschreibt
+        file_put_contents($this->configFile, json_encode(['app.name' => 'OverriddenApp']));
 
-        // Wir ändern eine Einstellung
-        $service->set('module_site_search', true);
+        $config = new ConfigService($this->projectDir);
 
-        // Prüfung 1: Ist der Wert im Service gesetzt?
-        $this->assertTrue($service->isEnabled('module_site_search'));
+        // Datei gewinnt
+        $this->assertEquals('OverriddenApp', $config->get('app.name'));
+        // ENV bleibt als Fallback für fehlende Keys
+        $this->assertEquals(999, $config->get('session.lifetime'));
+    }
 
-        // Prüfung 2: Wurde die Datei geschrieben?
-        $filePath = $this->projectDir . '/config/modules.json';
-        $this->assertFileExists($filePath);
-
-        // Prüfung 3: Steht der korrekte Inhalt drin?
-        $content = file_get_contents($filePath);
-        $data = json_decode($content, true);
+    /**
+     * Prüft das Speichern von Werten.
+     */
+    public function testSetSavesConfigToFile(): void
+    {
+        $config = new ConfigService($this->projectDir);
         
-        $this->assertIsArray($data);
-        $this->assertTrue($data['module_site_search']);
+        $config->set('new_setting', 'value');
+
+        // Prüfen, ob Datei existiert und Inhalt hat
+        $this->assertFileExists($this->configFile);
+        $content = json_decode(file_get_contents($this->configFile), true);
+        
+        $this->assertEquals('value', $content['new_setting']);
     }
 
-    public function testGracefulFallbackOnCorruptJson()
+    /**
+     * Prüft das Verhalten bei defekter JSON-Datei (Fallback auf Defaults).
+     */
+    public function testGracefulFallbackOnCorruptJson(): void
     {
-        // Wir erstellen eine defekte JSON-Datei
-        file_put_contents(
-            $this->projectDir . '/config/modules.json',
-            '{ "broken": "json", ,,, }' 
-        );
+        file_put_contents($this->configFile, '{invalid_json');
 
-        // Der Service darf hier nicht abstürzen, sondern sollte die Defaults nutzen
-        $service = new ConfigService($this->projectDir);
+        $config = new ConfigService($this->projectDir);
 
-        // Prüfung: Fallback auf Defaults
-        $this->assertTrue($service->isEnabled('module_cookie_banner'), 'Sollte bei defektem JSON auf Default zurückfallen.');
+        // Sollte nicht crashen, sondern Defaults nutzen
+        $this->assertEquals('TestApp', $config->get('app.name'));
     }
 }

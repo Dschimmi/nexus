@@ -40,6 +40,7 @@ return function(ContainerBuilder $container) {
 
     // Der zentrale Session-Service
     $container->register('session_service', SessionService::class)
+        ->addArgument(new Reference('config_service')) // Injiziere ConfigService für Lifetime & Salt
         ->setPublic(true);
 
     // Der Service zur Verwaltung der Benutzerzustimmung

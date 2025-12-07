@@ -7,59 +7,83 @@ namespace MrWo\Nexus\Service;
 use Tracy\Debugger;
 
 /**
- * Verwaltet die globale Konfiguration und Feature-Toggles der Anwendung.
- * Speichert Einstellungen in einer JSON-Datei, um sie über das Admin-Panel persistieren zu können.
+ * Verwaltet die globale Konfiguration der Anwendung.
+ * Aggregiert Werte aus Environment (.env), Konfigurationsdatei (modules.json) und System-Defaults.
+ * 
+ * Architektur-Prinzip: Config and Code separation.
  */
 class ConfigService
 {
-    /**
-     * @var string Der absolute Pfad zur Konfigurationsdatei (z.B. modules.json).
-     */
     private string $configFilePath;
-
-    /**
-     * @var array Die aktuell geladenen Einstellungen.
-     */
     private array $settings = [];
+    private array $defaults = [];
 
     /**
-     * @var array Standardwerte für Module, falls keine Konfigurationsdatei existiert.
-     *            Standardmäßig sind optionale Module deaktiviert, Compliance-Module aktiviert.
-     */
-    private array $defaults = [
-        'module_user_management' => false,    // User-Login/Registrierung
-        'module_site_search' => false,        // Suchfeld im Header
-        'module_cookie_banner' => true,       // DSGVO-Banner
-        'module_language_selection' => true,  // Sprachwahl
-    ];
-
-    /**
+     * Erstellt den Service und initialisiert die Konfiguration.
+     * 
      * @param string $projectDir Das Wurzelverzeichnis des Projekts.
      */
     public function __construct(string $projectDir)
     {
-        // Wir speichern die Konfiguration im config-Ordner
         $this->configFilePath = $projectDir . '/config/modules.json';
+        
+        // 1. System-Defaults aus Environment laden (12-Factor App)
+        // Diese Werte sollten in der .env definiert sein.
+        // Fallbacks dienen nur der technischen Stabilität (Crash-Prevention).
+        $this->defaults = [
+            // App Identity
+            'app.name'   => $_ENV['APP_NAME'] ?? 'Exelor',
+            'app.secret' => $_ENV['APP_SECRET'] ?? 'Warning:SetAppSecretInEnv!',
+            
+            // Session
+            'session.lifetime'          => (int) ($_ENV['SESSION_LIFETIME'] ?? 1800),
+            'session.absolute_lifetime' => (int) ($_ENV['SESSION_ABSOLUTE_LIFETIME'] ?? 43200),
+            
+            // Module Toggles (Standard: Aus, außer Compliance)
+            'module_user_management'    => false,
+            'module_site_search'        => false,
+            'module_cookie_banner'      => true,
+            'module_language_selection' => true,
+        ];
+
+        // 2. Persistierte Einstellungen laden (Override)
         $this->load();
     }
 
     /**
-     * Prüft, ob ein bestimmtes Modul oder eine Einstellung aktiviert ist.
-     *
-     * @param string $key Der Schlüssel der Einstellung (z.B. 'module_site_search').
-     * @return bool
+     * Liest einen Konfigurationswert.
+     * Priorität: modules.json > .env/Defaults
+     * 
+     * @param string $key     Der Schlüssel.
+     * @param mixed  $default Rückgabewert, falls Key unbekannt.
+     * @return mixed
      */
-    public function isEnabled(string $key): bool
+    public function get(string $key, mixed $default = null): mixed
     {
-        return (bool) ($this->settings[$key] ?? $this->defaults[$key] ?? false);
+        // 1. User-Config (Datei) hat Vorrang für Laufzeit-Einstellungen (Toggles)
+        if (array_key_exists($key, $this->settings)) {
+            return $this->settings[$key];
+        }
+        
+        // 2. Environment/Defaults für Infrastruktur-Werte
+        if (array_key_exists($key, $this->defaults)) {
+            return $this->defaults[$key];
+        }
+
+        return $default;
     }
 
     /**
-     * Setzt einen Wert und speichert die Konfiguration sofort.
-     *
-     * @param string $key Der Schlüssel.
-     * @param mixed $value Der Wert (meist bool).
-     * @return void
+     * Prüft ein Toggle (Boolean).
+     */
+    public function isEnabled(string $key): bool
+    {
+        return (bool) $this->get($key, false);
+    }
+
+    /**
+     * Setzt einen Wert und speichert ihn in modules.json.
+     * Nutzung: Admin-Panel.
      */
     public function set(string $key, mixed $value): void
     {
@@ -68,9 +92,7 @@ class ConfigService
     }
 
     /**
-     * Lädt die Konfiguration aus der JSON-Datei.
-     *
-     * @return void
+     * Lädt settings aus der JSON-Datei.
      */
     private function load(): void
     {
@@ -79,43 +101,36 @@ class ConfigService
             $data = json_decode($content, true);
 
             if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
-                // Wir mergen die geladenen Daten mit den Defaults, um sicherzustellen,
-                // dass neue Keys in Zukunft auch existieren.
-                $this->settings = array_merge($this->defaults, $data);
+                $this->settings = $data;
                 return;
             }
         }
-
-        // Fallback auf Defaults, wenn Datei nicht existiert oder fehlerhaft ist
-        $this->settings = $this->defaults;
+        $this->settings = [];
     }
 
     /**
-     * Speichert die aktuellen Einstellungen in die JSON-Datei.
-     *
-     * @return void
+     * Persistiert die settings.
      */
     private function save(): void
     {
         try {
+            // Wir speichern nur die Runtime-Settings (Toggles), nicht die Env-Werte!
+            // Das verhindert, dass Secrets versehentlich in die JSON geschrieben werden.
             $data = json_encode($this->settings, JSON_PRETTY_PRINT);
             if ($data === false) {
                 throw new \RuntimeException('Konfiguration konnte nicht kodiert werden.');
             }
             file_put_contents($this->configFilePath, $data);
         } catch (\Throwable $e) {
-            // Fehler beim Speichern loggen (z.B. Berechtigungsprobleme)
             Debugger::log($e, Debugger::ERROR);
         }
     }
 
     /**
-     * Gibt alle Einstellungen zurück (für das Admin-Formular).
-     *
-     * @return array
+     * Gibt alle effektiven Einstellungen zurück.
      */
     public function getAll(): array
     {
-        return $this->settings;
+        return array_merge($this->defaults, $this->settings);
     }
 }

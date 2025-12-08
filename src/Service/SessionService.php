@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Service;
 
+use SessionHandlerInterface;
 use Tracy\Debugger;
 
 /**
@@ -11,7 +12,7 @@ use Tracy\Debugger;
  * 
  * Implementiert strikte Daten-Isolation via "Bags", gehärtete Sicherheit
  * (Fingerprinting, Locking, Migration) und abstrahierten Zugriff.
- * Konfiguriert sich dynamisch über den ConfigService.
+ * Konfiguriert sich dynamisch über den ConfigService und nutzt einen injizierten Handler.
  * 
  * @see PHN 4.1.2
  */
@@ -33,19 +34,24 @@ class SessionService
     private string $appName;
 
     /**
-     * Erstellt den Service und lädt die Konfiguration.
-     * Prüft, ob PHP bereits eine Session gestartet hat (z.B. durch auto_start).
+     * Erstellt den Service, lädt die Konfiguration und registriert den Handler.
      * 
-     * @param ConfigService $config Der Konfigurations-Service.
+     * @param ConfigService           $config  Der Konfigurations-Service.
+     * @param SessionHandlerInterface $handler Der Speicher-Handler (File, Redis, etc.).
      */
     public function __construct(
-        private ConfigService $config
+        private ConfigService $config,
+        private SessionHandlerInterface $handler
     ) {
-        // Konfiguration laden (mit Fallback auf sichere Defaults aus dem ConfigService)
+        // Konfiguration laden
         $this->sessionLifetime = (int) $config->get('session.lifetime');
         $this->absoluteLifetime = (int) $config->get('session.absolute_lifetime');
         $this->appSecret = (string) $config->get('app.secret');
         $this->appName = (string) $config->get('app.name');
+
+        // Handler registrieren (Mantis 0000020)
+        // Wir setzen den Handler, bevor die Session startet.
+        session_set_save_handler($this->handler, true);
 
         if (session_status() === PHP_SESSION_ACTIVE) {
             $this->started = true;
@@ -251,7 +257,6 @@ class SessionService
         $prefix = $isHttps ? '__Host-' : '';
 
         // Dynamischer Name: __Host-Exelor-Hash
-        // Wir nutzen app.secret für den Hash, damit er stabil aber einzigartig pro Installation ist.
         $sessionName = $prefix . $this->appName . '-' . substr(hash('sha256', $this->appSecret), 0, 8);
         session_name($sessionName);
         

@@ -33,14 +33,23 @@ return function(ContainerBuilder $container) {
     // SERVICES
     // =========================================================================
 
-    // Der zentrale Konfigurations-Service (Verwaltet Feature-Toggles via modules.json)
+    // Der zentrale Konfigurations-Service
     $container->register('config_service', ConfigService::class)
-        ->addArgument($projectDir) // Übergibt den Pfad zum Projekt-Root
+        ->addArgument(new Reference(MrWo\Nexus\Repository\ConfigRepositoryInterface::class)) // Injiziertes Repo
         ->setPublic(true);
+
+    // Factory für Session-Handler
+    $container->register('session_factory', MrWo\Nexus\Service\SessionFactory::class)
+        ->addArgument(new Reference('config_service'));
+
+    // Der Handler selbst (erzeugt durch Factory)
+    $container->register('session_handler_instance', \SessionHandlerInterface::class)
+        ->setFactory([new Reference('session_factory'), 'createHandler']);
 
     // Der zentrale Session-Service
     $container->register('session_service', SessionService::class)
         ->addArgument(new Reference('config_service')) // Injiziere ConfigService für Lifetime & Salt
+        ->addArgument(new Reference('session_handler_instance')) // Injizierter Handler
         ->setPublic(true);
 
     // Der Service zur Verwaltung der Benutzerzustimmung
@@ -64,44 +73,13 @@ return function(ContainerBuilder $container) {
     // Der Authentifizierungs-Service (Login-Logik)
     $container->register(AuthenticationService::class, AuthenticationService::class)
         ->addArgument(new Reference('session_service'))
-        ->addArgument($getEnv('ADMIN_USER'))         // Aus .env
-        ->addArgument($getEnv('ADMIN_EMAIL'))        // Aus .env (Neu!)
-        ->addArgument($getEnv('ADMIN_PASSWORD_HASH')) // Aus .env
+        ->addArgument(new Reference(MrWo\Nexus\Repository\UserRepositoryInterface::class)) // Injiziertes Repo
         ->setPublic(true);
 
     // Der Service für Dummy-Seiten und Sitemap
     $container->register(PageManagerService::class, PageManagerService::class)
-        ->addArgument($projectDir) // Projekt-Root Pfad
-        ->setPublic(true);
-
-    // =========================================================================
-    // TWIG KONFIGURATION
-    // =========================================================================
-
-    // Definiert, wo Twig nach Template-Dateien suchen soll
-    $container->register('twig.loader', FilesystemLoader::class)
-        ->addArgument(__DIR__ . '/../templates');
-
-    // Die benutzerdefinierte Twig Extension
-    $container->register('twig.app_extension', AppExtension::class)
-        ->addArgument(new Reference('translator_service'))
-        ->addArgument(new Reference('asset_service'))
-        ->addArgument(new Reference('config_service'))
-        ->addArgument(new Reference('session_service'))
-        ->addArgument(new Reference(PageManagerService::class)) // Neu: Für 'get_dummy_pages()'
-        ->addTag('twig.extension');
-
-    // Der zentrale Twig Environment Service
-    // Umsetzung ADR 011: Environment-Awareness für Cache & Debugging
-    $container->register(Environment::class, Environment::class)
-        ->addArgument(new Reference('twig.loader')) // 1. Argument: Loader
-        ->addArgument([                             // 2. Argument: Optionen
-            'debug' => $getEnv('APP_ENV') === 'development',
-            'cache' => ($getEnv('APP_ENV') === 'development') ? false : $projectDir . '/var/cache/twig',
-            'auto_reload' => true,
-            'strict_variables' => ($getEnv('APP_ENV') === 'development'),
-        ])
-        ->addMethodCall('addExtension', [new Reference('twig.app_extension')])
+        ->addArgument(new Reference(MrWo\Nexus\Repository\PageRepositoryInterface::class)) // Injiziertes Repo
+        ->addArgument($projectDir) // Für Sitemap-Pfad
         ->setPublic(true);
 
     // =========================================================================
@@ -142,5 +120,53 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('translator_service'))          // Translator Service
         ->addArgument(new Reference(PageManagerService::class))     // PageManager Service
         ->addArgument(new Reference('session_service'))             // Neu: Session Service für Flash-Messages
+        ->setPublic(true);
+
+    // =========================================================================
+    // REPOSITORIES
+    // =========================================================================
+
+    // Das File-basierte Page-Repository
+    $container->register(MrWo\Nexus\Repository\PageRepositoryInterface::class, MrWo\Nexus\Repository\FilePageRepository::class)
+        ->addArgument($projectDir);
+
+    // Das File-basierte Config-Repository
+    $container->register(MrWo\Nexus\Repository\ConfigRepositoryInterface::class, MrWo\Nexus\Repository\FileConfigRepository::class)
+        ->addArgument($projectDir);
+
+    // Das Environment-basierte User-Repository (Fallback)
+    $container->register(MrWo\Nexus\Repository\UserRepositoryInterface::class, MrWo\Nexus\Repository\EnvUserRepository::class)
+        ->addArgument($getEnv('ADMIN_USER'))
+        ->addArgument($getEnv('ADMIN_EMAIL'))
+        ->addArgument($getEnv('ADMIN_PASSWORD_HASH'));
+    
+    // =========================================================================
+    // TWIG KONFIGURATION
+    // =========================================================================
+
+    // Definiert, wo Twig nach Template-Dateien suchen soll
+    $container->register('twig.loader', FilesystemLoader::class)
+        ->addArgument(__DIR__ . '/../templates');
+
+    // Die benutzerdefinierte Twig Extension
+    $container->register('twig.app_extension', AppExtension::class)
+        ->addArgument(new Reference('translator_service'))
+        ->addArgument(new Reference('asset_service'))
+        ->addArgument(new Reference('config_service'))
+        ->addArgument(new Reference('session_service'))
+        ->addArgument(new Reference(PageManagerService::class)) // Neu: Für 'get_dummy_pages()'
+        ->addTag('twig.extension');
+
+    // Der zentrale Twig Environment Service
+    // Umsetzung ADR 011: Environment-Awareness für Cache & Debugging
+    $container->register(Environment::class, Environment::class)
+        ->addArgument(new Reference('twig.loader')) // 1. Argument: Loader
+        ->addArgument([                             // 2. Argument: Optionen
+            'debug' => $getEnv('APP_ENV') === 'development',
+            'cache' => ($getEnv('APP_ENV') === 'development') ? false : $projectDir . '/var/cache/twig',
+            'auto_reload' => true,
+            'strict_variables' => ($getEnv('APP_ENV') === 'development'),
+        ])
+        ->addMethodCall('addExtension', [new Reference('twig.app_extension')])
         ->setPublic(true);
 };

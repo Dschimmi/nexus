@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Service;
 
+use MrWo\Nexus\Repository\UserRepositoryInterface;
+
 /**
  * Zentraler Service für Authentifizierungsprozesse.
  * Prüft Zugangsdaten und verwaltet die Benutzer-Identität.
- * Nutzt den gehärteten SessionService mit Security-Bag.
+ * Entkoppelt von der Datenquelle durch UserRepositoryInterface.
  */
 class AuthenticationService
 {
     public function __construct(
         private SessionService $session,
-        private string $adminUser,
-        private string $adminEmail,
-        private string $adminPassHash
+        private UserRepositoryInterface $userRepository
     ) {}
 
     /**
@@ -27,24 +27,22 @@ class AuthenticationService
      */
     public function login(string $identifier, string $password): bool
     {
-        // 1. Identität prüfen (Legacy .env Check)
-        // TODO: Später auf UserProviderInterface umstellen für DB-Auth
-        $isCorrectUser = ($identifier === $this->adminUser || $identifier === $this->adminEmail);
+        // 1. User über das Repository suchen (egal ob Env, DB oder LDAP)
+        $user = $this->userRepository->findByIdentifier($identifier);
 
-        if ($isCorrectUser && password_verify($password, $this->adminPassHash)) {
+        // 2. Wenn User nicht gefunden -> Abbruch
+        if (!$user) {
+            return false;
+        }
+
+        // 3. Passwort prüfen (gegen den Hash aus dem User-Objekt)
+        if (password_verify($password, $user->getPasswordHash())) {
             
-            // SECURITY: Session-ID rotieren (Schutz vor Fixation)
-            // Wir nutzen migrate(true), um die alte Session zu löschen.
+            // SECURITY: Session-ID rotieren
             $this->session->migrate(true);
 
-            // SECURITY: User in den isolierten Security-Bag speichern
-            $this->session->getBag('security')->set('user', [
-                'id'       => 'root',
-                'username' => $this->adminUser,
-                'email'    => $this->adminEmail,
-                'group'    => 'System',
-                'role'     => 'Administrator'
-            ]);
+            // SECURITY: User-Daten (ohne Passwort!) in Session speichern
+            $this->session->getBag('security')->set('user', $user->toArray());
 
             return true;
         }
@@ -57,11 +55,10 @@ class AuthenticationService
      */
     public function logout(): void
     {
-        // 1. User-Daten löschen (Logout)
+        // 1. User-Daten löschen
         $this->session->getBag('security')->clear();
         
-        // 2. Session-ID wechseln (Sicherheit), aber Attribute (Sprache) behalten
-        // migrate(true) löscht die ALTE Session-Datei, aber behält $_SESSION im RAM für die NEUE ID.
+        // 2. Session rotieren (Sicherheit)
         $this->session->migrate(true);
     }
 
@@ -70,7 +67,6 @@ class AuthenticationService
      */
     public function getUser(): ?array
     {
-        // Daten aus dem Security-Bag lesen
         return $this->session->getBag('security')->get('user');
     }
 
@@ -79,7 +75,11 @@ class AuthenticationService
      */
     public function isAdmin(): bool
     {
-        $user = $this->getUser();
-        return $user && $user['group'] === 'System' && $user['role'] === 'Administrator';
+        $userData = $this->getUser();
+        if (!$userData) {
+            return false;
+        }
+
+        return ($userData['group'] ?? '') === 'System' && ($userData['role'] ?? '') === 'Administrator';
     }
 }

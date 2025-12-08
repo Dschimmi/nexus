@@ -303,21 +303,55 @@ class SessionService
 
         return $ip;
     }
-
     /**
-     * Extrahiert Browser-Familie und Major-Version.
+     * Extrahiert Browser-Familie, Major-Version UND die OS-Plattform.
+     * Erstellt eine Signature (z.B. "MacOS|Chrome/123") für den Fingerprint.
      * Vermeidet Invalidierung bei Minor-Updates.
+     *
+     * @param string $ua Der komplette User-Agent-String.
+     * @return string Die kombinierte Signatur aus OS und Browser.
+     */
+    
+    /**
+     * Extrahiert Browser-Familie, Major-Version UND die OS-Plattform.
+     * Erstellt eine Signature (z.B. "MacOS|Chrome/123") für den Fingerprint.
+     * Vermeidet Invalidierung bei Minor-Updates.
+     *
+     * @param string $ua Der komplette User-Agent-String.
+     * @return string Die kombinierte Signatur aus OS und Browser.
      */
     private function parseUserAgent(string $ua): string
     {
-        if (preg_match('#(Firefox|Chrome|Safari|Edge|OPR)/([0-9]+)#', $ua, $matches)) {
-            return $matches[1] . '/' . $matches[2];
-        }
-        
-        if (preg_match('#Trident/.*rv:([0-9]+)#', $ua, $matches)) {
-            return 'IE/' . $matches[1];
+        // 1. OS-Plattform extrahieren
+        $operatingSystem = 'UnknownOS';
+
+        // Sucht nach Haupt-Plattform-Namen (Case-Insensitive)
+        if (preg_match('/(Windows|Macintosh|Linux|Android|iPhone|iPad|Mac\sOS\sX)/i', $ua, $matches)) {
+            // Normalisierung der erkannten Plattform-Namen
+            $matchedOs = $matches[1];
+            
+            if (stripos($matchedOs, 'Win') !== false) {
+                $operatingSystem = 'Windows';
+            } elseif (stripos($matchedOs, 'Mac') !== false) {
+                // Unterscheidet MacOS von iOS (iPhone/iPad)
+                $operatingSystem = (stripos($matchedOs, 'iP') !== false) ? 'iOS' : 'MacOS';
+            } elseif (stripos($matchedOs, 'Linux') !== false) {
+                $operatingSystem = 'Linux';
+            } elseif (stripos($matchedOs, 'Android') !== false) {
+                $operatingSystem = 'Android';
+            }
         }
 
-        return $ua;
+        // 2. Browser-Familie und Major-Version extrahieren
+        $browserSignature = 'UnknownBrowser';
+
+        if (preg_match('#(Firefox|Chrome|Safari|Edge|OPR)/([0-9]+)#', $ua, $matches)) {
+            $browserSignature = $matches[1] . '/' . $matches[2];
+        } elseif (preg_match('#Trident/.*rv:([0-9]+)#', $ua, $matches)) {
+            $browserSignature = 'IE/' . $matches[1];
+        }
+
+        // 3. Kombinierte Signatur: OS|Browser/MajorVersion
+        return $operatingSystem . '|' . $browserSignature;
     }
 }

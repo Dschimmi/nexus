@@ -42,7 +42,8 @@ class EnvUserRepository implements UserRepositoryInterface
                 $this->adminEmail,
                 $this->adminPassHash,
                 'System',           // Feste Gruppe
-                'Administrator'     // Feste Rolle
+                'Administrator',     // Feste Rolle
+                1             // Feste Auth-Version (Anti-Replay)
             );
         }
 

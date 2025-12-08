@@ -23,6 +23,7 @@ class User
      * @param string $passwordHash Der gehashte Passwort-String (Argon2id).
      * @param string $group        Die primäre Benutzergruppe (z.B. 'System').
      * @param string $role         Die primäre Rolle (z.B. 'Administrator').
+     * @param int    $authVersion  Die Version der Authentifizierungsdaten (Anti-Replay).
      */
     public function __construct(
         private string $id,
@@ -30,7 +31,8 @@ class User
         private string $email,
         private string $passwordHash,
         private string $group,
-        private string $role
+        private string $role,
+        private int $authVersion = 1 // Default 1 für Abwärtskompatibilität
     ) {}
 
     /**
@@ -88,6 +90,15 @@ class User
     }
 
     /**
+     * Gibt die Authentifizierungs-Version zurück.
+     * @return int
+     */
+    public function getAuthVersion(): int
+    {
+        return $this->authVersion;
+    }
+
+    /**
      * Konvertiert das Objekt in ein assoziatives Array.
      * Wird verwendet, um Benutzerdaten in der Session zu speichern,
      * ohne das gesamte Objekt (inkl. Passwort-Hash) zu serialisieren.
@@ -101,7 +112,8 @@ class User
             'username' => $this->username,
             'email' => $this->email,
             'group' => $this->group,
-            'role' => $this->role
+            'role' => $this->role,
+            'auth_version' => $this->authVersion
         ];
     }
 
@@ -121,7 +133,8 @@ class User
             $data['email'] ?? '',
             '', // Passwort-Hash wird nicht in der Session gespeichert
             $data['group'] ?? '',
-            $data['role'] ?? ''
+            $data['role'] ?? '',
+            (int) ($data['auth_version'] ?? 1)
         );
     }
 }

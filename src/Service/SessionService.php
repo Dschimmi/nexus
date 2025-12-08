@@ -201,19 +201,26 @@ class SessionService
      * 
      * @return void
      */
+    /**
+     * Validiert die Session gegen Hijacking (Fingerprint) und Timeouts.
+     * Bei Fehler wird die Session invalidiert.
+     * 
+     * @return void
+     */
     private function validateSession(): void
     {
         $meta = $_SESSION[self::KEY_META] ?? [];
         $now = time();
+        
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-        // Anonymisierter Fingerprint (IPv4 /24) zur Vermeidung von False-Positives
-        $ipParts = explode('.', $ip);
-        $anonymizedIp = (count($ipParts) === 4) ? implode('.', array_slice($ipParts, 0, 3)) . '.0' : $ip;
+        
+        $anonymizedIp = $this->anonymizeIp($ip);
+        $browserSignature = $this->parseUserAgent($ua);
         
         // Salted Fingerprint mit App-Secret aus Config
-        $fingerprint = hash('sha256', $anonymizedIp . $ua . $this->appSecret);
+        // Optional: Geo-Location wird aktuell weggelassen, da kein Service verfügbar.
+        $fingerprint = hash('sha256', $anonymizedIp . $browserSignature . $this->appSecret);
 
         // Neue Session initialisieren
         if (empty($meta)) {
@@ -227,7 +234,7 @@ class SessionService
 
         // 1. Fingerprint Check (Hijacking Schutz)
         if (!hash_equals($meta['fingerprint'], $fingerprint)) {
-            Debugger::log('Session Hijacking Attempt blocked.', Debugger::WARNING);
+            Debugger::log("Session Hijacking Attempt blocked. IP: {$anonymizedIp}, UA: {$browserSignature}", Debugger::WARNING);
             $this->invalidate();
             return;
         }
@@ -268,5 +275,49 @@ class SessionService
             'httponly' => true,
             'samesite' => 'Strict'
         ]);
+    }
+
+    /**
+     * Anonymisiert IPv4 und IPv6 Adressen.
+     * IPv4: /24 (letztes Oktett genullt).
+     * IPv6: /64 (ersten 4 Blöcke behalten).
+     */
+    private function anonymizeIp(string $ip): string
+    {
+        // IPv4
+        if (strpos($ip, '.') !== false) {
+            $parts = explode('.', $ip);
+            return count($parts) === 4 ? implode('.', array_slice($parts, 0, 3)) . '.0' : $ip;
+        }
+
+        // IPv6
+        if (strpos($ip, ':') !== false) {
+            $packed = inet_pton($ip);
+            if ($packed === false) return $ip; // Fallback bei ungültiger IP
+            
+            // Maskieren: Die ersten 8 Bytes (64 Bit) behalten, Rest nullen
+            $mask = str_repeat("\xFF", 8) . str_repeat("\x00", 8);
+            $masked = $packed & $mask;
+            return inet_ntop($masked);
+        }
+
+        return $ip;
+    }
+
+    /**
+     * Extrahiert Browser-Familie und Major-Version.
+     * Vermeidet Invalidierung bei Minor-Updates.
+     */
+    private function parseUserAgent(string $ua): string
+    {
+        if (preg_match('#(Firefox|Chrome|Safari|Edge|OPR)/([0-9]+)#', $ua, $matches)) {
+            return $matches[1] . '/' . $matches[2];
+        }
+        
+        if (preg_match('#Trident/.*rv:([0-9]+)#', $ua, $matches)) {
+            return 'IE/' . $matches[1];
+        }
+
+        return $ua;
     }
 }

@@ -15,6 +15,7 @@ use MrWo\Nexus\Service\PageManagerService;
 use MrWo\Nexus\Twig\AppExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -126,6 +127,20 @@ return function(ContainerBuilder $container) {
     // REPOSITORIES
     // =========================================================================
 
+    // 1. Der Env-Provider (explizit unter eigenem Namen registriert und getaggt)
+    $container->register(MrWo\Nexus\Repository\EnvUserRepository::class, MrWo\Nexus\Repository\EnvUserRepository::class)
+        ->addArgument($getEnv('ADMIN_USER'))
+        ->addArgument($getEnv('ADMIN_EMAIL'))
+        ->addArgument($getEnv('ADMIN_PASSWORD_HASH'))
+        ->addTag('nexus.user_provider')
+        ->setPublic(true);
+
+    // 2. Die Chain (Sammelt alle Provider)
+    // Wir registrieren die Chain ALS die Implementierung für das Interface.
+    $container->register(MrWo\Nexus\Repository\UserRepositoryInterface::class, MrWo\Nexus\Repository\ChainUserRepository::class)
+        ->addArgument(new TaggedIteratorArgument('nexus.user_provider'))
+        ->setPublic(true);
+
     // Das File-basierte Page-Repository
     $container->register(MrWo\Nexus\Repository\PageRepositoryInterface::class, MrWo\Nexus\Repository\FilePageRepository::class)
         ->addArgument($projectDir);
@@ -133,12 +148,6 @@ return function(ContainerBuilder $container) {
     // Das File-basierte Config-Repository
     $container->register(MrWo\Nexus\Repository\ConfigRepositoryInterface::class, MrWo\Nexus\Repository\FileConfigRepository::class)
         ->addArgument($projectDir);
-
-    // Das Environment-basierte User-Repository (Fallback)
-    $container->register(MrWo\Nexus\Repository\UserRepositoryInterface::class, MrWo\Nexus\Repository\EnvUserRepository::class)
-        ->addArgument($getEnv('ADMIN_USER'))
-        ->addArgument($getEnv('ADMIN_EMAIL'))
-        ->addArgument($getEnv('ADMIN_PASSWORD_HASH'));
     
     // =========================================================================
     // TWIG KONFIGURATION

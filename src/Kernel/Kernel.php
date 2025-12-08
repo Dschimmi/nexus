@@ -53,6 +53,8 @@ class Kernel
         // Lade die Service-Konfigurations-Funktion und führe sie aus, um den Container zu füllen.
         $configureContainer = require_once __DIR__ . '/../../config/services.php';
         $configureContainer($this->container);
+   
+        $this->container->compile();
 
         // Starte die Session über den Service aus dem Container.
         $sessionService = $this->container->get('session_service');

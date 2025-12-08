@@ -15,7 +15,7 @@ class AuthenticationService
 {
     public function __construct(
         private SessionService $session,
-        private UserRepositoryInterface $userRepository
+        private UserRepositoryInterface $userRepository,
     ) {}
 
     /**

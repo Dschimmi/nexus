@@ -4,57 +4,68 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Service;
 
-use Symfony\Component\HttpFoundation\Request;
+use MrWo\Nexus\Contract\TranslationProviderInterface;
 
 /**
- * Service für Übersetzungen (i18n).
- * Lädt die aktive Sprache direkt aus der Session beim Start.
+ * Zentraler Service für Übersetzungen (i18n).
+ * Aggregiert Daten aus verschiedenen Providern.
  */
 class TranslatorService
 {
     private array $translations = [];
-    private string $currentLocale = 'de'; // Default
-    private string $translationsDir;
+    private string $currentLocale = 'de';
+    
+    /** @var TranslationProviderInterface[] */
+    private array $providers = [];
 
     public function __construct(
-        private SessionService $session, 
-        string $projectDir
+        private SessionService $session
     ) {
-        $this->translationsDir = $projectDir . '/translations';
-        
-        // Sprache direkt aus Session laden (falls vorhanden)
+        // Sprache aus Session laden
         $attributes = $this->session->getBag('attributes');
         if ($attributes->has('locale')) {
             $this->currentLocale = $attributes->get('locale');
         }
-
-        // Texte laden
-        $this->loadTranslations();
     }
 
     /**
-     * Lädt die Übersetzungen aus der PHP-Datei.
+     * Fügt eine Übersetzungsquelle hinzu.
      */
-    private function loadTranslations(): void
+    public function addProvider(TranslationProviderInterface $provider): void
     {
-        $path = $this->translationsDir . '/' . $this->currentLocale . '.php';
+        $this->providers[] = $provider;
+        // Cache invalidieren oder sofort nachladen? 
+        // Wir laden lazy beim ersten translate() oder explizit.
+        $this->reload(); 
+    }
 
-        if (file_exists($path)) {
-            $this->translations = require $path;
-        } else {
-            // Fallback auf 'english', falls Datei fehlt
-            $pathDe = $this->translationsDir . '/en.php';
-            if (file_exists($pathDe)) {
-                $this->translations = require $pathDe;
+    /**
+     * Lädt alle Übersetzungen neu (aus allen Providern).
+     */
+    public function reload(): void
+    {
+        $this->translations = [];
+        
+        // Fallback Sprache ('de') zuerst laden
+        foreach ($this->providers as $provider) {
+            $this->translations = array_merge($this->translations, $provider->loadTranslations('de'));
+        }
+
+        // Aktuelle Sprache darüber mergen (überschreibt Defaults)
+        if ($this->currentLocale !== 'de') {
+            foreach ($this->providers as $provider) {
+                $this->translations = array_merge($this->translations, $provider->loadTranslations($this->currentLocale));
             }
         }
     }
 
-    /**
-     * Übersetzt einen Schlüssel.
-     */
     public function translate(string $key, array $params = []): string
     {
+        // Initial laden, falls noch nicht geschehen (und Provider da sind)
+        if (empty($this->translations) && !empty($this->providers)) {
+            $this->reload();
+        }
+
         $text = $this->translations[$key] ?? $key;
 
         if (!empty($params)) {
@@ -64,9 +75,6 @@ class TranslatorService
         return $text;
     }
 
-    /**
-     * Gibt die aktuell aktive Sprache zurück.
-     */
     public function getLocale(): string
     {
         return $this->currentLocale;

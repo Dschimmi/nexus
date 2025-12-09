@@ -59,10 +59,14 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('session_service')) // Benötigt den Session-Service
         ->setPublic(true);
         
-    // Der Service für Übersetzungen
+    // 1. Der File-Provider
+    $container->register(MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class, MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class)
+        ->addArgument($projectDir);
+
+    // 2. Der Translator Service (neu verkabelt)
     $container->register('translator_service', TranslatorService::class)
-        ->addArgument(new Reference('session_service')) // Benötigt den Session-Service
-        ->addArgument($projectDir) // Projektpfad injizieren für Testbarkeit
+        ->addArgument(new Reference('session_service'))
+        ->addMethodCall('addProvider', [new Reference(MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class)])
         ->setPublic(true);
 
     // Der Service für Assets (Manifest, Dev/Prod automatisch)

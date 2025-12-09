@@ -1,0 +1,9 @@
+parameters:
+    level: 5  # Level 0-9. 5 ist ein guter Start für bestehende Projekte.
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - vendor
+        - var
+    tmpDir: var/cache/phpstan

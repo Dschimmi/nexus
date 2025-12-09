@@ -73,6 +73,14 @@ class AdminController
      */
     public function login(Request $request): Response
     {
+        // 1. CSRF Prüfung
+        $submittedToken = $request->request->get('_csrf_token');
+        if (!$this->session->isCsrfTokenValid('admin_login', $submittedToken)) {
+            // Angriff oder Session abgelaufen
+            $this->session->addFlash('error', 'Ungültiges Sicherheitstoken. Bitte erneut versuchen.');
+            return new RedirectResponse('/admin'); // Redirect to self (GET) to reset form
+        }
+        
         $identifier = $request->request->get('username', '');
         $password = $request->request->get('password', '');
         

@@ -20,6 +20,7 @@ class SessionService
 {
     /** @var string Interner Schlüssel für Metadaten (Zeitstempel, Fingerprint). */
     private const KEY_META = '__nexus_meta';
+    private const KEY_VERSION = '_version';
     
     /** @var bool Status-Flag, ob die Session gestartet wurde. */
     private bool $started = false;
@@ -41,7 +42,8 @@ class SessionService
      */
     public function __construct(
         private ConfigService $config,
-        private SessionHandlerInterface $handler
+        private SessionHandlerInterface $handler,
+        private SecurityLogger $logger
     ) {
         // Konfiguration laden
         $this->sessionLifetime = (int) $config->get('session.lifetime');
@@ -112,6 +114,8 @@ class SessionService
      */
     public function save(): void
     {
+        $_SESSION[self::KEY_VERSION] = time();
+        
         if (!$this->started) {
             return;
         }
@@ -139,7 +143,13 @@ class SessionService
     public function migrate(bool $destroy = false): void
     {
         $this->start();
+        $oldId = session_id();
         session_regenerate_id($destroy);
+        
+        $this->logger->log('session_migration', [
+            'destroy_old' => $destroy,
+            'old_id_hash' => hash('sha256', $oldId)
+        ]);
     }
 
     /**
@@ -150,6 +160,8 @@ class SessionService
      */
     public function invalidate(): void
     {
+        $this->logger->log('session_invalidation');
+        
         if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
         }
@@ -193,6 +205,40 @@ class SessionService
         return $flashes;
     }
 
+    public function generateCsrfToken(string $tokenId): string
+    {
+        $token = bin2hex(random_bytes(32));
+        $bag = $this->getBag('security');
+        
+        // Wir speichern Tokens gruppiert
+        $tokens = $bag->get('csrf', []);
+        $tokens[$tokenId] = $token;
+        
+        $bag->set('csrf', $tokens);
+        
+        return $token;
+    }
+
+    /**
+     * Prüft, ob ein übermitteltes Token gültig ist.
+     */
+    public function isCsrfTokenValid(string $tokenId, ?string $token): bool
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $bag = $this->getBag('security');
+        $tokens = $bag->get('csrf', []);
+
+        if (!isset($tokens[$tokenId])) {
+            return false;
+        }
+
+        // Zeitkonstanter Vergleich gegen Timing-Attacks
+        return hash_equals($tokens[$tokenId], $token);
+    }
+
     // --- Interne Sicherheitslogik ---
 
     /**
@@ -211,11 +257,12 @@ class SessionService
     {
         $meta = $_SESSION[self::KEY_META] ?? [];
         $now = time();
+        $_SESSION[self::KEY_VERSION] = time();
         
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
         
-        $anonymizedIp = $this->anonymizeIp($ip);
+        $anonymizedIp = $this->logger->anonymizeIp($ip);
         $browserSignature = $this->parseUserAgent($ua);
         
         // Salted Fingerprint mit App-Secret aus Config
@@ -234,19 +281,24 @@ class SessionService
 
         // 1. Fingerprint Check (Hijacking Schutz)
         if (!hash_equals($meta['fingerprint'], $fingerprint)) {
-            Debugger::log("Session Hijacking Attempt blocked. IP: {$anonymizedIp}, UA: {$browserSignature}", Debugger::WARNING);
+           $this->logger->log('fingerprint_mismatch', [
+                'expected' => $meta['fingerprint'],
+                'actual' => $fingerprint
+            ]);
             $this->invalidate();
             return;
         }
 
         // 2. Idle Timeout Check (Nutzt Config-Wert)
         if (($now - $meta['last_activity']) > $this->sessionLifetime) {
+            $this->logger->log('session_timeout_idle'); 
             $this->invalidate();
             return;
         }
 
         // 3. Absolute Timeout Check (Nutzt Config-Wert)
         if (($now - $meta['created_at']) > $this->absoluteLifetime) {
+            $this->logger->log('session_timeout_absolute');
             $this->invalidate();
             return;
         }
@@ -277,32 +329,6 @@ class SessionService
         ]);
     }
 
-    /**
-     * Anonymisiert IPv4 und IPv6 Adressen.
-     * IPv4: /24 (letztes Oktett genullt).
-     * IPv6: /64 (ersten 4 Blöcke behalten).
-     */
-    private function anonymizeIp(string $ip): string
-    {
-        // IPv4
-        if (strpos($ip, '.') !== false) {
-            $parts = explode('.', $ip);
-            return count($parts) === 4 ? implode('.', array_slice($parts, 0, 3)) . '.0' : $ip;
-        }
-
-        // IPv6
-        if (strpos($ip, ':') !== false) {
-            $packed = inet_pton($ip);
-            if ($packed === false) return $ip; // Fallback bei ungültiger IP
-            
-            // Maskieren: Die ersten 8 Bytes (64 Bit) behalten, Rest nullen
-            $mask = str_repeat("\xFF", 8) . str_repeat("\x00", 8);
-            $masked = $packed & $mask;
-            return inet_ntop($masked);
-        }
-
-        return $ip;
-    }
     /**
      * Extrahiert Browser-Familie, Major-Version UND die OS-Plattform.
      * Erstellt eine Signature (z.B. "MacOS|Chrome/123") für den Fingerprint.
@@ -353,5 +379,5 @@ class SessionService
 
         // 3. Kombinierte Signatur: OS|Browser/MajorVersion
         return $operatingSystem . '|' . $browserSignature;
-    }
+    }    
 }

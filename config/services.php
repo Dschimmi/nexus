@@ -51,6 +51,7 @@ return function(ContainerBuilder $container) {
     $container->register('session_service', SessionService::class)
         ->addArgument(new Reference('config_service')) // Injiziere ConfigService für Lifetime & Salt
         ->addArgument(new Reference('session_handler_instance')) // Injizierter Handler
+        ->addArgument(new Reference('security_logger')) // <--- Security-Logger
         ->setPublic(true);
 
     // Der Service zur Verwaltung der Benutzerzustimmung
@@ -75,12 +76,17 @@ return function(ContainerBuilder $container) {
     $container->register(AuthenticationService::class, AuthenticationService::class)
         ->addArgument(new Reference('session_service'))
         ->addArgument(new Reference(MrWo\Nexus\Repository\UserRepositoryInterface::class)) // Injiziertes Repo
+        ->addArgument(new Reference('security_logger')) // Security-Logger
         ->setPublic(true);
 
     // Der Service für Dummy-Seiten und Sitemap
     $container->register(PageManagerService::class, PageManagerService::class)
         ->addArgument(new Reference(MrWo\Nexus\Repository\PageRepositoryInterface::class)) // Injiziertes Repo
         ->addArgument($projectDir) // Für Sitemap-Pfad
+        ->setPublic(true);
+
+    // Der Security Logger
+    $container->register('security_logger', MrWo\Nexus\Service\SecurityLogger::class)
         ->setPublic(true);
 
     // =========================================================================

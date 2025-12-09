@@ -76,6 +76,9 @@ class AppExtension extends AbstractExtension
 
             // Holt die Liste der Dummy-Seiten (Neu)
             new TwigFunction('get_dummy_pages', fn() => $this->pageManager->getPages()),
+
+            // CSRF Token Generator
+            new TwigFunction('csrf_token', [$this->session, 'generateCsrfToken']),
         ];
     }
 }

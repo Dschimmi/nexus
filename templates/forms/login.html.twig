@@ -24,6 +24,7 @@
         {% endif %}
 
         <form action="{{ form_action }}" method="post" class="login-form">
+            {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_login'} %}
             <div class="form-group">
                 <label for="username" class="form-label">{{ 'login.username_label'|trans }}</label>
                 <input type="text" 

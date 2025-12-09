@@ -58,7 +58,29 @@ class Kernel
 
         // Starte die Session über den Service aus dem Container.
         $sessionService = $this->container->get('session_service');
-        $sessionService->start();
+        
+        // Kontextsteuerung (Ticket 26): Keine automatische Session für CLI oder API.
+        // API-Requests (/api/...) sind stateless und nutzen Tokens statt Sessions.
+        $isCli = (php_sapi_name() === 'cli');
+        $isApiRequest = str_starts_with($request->getPathInfo(), '/api/');
+
+        if (!$isCli && !$isApiRequest) {
+            $sessionService->start();
+        }
+        
+        // --- NEU: Globaler Security Check (Anti-Replay) ---
+        /** @var \MrWo\Nexus\Service\AuthenticationService $authService */
+        $authService = $this->container->get(\MrWo\Nexus\Service\AuthenticationService::class);
+        
+        // Wenn ein User eingeloggt ist, prüfen wir die Integrität (nur wenn Session läuft)
+        if (!$isCli && !$isApiRequest && $authService->getUser()) {
+            if (!$authService->validateSessionUser()) {
+                // Wenn Check fehlschlägt (wurde ausgeloggt), Redirect zur Login-Seite erzwingen?
+                // Oder wir lassen ihn weiterlaufen, er ist ja jetzt ausgeloggt.
+                // Redirect wäre sauberer, aber wir sind im Kernel vor dem Router.
+                // Wir belassen es beim Logout. Der nächste Controller-Aufruf (Admin) wird merken, dass er weg ist.
+            }
+        }
 
         // Wir stellen das 'app' Objekt global für Twig bereit (für app.request.pathInfo etc.)
         /** @var Environment $twig */
@@ -117,8 +139,10 @@ class Kernel
             $response = new Response('Ein Fehler ist aufgetreten', 500);
         } finally {
             // WICHTIG: Session-Daten zurückschreiben, egal ob Erfolg oder Fehler.
-            // Ohne diesen Aufruf gehen Flash-Messages im Fehlerfall verloren.
-            $sessionService->save();
+            // Aber nur, wenn wir überhaupt eine Session haben (kein CLI/API).
+            if (isset($isCli) && !$isCli && isset($isApiRequest) && !$isApiRequest) {
+                $sessionService->save();
+            }
         }
 
         return $response;

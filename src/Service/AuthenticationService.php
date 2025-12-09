@@ -16,6 +16,7 @@ class AuthenticationService
     public function __construct(
         private SessionService $session,
         private UserRepositoryInterface $userRepository,
+        private SecurityLogger $logger,
     ) {}
 
     /**
@@ -32,6 +33,10 @@ class AuthenticationService
 
         // 2. Wenn User nicht gefunden -> Abbruch
         if (!$user) {
+            $this->logger->log('auth_login_failure', [
+                'reason' => 'user_not_found', 
+                'identifier' => $identifier
+            ]);
             return false;
         }
 
@@ -44,8 +49,18 @@ class AuthenticationService
             // SECURITY: User-Daten (ohne Passwort!) in Session speichern
             $this->session->getBag('security')->set('user', $user->toArray());
 
+            $this->logger->log('auth_login_success', [
+                'user_id' => $user->getId(),
+                'username' => $user->getUsername()
+            ]);
+
             return true;
         }
+
+        $this->logger->log('auth_login_failure', [
+            'reason' => 'invalid_password', 
+            'identifier' => $identifier
+        ]);
 
         return false;
     }
@@ -55,6 +70,12 @@ class AuthenticationService
      */
     public function logout(): void
     {
+
+        $user = $this->getUser();
+        $username = $user['username'] ?? 'unknown';
+
+        $this->logger->log('auth_logout', ['user' => $username]);
+
         // 1. User-Daten löschen
         $this->session->getBag('security')->clear();
         
@@ -81,5 +102,37 @@ class AuthenticationService
         }
 
         return ($userData['group'] ?? '') === 'System' && ($userData['role'] ?? '') === 'Administrator';
+    }
+
+    /**
+     * Prüft, ob der User in der Session noch gültig ist (Anti-Replay).
+     * Lädt den User frisch aus dem Repository und vergleicht die authVersion.
+     * 
+     * @return bool True, wenn Session valide ist.
+     */
+    public function validateSessionUser(): bool
+    {
+        $sessionUser = $this->getUser();
+        if (!$sessionUser) {
+            return false;
+        }
+
+        // Wir nutzen den Username als Identifier, da IDs bei EnvUser 'root' sind
+        $freshUser = $this->userRepository->findByIdentifier($sessionUser['username']);
+
+        if (!$freshUser) {
+            // User existiert nicht mehr (gelöscht?)
+            $this->logout();
+            return false;
+        }
+
+        // Anti-Replay Check
+        if ($freshUser->getAuthVersion() !== ((int) ($sessionUser['auth_version'] ?? 0))) {
+            // Version mismatch! (Passwort geändert / Session kill)
+            $this->logout();
+            return false;
+        }
+
+        return true;
     }
 }

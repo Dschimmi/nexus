@@ -34,6 +34,10 @@ class ConfigService
             'module_site_search'        => false,
             'module_cookie_banner'      => true,
             'module_language_selection' => true,
+
+            'database.dsn'      => $_ENV['DB_DSN'] ?? null,
+            'database.user'     => $_ENV['DB_USER'] ?? null,
+            'database.password' => $_ENV['DB_PASSWORD'] ?? null,
         ];
 
         // 2. Persistierte Einstellungen laden

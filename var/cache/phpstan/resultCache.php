@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 return [
-	'lastFullAnalysisTime' => 1765296857,
+	'lastFullAnalysisTime' => 1765376491,
 	'meta' => array (
   'cacheVersion' => 'v12-linesToIgnore',
   'phpstanVersion' => '2.1.33',
@@ -20,7 +20,7 @@ return [
   ),
   'composerLocks' => 
   array (
-    'C:/xampp/htdocs/nexus/composer.lock' => '5534f3f952e3754d34ac5414544493186f8b6e2c',
+    'C:/xampp/htdocs/nexus/composer.lock' => '6ad77d4e4d306aa72c03848de61b799e54b9886e',
   ),
   'composerInstalled' => 
   array (
@@ -100,11 +100,23 @@ return [
           ),
           'dev_requirement' => true,
         ),
+        'firebase/php-jwt' => 
+        array (
+          'pretty_version' => 'v6.11.1',
+          'version' => '6.11.1.0',
+          'reference' => 'd1e91ecf8c598d073d0995afa8cd5c75c6e19e66',
+          'type' => 'library',
+          'install_path' => 'C:\\xampp\\htdocs\\nexus\\vendor\\composer/../firebase/php-jwt',
+          'aliases' => 
+          array (
+          ),
+          'dev_requirement' => false,
+        ),
         'friendsofphp/php-cs-fixer' => 
         array (
-          'pretty_version' => 'v3.90.0',
-          'version' => '3.90.0.0',
-          'reference' => 'ad732c2e9299c9743f9c55ae53cc0e7642ab1155',
+          'pretty_version' => 'v3.91.3',
+          'version' => '3.91.3.0',
+          'reference' => '9f10aa6390cea91da175ea608880e942d7c0226e',
           'type' => 'application',
           'install_path' => 'C:\\xampp\\htdocs\\nexus\\vendor\\composer/../friendsofphp/php-cs-fixer',
           'aliases' => 
@@ -1428,6 +1440,13 @@ return [
       ),
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
+  array (
+    'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
+    array (
+      0 => 'MrWo\\Nexus\\Repository\\EnvApiTokenRepository',
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvUserRepository.php' => 
   array (
     'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
@@ -1467,6 +1486,13 @@ return [
       ),
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\ApiTokenAuthenticator.php' => 
+  array (
+    'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
+    array (
+      0 => 'MrWo\\Nexus\\Service\\ApiTokenAuthenticator',
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php' => 
   array (
     'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
@@ -1479,6 +1505,43 @@ return [
     'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
     array (
       0 => 'MrWo\\Nexus\\Service\\ConsentService',
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php' => 
+  array (
+    'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
+    array (
+      0 => 'MrWo\\Nexus\\Service\\DatabaseService',
+    ),
+    'PHPStan\\Rules\\DeadCode\\PossiblyPureMethodCallCollector' => 
+    array (
+      0 => 
+      array (
+        0 => 
+        array (
+          0 => 'PDO',
+        ),
+        1 => 'setAttribute',
+        2 => 45,
+      ),
+      1 => 
+      array (
+        0 => 
+        array (
+          0 => 'PDO',
+        ),
+        1 => 'setAttribute',
+        2 => 48,
+      ),
+      2 => 
+      array (
+        0 => 
+        array (
+          0 => 'PDO',
+        ),
+        1 => 'setAttribute',
+        2 => 51,
+      ),
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\PageManagerService.php' => 
@@ -1678,6 +1741,21 @@ return [
     array (
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\ApiController.php' => 
+  array (
+    'fileHash' => 'ee80a271cb642e13f791c5920fe052b398012174',
+    'dependentFiles' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\V1\\StatusController.php',
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\V1\\StatusController.php' => 
+  array (
+    'fileHash' => '33fcccf6103acf16568f39db7df6302fb9ca751f',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Controller\\ConsentController.php' => 
   array (
     'fileHash' => '3379a5768726072ef5cdba7bdfa2a6b6f862ae71',
@@ -1731,6 +1809,15 @@ return [
     array (
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ApiTokenRepositoryInterface.php' => 
+  array (
+    'fileHash' => '2e561480fadda93abe4b5d7865af656abfa1ee78',
+    'dependentFiles' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\ApiTokenAuthenticator.php',
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ChainUserRepository.php' => 
   array (
     'fileHash' => '407fdd7703a86479d8baebb83e3a8f054c27be8f',
@@ -1745,6 +1832,13 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\FileConfigRepository.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConfigService.php',
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
+  array (
+    'fileHash' => '898b0f595e0c2b859299944c0a891c1c2a20b38f',
+    'dependentFiles' => 
+    array (
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvUserRepository.php' => 
@@ -1788,6 +1882,13 @@ return [
       2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\ApiTokenAuthenticator.php' => 
+  array (
+    'fileHash' => 'a317247e8e8f7c5356fc840b9a3dfe6532702e6a',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\AssetService.php' => 
   array (
     'fileHash' => 'be479c1a462042fdb00b471e868ccabcb985ef85',
@@ -1808,15 +1909,16 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConfigService.php' => 
   array (
-    'fileHash' => '9b1d41221abedf802ff85ee1481e0a53c432d85a',
+    'fileHash' => '708b9daff9377447bdaaae158f7c11d8e91a449d',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
-      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionFactory.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
-      3 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      4 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionFactory.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
+      4 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
+      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
+      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConsentService.php' => 
@@ -1825,6 +1927,13 @@ return [
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\ConsentController.php',
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php' => 
+  array (
+    'fileHash' => 'b9edb7ec2c3f7827d38f744febc1182ff9f894f2',
+    'dependentFiles' => 
+    array (
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\PageManagerService.php' => 
@@ -2497,6 +2606,252 @@ return [
               array (
               ),
             )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\ApiController.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Controller\\Api\\ApiController',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Basis-Controller für alle API-Endpunkte.
+ * 
+ * Stellt Hilfsmethoden bereit, um standardisierte JSON-Antworten
+ * zu generieren (JSend-ähnliches Format oder einfaches JSON).
+ * Dient als zentrale Stelle für API-spezifische Logik (z.B. Serializer-Integration).
+ */',
+         'namespace' => 'MrWo\\Nexus\\Controller\\Api',
+         'uses' => 
+        array (
+          'jsonresponse' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => true,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'json',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Erstellt eine erfolgreiche JSON-Antwort.
+     * 
+     * @param mixed $data   Die Nutzdaten (werden zu JSON serialisiert).
+     * @param int   $status HTTP-Statuscode (Standard: 200 OK).
+     * @param array $headers Optionale HTTP-Header.
+     * @return JsonResponse
+     */',
+             'namespace' => 'MrWo\\Nexus\\Controller\\Api',
+             'uses' => 
+            array (
+              'jsonresponse' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => false,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'data',
+               'type' => 'mixed',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'status',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => true,
+               'attributes' => 
+              array (
+              ),
+            )),
+            2 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'headers',
+               'type' => 'array',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => true,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'error',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Erstellt eine JSON-Fehlermeldung.
+     * 
+     * @param string $message Die Fehlermeldung.
+     * @param int    $status  HTTP-Statuscode (Standard: 400 Bad Request).
+     * @return JsonResponse
+     */',
+             'namespace' => 'MrWo\\Nexus\\Controller\\Api',
+             'uses' => 
+            array (
+              'jsonresponse' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => false,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'message',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'status',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => true,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\V1\\StatusController.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Controller\\Api\\V1\\StatusController',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Status-Endpunkt für die API Version 1.
+ * 
+ * Dient als Health-Check und Beispiel für die API-Architektur.
+ * Gibt den Systemstatus und die API-Version zurück.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Controller\\Api\\V1',
+         'uses' => 
+        array (
+          'apicontroller' => 'MrWo\\Nexus\\Controller\\Api\\ApiController',
+          'jsonresponse' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => 'MrWo\\Nexus\\Controller\\Api\\ApiController',
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'ping',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft die Verfügbarkeit der API.
+     * 
+     * @return JsonResponse JSON-Objekt mit Status und Version.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Controller\\Api\\V1',
+             'uses' => 
+            array (
+              'apicontroller' => 'MrWo\\Nexus\\Controller\\Api\\ApiController',
+              'jsonresponse' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'Symfony\\Component\\HttpFoundation\\JsonResponse',
+           'parameters' => 
+          array (
           ),
            'attributes' => 
           array (
@@ -3897,6 +4252,77 @@ return [
       ),
     )),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ApiTokenRepositoryInterface.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedInterfaceNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Repository\\ApiTokenRepositoryInterface',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Schnittstelle für den Zugriff auf API-Tokens.
+ * Ermöglicht den Austausch der Token-Quelle (Env, DB, Redis).
+ */',
+         'namespace' => 'MrWo\\Nexus\\Repository',
+         'uses' => 
+        array (
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'extends' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'isValid',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft, ob ein gegebenes Token existiert und gültig ist.
+     * 
+     * @param string $token Das zu prüfende Token (Raw String).
+     * @return bool True, wenn das Token gültig ist.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'bool',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'token',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+    )),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ChainUserRepository.php' => 
   array (
     0 => 
@@ -4108,6 +4534,104 @@ return [
           array (
           ),
         )),
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Repository\\EnvApiTokenRepository',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Validiert Tokens gegen eine Umgebungsvariable.
+ * Dient als einfacher Schutz für initiale Deployments.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Repository',
+         'uses' => 
+        array (
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+        0 => 'MrWo\\Nexus\\Repository\\ApiTokenRepositoryInterface',
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => '__construct',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => NULL,
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'masterToken',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'isValid',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'bool',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'token',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
       ),
     )),
   ),
@@ -4898,6 +5422,121 @@ return [
           array (
           ),
         )),
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\ApiTokenAuthenticator.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Service\\ApiTokenAuthenticator',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Service zur Validierung von API-Tokens.
+ * 
+ * Extrahiert das Bearer-Token aus dem Header und delegiert
+ * die Prüfung an das Repository.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Service',
+         'uses' => 
+        array (
+          'apitokenrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ApiTokenRepositoryInterface',
+          'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => '__construct',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => NULL,
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'repository',
+               'type' => 'MrWo\\Nexus\\Repository\\ApiTokenRepositoryInterface',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'validate',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft, ob der Request ein gültiges Token enthält.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'apitokenrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ApiTokenRepositoryInterface',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'bool',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'request',
+               'type' => 'Symfony\\Component\\HttpFoundation\\Request',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
       ),
     )),
   ),
@@ -5742,6 +6381,170 @@ return [
               array (
               ),
             )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Service\\DatabaseService',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Zentraler Wrapper für Datenbankzugriffe.
+ * Erzwingt Prepared Statements und sichere Konfiguration.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Service',
+         'uses' => 
+        array (
+          'pdo' => 'PDO',
+          'pdoexception' => 'PDOException',
+          'runtimeexception' => 'RuntimeException',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => '__construct',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => NULL,
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'config',
+               'type' => 'MrWo\\Nexus\\Service\\ConfigService',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'query',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Führt ein Prepared Statement aus.
+     * Einziger Weg, Queries zu senden (kein query() oder exec() erlaubt).
+     * 
+     * @param string $sql Das SQL-Statement mit Platzhaltern (:name oder ?).
+     * @param array $params Die Parameter für das Statement.
+     * @return array Das Ergebnis (fetchAll).
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'pdo' => 'PDO',
+              'pdoexception' => 'PDOException',
+              'runtimeexception' => 'RuntimeException',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'array',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'sql',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'params',
+               'type' => 'array',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => true,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'lastInsertId',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Gibt die ID des zuletzt eingefügten Datensatzes zurück.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'pdo' => 'PDO',
+              'pdoexception' => 'PDOException',
+              'runtimeexception' => 'RuntimeException',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'string',
+           'parameters' => 
+          array (
           ),
            'attributes' => 
           array (

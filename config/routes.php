@@ -104,6 +104,15 @@ $routes->add('language_switch', new Route(
     methods: ['POST']
 ));
 
+// --- API ROUTEN (V1) ---
+
+// Status/Ping Endpunkt (Health Check)
+$routes->add('api_v1_status', new Route(
+    path: '/api/v1/status',
+    defaults: ['_controller' => [MrWo\Nexus\Controller\Api\V1\StatusController::class, 'ping']],
+    methods: ['GET']
+));
+
 /**
  * ============================================================================
  *  DYNAMISCHE SEITEN (Dummy-Pages)

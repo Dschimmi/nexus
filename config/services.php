@@ -93,6 +93,18 @@ return function(ContainerBuilder $container) {
     $container->register('security_logger', MrWo\Nexus\Service\SecurityLogger::class)
         ->setPublic(true);
 
+    // --- SERVICES ---
+    
+    // API Token Authenticator
+    $container->register(MrWo\Nexus\Service\ApiTokenAuthenticator::class, MrWo\Nexus\Service\ApiTokenAuthenticator::class)
+        ->addArgument(new Reference(MrWo\Nexus\Repository\ApiTokenRepositoryInterface::class))
+        ->setPublic(true);
+
+    // Datenbank-Service (PDO Wrapper)
+    $container->register('database_service', MrWo\Nexus\Service\DatabaseService::class)
+        ->addArgument(new Reference('config_service'))
+        ->setPublic(true);
+
     // =========================================================================
     // CONTROLLER
     // =========================================================================
@@ -133,6 +145,10 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('session_service'))             // Neu: Session Service für Flash-Messages
         ->setPublic(true);
 
+    // API V1 Status Controller
+    $container->register(MrWo\Nexus\Controller\Api\V1\StatusController::class, MrWo\Nexus\Controller\Api\V1\StatusController::class)
+        ->setPublic(true);
+
     // =========================================================================
     // REPOSITORIES
     // =========================================================================
@@ -158,6 +174,11 @@ return function(ContainerBuilder $container) {
     // Das File-basierte Config-Repository
     $container->register(MrWo\Nexus\Repository\ConfigRepositoryInterface::class, MrWo\Nexus\Repository\FileConfigRepository::class)
         ->addArgument($projectDir);
+
+    // API Token Repository (Env Implementation)
+    $container->register(MrWo\Nexus\Repository\ApiTokenRepositoryInterface::class, MrWo\Nexus\Repository\EnvApiTokenRepository::class)
+        ->addArgument($getEnv('APP_SECRET'))
+        ->setPublic(true);
     
     // =========================================================================
     // TWIG KONFIGURATION

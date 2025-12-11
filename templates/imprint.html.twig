@@ -1,7 +1,6 @@
 {#
     Template für das Impressum.
-    Erbt vom Basis-Layout und füllt den Content-Block mit rechtlichen Angaben.
-    Alle Texte werden über den Translator-Service geladen.
+    Nutzt die .card Komponente für den Textinhalt.
 #}
 {% extends 'base.html.twig' %}
 
@@ -9,23 +8,21 @@
 {% block description %}{{ 'nav.imprint'|trans }} von {{ 'brand.name'|trans }}{% endblock %}
 
 {% block content %}
-<section class="std-page-container">
+<section class="card">
     <h1>{{ 'nav.imprint'|trans }}</h1>
     
-    <div class="std-content">
+    <div>
         {# Angaben gemäß § 5 TMG #}
         <p><strong>{{ 'imprint.section_tmg'|trans }}</strong></p>
         <p>
-            {# 
-               Sicherheits-Update: Nutzung von nl2br statt raw.
-               Der Text wird escaped, nur \n wird zu <br> umgewandelt.
-            #}
+            {# Nutzung von nl2br für Zeilenumbrüche aus der Übersetzung #}
             {{ 'imprint.address_block'|trans|nl2br }}
         </p>
 
         {# Kontaktinformationen #}
         <p><strong>{{ 'imprint.section_contact'|trans }}</strong></p>
-        <p>
+        {# u-mb-0 entfernt den unteren Abstand beim letzten Element #}
+        <p class="u-mb-0">
             {{ 'imprint.phone'|trans }}<br>
             {{ 'imprint.email'|trans }}
         </p>

@@ -1,185 +1,123 @@
-/* =========================================
-   DATEI: content.css
-   ZWECK: Layout-Raster und Container-Styles (Textboxen)
-   ========================================= */
+/* ==========================================================================
+   LAYER 4: LAYOUT LAYER (CONTENT)
+   Datei: content.css
+   Zweck: Spezifische Layouts (Hero, Grid) und Content-Container (Card).
+   BEM-Blöcke: .main-content, .hero, .grid, .card
+   ========================================================================== */
 
-/* --- Helfer-Klassen (Utilities) --- */
-.text-center { text-align: center; }
-.text-gold { color: var(--col-gold); }
-.text-bold { font-weight: 700; }
-.text-muted { color: var(--text-muted); }
-.font-small { font-size: 0.9rem; }
+/* --- Block: Main Content (Wrapper) --- */
+.main-content {
+    flex: 1;
+    width: 100%;
+    max-width: var(--container-width);
+    margin: var(--space-8) auto;
+    padding: 0 var(--space-4);
+    overflow-x: hidden; 
+}
 
-.mb-1 { margin-bottom: 1rem; }
-.mb-2 { margin-bottom: 2rem; }
-.mb-4 { margin-bottom: 4rem; }
+/* --- Block: Hero Section --- */
+.hero {
+    text-align: center;
+    padding: var(--space-16) 0 var(--space-12) 0;
+}
 
-.flex-col-full {
+.hero__title {
+    font-size: 3rem; /* Großschrift für Hero */
+    line-height: 1.2;
+    margin-bottom: var(--space-6);
+    color: var(--c-text-main);
+    font-weight: var(--font-weight-bold);
+}
+
+.hero__text {
+    font-size: 1.25rem;
+    color: var(--c-text-muted);
+    max-width: 800px;
+    margin: 0 auto var(--space-8) auto;
+}
+
+.hero__actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* --- Block: Grid Layouts --- */
+.grid {
+    display: grid;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+}
+
+/* Element: Spalten-Modifier */
+.grid--cols-1 { grid-template-columns: 1fr; }
+.grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Responsive Anpassungen */
+@media (max-width: 900px) {
+    .grid--cols-4, 
+    .grid--cols-3 { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 600px) {
+    .grid--cols-4, 
+    .grid--cols-3, 
+    .grid--cols-2 { 
+        grid-template-columns: 1fr; 
+    }
+}
+
+/* --- Block: Card (ehemals .textbox) --- */
+.card {
+    background-color: var(--c-bg-surface);
+    border: 1px solid var(--c-border-main);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    
+    /* Dezenter Schatten */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-/* Link mit Gold-Hover/Farbe für Content-Bereich */
-.link-gold {
-    color: var(--col-gold);
-    text-decoration: none;
-    font-weight: 700;
-    display: inline-block;
-    margin-top: 0.5rem;
-}
-.link-gold:hover { text-decoration: underline; }
-
-
-/* --- 1. HAUPT CONTAINER --- */
-main {
-    flex: 1;
-    width: 100%;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    overflow-x: hidden; 
-}
-
-.std-page-container {
-    display: flex;
-    flex-direction: column;     /* Stapelt die Inhalte */
-    justify-content: center; /* Zentriert Kinder horizontal */
-    align-items: center;     /* Zentriert Kinder vertikal (optional) */
-    /* min-height: 100vh;       /* Volle Viewport-Höhe (für vertikale Zentrierung) */
-    margin: 0;               /* Entfernt Standard-Margins */
-}
-
-.login-wrapper {
-    max-width: 300px;
-    width: 100%; /* Optional: Verhindert Überlauf */
-}
-
-/* --- 2. DIE TEXTBOX (Generisches Design) --- */
-/* Ersetzt die alte .card Klasse */
-.textbox {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 1.5rem;
-    
-    /* Dezenter Schatten für Abhebung, kein Hover-Movement mehr */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    
-    /* Stellt sicher, dass Buttons unten bündig sein können */
-    display: flex;
-    flex-direction: column;
-    height: 100%; 
-}
-
-/* Icon Container in Textboxen */
-.textbox-icon {
-    color: var(--col-gold);
-    margin-bottom: 1rem;
+.card__icon {
+    color: var(--c-brand-primary);
+    margin-bottom: var(--space-4);
     display: flex;
     align-items: center;
 }
 
-/* Button Wrapper in Textboxen (schiebt Button nach unten) */
-.textbox-actions {
-    margin-top: auto; /* Magic Trick für gleiche Höhe */
-    padding-top: 1rem;
+/* Stellt sicher, dass Buttons immer unten bündig sind */
+.card__actions {
+    margin-top: auto;
+    padding-top: var(--space-4);
     width: 100%;
 }
 
-
-/* --- 3. GRID SYSTEM (Layout 1-4 Spalten) --- */
-
-/* Basis Grid Verhalten */
-[class^="grid-"] {
-    display: grid;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+/* Modifier: Error State (für Fehlermeldungen) */
+.card--error {
+    background-color: var(--c-status-error-bg) !important;
+    border-color: var(--c-status-error) !important;
+    color: #991b1b !important; /* Dunkles Rot für Lesbarkeit */
 }
 
-/* .grid-4: Vier Spalten (z.B. Features) */
-.grid-4 {
-    grid-template-columns: repeat(4, 1fr);
-}
-
-/* .grid-3: Drei Spalten (z.B. CTA) */
-.grid-3 {
-    grid-template-columns: repeat(3, 1fr);
-}
-
-/* .grid-2: Zwei Spalten (z.B. Info-Texte) */
-.grid-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-/* .grid-1: Eine Spalte (Volle Breite) */
-.grid-1 {
-    grid-template-columns: 1fr;
-}
-
-
-/* --- 4. RESPONSIVE ANPASSUNGEN --- */
-
-/* Tablet (< 900px): Alles wird max 2-spaltig */
-@media (max-width: 900px) {
-    .grid-4, .grid-3 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Mobile (< 600px): Alles wird 1-spaltig */
-@media (max-width: 600px) {
-    .grid-4, .grid-3, .grid-2 {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* --- 5. HERO TYPOGRAFIE (Bleibt spezifisch für Startseite) --- */
-.hero-section {
-    text-align: center;
-    padding: 4rem 0 3rem 0;
-}
-.hero-title {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    color: var(--text-main);
-}
-.hero-text {
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    max-width: 800px;
-    margin: 0 auto 2.5rem auto;
-}
-.hero-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* =========================================
-   ERROR STATE OVERRIDES
-   (Muss hier stehen, um Standard .textbox zu überschreiben)
-   ========================================= */
-
-/* 1. Light Mode: Helles Rot */
-.textbox.alert-error {
-    background-color: #fee2e2 !important;
-    color: #7f1d1d !important;
-    border-color: #fecaca !important;
-}
-
-/* 2. Dark Mode: Dunkles Rot */
-[data-theme="dark"] .textbox.alert-error {
-    background-color: #450a0a !important; /* Tiefes Dunkelrot */
-    color: #fecaca !important; /* Helles Rot für Text */
-    border-color: #7f1d1d !important;
-}
-
-/* Überschriften erben die rote Textfarbe */
-.textbox.alert-error h1,
-.textbox.alert-error .hero-title {
+/* Text-Overrides im Error-Fall */
+.card--error h1, 
+.card--error h2, 
+.card--error h3,
+.card--error .hero__title {
     color: inherit !important;
+}
+
+/* Modifier: Auth/Login (Zentriert & Schmal) */
+.card--auth {
+    max-width: 400px;
+    margin: 0 auto;
 }

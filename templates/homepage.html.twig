@@ -3,104 +3,95 @@
 {% block title %}{{ 'home.hero.title'|trans }}{% endblock %}
 
 {% block content %}
-    <!-- 1. HERO SECTION -->
-    <section class="hero-section">
-        <h1 class="hero-title">
+    <section class="hero">
+        <h1 class="hero__title">
             {{ 'home.hero.title'|trans }}
         </h1>
-        <p class="hero-text">
+        <p class="hero__text">
             {{ 'home.hero.text'|trans }}
         </p>
-        <div class="hero-actions">
-            {# Ziel geändert auf Kontakt, da Download noch nicht existiert #}
-            <a href="/kontakt" class="btn btn-primary">{{ 'home.hero.btn_start'|trans }}</a>
+        <div class="hero__actions">
+            {# Ziel geändert auf Kontakt #}
+            <a href="/kontakt" class="btn btn--primary">{{ 'home.hero.btn_start'|trans }}</a>
         </div>
     </section>
 
-    <!-- 2. FEATURES GRID (4 Spalten) -->
     <section>
-        <h2 class="text-center mb-2">{{ 'home.features.title'|trans }}</h2>
+        <h2 class="u-text-center u-mb-4">{{ 'home.features.title'|trans }}</h2>
         
-        <div class="grid-4">
-            <!-- Feature 1 -->
-            <div class="textbox">
-                <div class="textbox-icon">
+        <div class="grid grid--cols-4">
+            <div class="card">
+                <div class="card__icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                 </div>
                 <h3>{{ 'home.feat1.title'|trans }}</h3>
-                <p class="text-muted">
+                <p class="u-text-muted">
                     {{ 'home.feat1.text'|trans }}
                 </p>
             </div>
 
-            <!-- Feature 2 -->
-            <div class="textbox">
-                <div class="textbox-icon">
+            <div class="card">
+                <div class="card__icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.5 6c-2.6 0-4.7 1-5.9 2.6-.5.8-.9 1.8-1 2.9h-3.2c-.2-1.1-.5-2.1-1-2.9-1.2-1.6-3.3-2.6-5.9-2.6v14c2.6 0 4.7-1 5.9-2.6.5-.8.9-1.8 1-2.9h3.2c.2 1.1.5 2.1 1 2.9 1.2 1.6 3.3 2.6 5.9 2.6v-14z"></path></svg>
                 </div>
                 <h3>{{ 'home.feat2.title'|trans }}</h3>
-                <p class="text-muted">
+                <p class="u-text-muted">
                     {{ 'home.feat2.text'|trans }}
                 </p>
             </div>
 
-            <!-- Feature 3 -->
-            <div class="textbox">
-                <div class="textbox-icon">
+            <div class="card">
+                <div class="card__icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 </div>
                 <h3>{{ 'home.feat3.title'|trans }}</h3>
-                <p class="text-muted">
+                <p class="u-text-muted">
                     {{ 'home.feat3.text'|trans }}
                 </p>
             </div>
 
-            <!-- Feature 4 -->
-            <div class="textbox">
-                <div class="textbox-icon">
+            <div class="card">
+                <div class="card__icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 </div>
                 <h3>{{ 'home.feat4.title'|trans }}</h3>
-                <p class="text-muted">
+                <p class="u-text-muted">
                     {{ 'home.feat4.text'|trans }}
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- 3. INFO GRID (2 Spalten für Textblöcke) -->
-    <div class="grid-2">
+    <div class="grid grid--cols-2">
         <section>
-            <h2 class="mb-1">{{ 'home.why.title'|trans }}</h2>
-            <p class="text-muted mb-1">
+            <h2 class="u-mb-2">{{ 'home.why.title'|trans }}</h2>
+            <p class="u-text-muted u-mb-2">
                 {{ 'home.why.text1'|trans }}
             </p>
-            <p class="text-muted">
+            <p class="u-text-muted">
                 {{ 'home.why.text2'|trans }}
             </p>
         </section>
 
         <section>
-            <h2 class="mb-1">{{ 'home.docs.title'|trans }}</h2>
-            <p class="text-muted mb-1">
+            <h2 class="u-mb-2">{{ 'home.docs.title'|trans }}</h2>
+            <p class="u-text-muted u-mb-2">
                 {{ 'home.docs.text1'|trans }}
             </p>
-            <p class="text-muted">
+            <p class="u-text-muted">
                 {{ 'home.docs.text2'|trans }}
             </p>
-            {# Link entfernt, da Seite nicht existiert #}
         </section>
     </div>
 
-    <!-- 4. CTA SECTION (Vereinfacht auf Kontakt) -->
-    <section class="textbox text-center">
-        <h2 class="mb-2">{{ 'home.cta.title'|trans }}</h2>
+    <section class="card u-text-center">
+        <h2 class="u-mb-4">{{ 'home.cta.title'|trans }}</h2>
         
         <div style="max-width: 600px; margin: 0 auto;">
-            <h4 class="mb-1">{{ 'home.cta.col3.title'|trans }}</h4>
-            <p class="text-muted mb-2">{{ 'home.cta.col3.text'|trans }}</p>
-            <div class="textbox-actions" style="justify-content: center;">
-                <a href="/kontakt" class="btn btn-primary">{{ 'home.cta.col3.btn'|trans }}</a>
+            <h4 class="u-mb-2">{{ 'home.cta.col3.title'|trans }}</h4>
+            <p class="u-text-muted u-mb-4">{{ 'home.cta.col3.text'|trans }}</p>
+            <div class="card__actions u-justify-center">
+                <a href="/kontakt" class="btn btn--primary">{{ 'home.cta.col3.btn'|trans }}</a>
             </div>
         </div>
     </section>

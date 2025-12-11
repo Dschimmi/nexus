@@ -18,9 +18,15 @@ export default defineConfig({
     rollupOptions: {
       // Hier listen wir ALLE unsere atomaren Dateien auf
       input: {
-        // CSS
+        // CSS - Layer 1 (Basis)
         variables: 'public/css/variables.css',
         base: 'public/css/base.css',
+        
+        // CSS - Layer 2 & 3 (Utilities & Components) - NEU
+        utilities: 'public/css/utilities.css',
+        components: 'public/css/components.css',
+
+        // CSS - Layer 4 (Layouts & Module)
         header: 'public/css/header.css',
         subheader: 'public/css/subheader.css',
         content: 'public/css/content.css',

@@ -1,17 +1,18 @@
 {% if config('module_cookie_banner') %}
 <div id="cookie-banner" class="cookie-banner" role="dialog" aria-modal="true" aria-labelledby="cookie-title">
     {# 1. Titel (Visuell oben) #}
-    <h3 id="cookie-title" class="cookie-title">{{ 'cookie.title'|trans }}</h3>
+    <h3 id="cookie-title" class="cookie-banner__title">{{ 'cookie.title'|trans }}</h3>
     
-    {# 2. Buttons (Im DOM hier, damit Fokus schnell hier landet. Visuell unten) #}
-    <div class="cookie-buttons">
-        <button class="btn btn-primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
-        <button class="btn btn-outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
+    {# 2. Buttons (Im DOM hier für Fokus-Reihenfolge, visuell via CSS unten) #}
+    <div class="cookie-banner__actions">
+        {# JS-Funktion handleCookie() wird erwartet #}
+        <button class="btn btn--primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
+        <button class="btn btn--outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
     </div>
 
-    {# 3. Text (Im DOM unten, Visuell in der Mitte) #}
-    <p class="cookie-text">
-        {{ 'cookie.text'|trans|raw }}
-    </p>
+    {# 3. Text (Visuell in der Mitte) #}
+    <div class="cookie-banner__text">
+        <p class="u-mb-0">{{ 'cookie.text'|trans|raw }}</p>
+    </div>
 </div>
 {% endif %}

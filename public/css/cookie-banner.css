@@ -1,84 +1,81 @@
-/* Container: Fixiert, mittig, solid */
+/* ==========================================================================
+   LAYER 4: MODULE (COOKIE BANNER)
+   Datei: cookie-banner.css
+   Zweck: Styling des modalen Cookie-Overlays.
+   BEM-Block: .cookie-banner
+   ========================================================================== */
+
+/* --- Block: Cookie Banner --- */
 .cookie-banner {
     display: none; /* Initial versteckt */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    
     width: 90%;
     max-width: 500px;
     
-    background-color: var(--bg-surface); /* Solide Farbe */
+    background-color: var(--c-bg-surface);
+    border: 1px solid var(--c-border-main);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
     
-    border: 1px solid var(--border-color);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border-radius: 6px;
-    padding: 2rem;
-    z-index: 9999;
+    /* Hoher Z-Index aus variables.css */
+    z-index: var(--z-modal);
     
-    /* Flexbox für visuelle Umsortierung */
+    /* Schatten für "Floating"-Effekt */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    
+    /* Flexbox für Layout */
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-4);
 }
 
-/* Sichtbarer Zustand */
-.cookie-banner.show {
+/* Modifier: Visible State (wird via JS getoggelt) */
+.cookie-banner--visible {
     display: flex;
 }
 
-/* --- VISUELLE REIHENFOLGE (Order) --- */
-
-/* 1. Titel ganz oben */
-.cookie-title {
+/* --- Element: Title --- */
+.cookie-banner__title {
+    /* Visuell oben */
     order: 1;
     margin: 0;
     font-size: 1.25rem;
-    color: var(--text-main);
+    font-weight: var(--font-weight-bold);
+    color: var(--c-text-main);
 }
 
-/* 2. Text in der Mitte (obwohl im DOM ganz unten) */
-.cookie-text {
+/* --- Element: Text --- */
+.cookie-banner__text {
+    /* Visuell in der Mitte */
     order: 2;
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.5;
     margin: 0;
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--c-text-muted);
 }
 
-/* 3. Buttons ganz unten (obwohl im DOM weiter oben) */
-.cookie-buttons {
+/* --- Element: Actions (Button Wrapper) --- */
+.cookie-banner__actions {
+    /* Visuell unten */
     order: 3;
     display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
 }
 
-/* Buttons Styling */
-.cookie-buttons .btn {
-    flex: 1; /* Gleich breit */
+/* Container für Buttons, damit sie gleich breit sind */
+.cookie-banner__actions .btn {
+    flex: 1;
 }
 
-/* Blur-Effekt */
-.blur-content {
+/* --- Utility: Blur Effect für den Hintergrund --- */
+/* Diese Klasse wird auf den Content-Wrapper (body > div) angewendet */
+.u-blur {
     filter: blur(5px);
     pointer-events: none;
     user-select: none;
-}
-
-/* --- ACCESSIBILITY / FOCUS STATES --- */
-
-/* Genereller Fokus-Stil für Buttons im Banner */
-.cookie-buttons .btn:focus {
-    outline: 2px solid var(--c-accent, #f2b400); /* Goldener Ring */
-    outline-offset: 2px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    z-index: 10; /* Damit der Ring über dem Nachbarn liegt */
-}
-
-/* Speziell für den Primary Button, damit er sich abhebt */
-.cookie-buttons .btn-primary:focus {
-    background-color: var(--c-text-main); /* Dunkler als Hover */
-    border-color: var(--c-text-main);
-    color: var(--c-bg-surface);
+    transition: filter 0.3s ease;
 }

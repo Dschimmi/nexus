@@ -9,71 +9,69 @@
 {% block title %}Fehler {{ code }} – {{ parent() }}{% endblock %}
 
 {% block content %}
-<section class="std-page-container">
-    
-    {# 
-       Logik für CSS-Klassen:
-       - Default: 'textbox text-center' (Weißer Hintergrund)
-       - Bei 404: 'textbox text-center alert-error' (Roter Hintergrund durch CSS-Override)
-    #}
-    <div class="textbox text-center {% if code == '404' or code == 404 %}alert-error{% endif %}">
+{# 
+    Logik für CSS-Klassen:
+    - Default: 'card u-text-center' (Weißer Hintergrund)
+    - Bei 404: 'card u-text-center card--error' (Roter Hintergrund via CSS-Modifier)
+#}
+<section class="card u-text-center {% if code == '404' or code == 404 %}card--error{% endif %}">
 
-        {# FALL 1: Development Modus #}
-        {% if app_env|default('production') == 'development' and exception is defined %}
-            <h1>Fehler {{ code }} (DEV)</h1>
-            <p class="mb-2">{{ status_text|default('Ein Fehler ist aufgetreten') }}</p>
-            
-            <div class="text-muted" style="text-align: left;">
-                <p><strong>Meldung:</strong> {{ exception.message }}</p>
-                <p><strong>Datei:</strong> {{ exception.file }} (Zeile {{ exception.line }})</p>
-            </div>
-
-        {# FALL 2: Production 404 (Rote Box mit Countdown) #}
-        {% elseif code == '404' or code == 404 %}
+    {# FALL 1: Development Modus #}
+    {% if app_env|default('production') == 'development' and exception is defined %}
+        <h1>Fehler {{ code }} (DEV)</h1>
+        <p class="u-mb-4">{{ status_text|default('Ein Fehler ist aufgetreten') }}</p>
         
-        <h1 class="hero-title">404</h1>           
-            <p class="text-bold mb-1" style="font-size: 1.2rem;">
-                {{ 'error.404.text'|trans }}
-            </p>
-            
-            <p class="mb-2">
-                Automatische Weiterleitung in <span id="countdown" class="text-bold">3</span> Sekunden...
-            </p>
+        <div class="u-text-left u-text-muted">
+            <p><strong>Meldung:</strong> {{ exception.message }}</p>
+            <p><strong>Datei:</strong> {{ exception.file }} (Zeile {{ exception.line }})</p>
+        </div>
 
-            <div class="textbox-actions" style="justify-content: center;">
-                {# Button im "Fehler-Stil" (Weiß auf Rot) #}
-                <a href="/" class="btn" style="background: white; color: #7f1d1d; border: 1px solid #7f1d1d; font-weight: bold;">
-                    {{ 'nav.home'|trans }} (Sofort)
-                </a>
-            </div>
+    {# FALL 2: Production 404 (Rote Box mit Countdown) #}
+    {% elseif code == '404' or code == 404 %}
+    
+        <h1 class="hero__title">404</h1>           
+ 
+        <p class="u-font-bold u-mb-1" style="font-size: 1.2rem;">
+            {{ 'error.404.text'|trans }}
+        </p>
+        
+        <p class="u-mb-4">
+            Automatische Weiterleitung in <span id="countdown" class="u-font-bold">3</span> Sekunden...
+        </p>
 
-            {# JavaScript für den automatischen Redirect (DEAKTIVIERT für Debugging) #}
-            <script>
-                (function() {
-                    var seconds = 3;
-                    var el = document.getElementById('countdown');
-                    var interval = setInterval(function() {
-                        seconds--;
-                        el.textContent = seconds;
-                        if (seconds <= 0) {
-                            clearInterval(interval);
-                            window.location.href = '/';
-                        }
-                    }, 1000);
-                })();
-            </script> 
+        <div class="card__actions u-justify-center">
+            {# Button im "Fehler-Stil" (Weiß auf Rot) via Modifier #}
+            <a href="/" class="btn btn--error-inverse">
+                {{ 'nav.home'|trans }} (Sofort)
+            </a>
+        </div>
 
-        {# FALL 3: Sonstige Fehler #}
-        {% else %}
-            <h1>Ein Fehler ist aufgetreten</h1>
-            <p class="mb-2">
-                {{ status_text|default('Es gab ein unerwartetes Problem. Bitte versuchen Sie es später erneut.') }}
-            </p>
-            <div class="textbox-actions">
-                <a href="/" class="btn btn-outline">{{ 'nav.home'|trans }}</a>
-            </div>
-        {% endif %}
+        {# JavaScript für den automatischen Redirect (Bleibt 1:1) #}
+        <script>
+            (function() {
+                var seconds = 3;
+                var el = document.getElementById('countdown');
+                var interval = setInterval(function() {
+                    seconds--;
+                    el.textContent = seconds;
+                    if (seconds <= 0) {
+                        clearInterval(interval);
+                        window.location.href = '/';
+                    }
+                }, 1000);
+            })();
+        </script> 
 
-    </div>
+    {# FALL 3: Sonstige Fehler #}
+    {% else %}
+        <h1>Ein Fehler ist aufgetreten</h1>
+        <p class="u-mb-4">
+            {{ status_text|default('Es gab ein unerwartetes Problem. Bitte versuchen Sie es später erneut.') }}
+        </p>
+        <div class="card__actions u-justify-center">
+            <a href="/" class="btn btn--outline">{{ 'nav.home'|trans }}</a>
+        </div>
+    {% endif %}
+
 </section>
 {% endblock %}

@@ -1,0 +1,70 @@
+/* ==========================================================================
+   LAYER 2: UTILITY LAYER (ATOMIC CLASSES)
+   Datei: utilities.css
+   Zweck: Wiederverwendbare, atomare Klassen für Abstände, Text & Layout.
+   Prefix: .u- (zur Unterscheidung von BEM-Komponenten)
+   ========================================================================== */
+
+/* --- 1. Text Utilities --- */
+.u-text-center { text-align: center !important; }
+.u-text-left   { text-align: left !important; }
+.u-text-right  { text-align: right !important; }
+
+.u-font-bold   { font-weight: var(--font-weight-bold) !important; }
+.u-text-muted  { color: var(--c-text-muted) !important; }
+.u-text-main   { color: var(--c-text-main) !important; }
+.u-text-accent { color: var(--c-brand-primary) !important; }
+.u-text-error  { color: var(--c-status-error) !important; }
+
+/* --- 2. Spacing Utilities (Margins) --- */
+/* Mappt die --space-* Variablen auf atomare Klassen */
+
+/* Margin Bottom (mb) */
+.u-mb-0 { margin-bottom: 0 !important; }
+.u-mb-1 { margin-bottom: var(--space-1) !important; } /* 0.25rem */
+.u-mb-2 { margin-bottom: var(--space-2) !important; } /* 0.5rem */
+.u-mb-4 { margin-bottom: var(--space-4) !important; } /* 1rem (Basis) */
+.u-mb-6 { margin-bottom: var(--space-6) !important; } /* 1.5rem */
+.u-mb-8 { margin-bottom: var(--space-8) !important; } /* 2rem */
+
+/* Margin Top (mt) */
+.u-mt-auto { margin-top: auto !important; } /* Nützlich für Flexbox-Footer */
+.u-mt-2    { margin-top: var(--space-2) !important; }
+.u-mt-4    { margin-top: var(--space-4) !important; }
+
+/* --- 3. Layout & Container --- */
+/* Zentraler Container für Seiteninhalte */
+.u-container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+}
+
+/* Flexbox Helfer */
+.u-flex         { display: flex !important; }
+.u-flex-col     { flex-direction: column !important; }
+.u-items-center { align-items: center !important; }
+.u-justify-center { justify-content: center !important; }
+.u-justify-between { justify-content: space-between !important; }
+.u-gap-2        { gap: var(--space-2) !important; }
+.u-gap-4        { gap: var(--space-4) !important; }
+
+/* --- 4. Visibility & Accessibility --- */
+.u-hidden { display: none !important; }
+.u-block  { display: block !important; }
+
+/* Screenreader only: Versteckt visuell, bleibt lesbar für AT */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}

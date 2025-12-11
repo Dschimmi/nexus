@@ -1,0 +1,306 @@
+/* ==========================================================================
+   LAYER 3: COMPONENT LAYER (GLOBAL)
+   Datei: components.css
+   Zweck: Wiederverwendbare UI-Komponenten (Buttons, Inputs, Badges, Dropdowns)
+   BEM-Struktur: .block__element--modifier
+   ========================================================================== */
+
+/* --- 1. Buttons (.btn) --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+/* Modifiers */
+.btn--primary {
+    color: var(--palette-blue-main);
+    background-color: var(--c-brand-primary);
+    border-color: var(--c-brand-primary);
+}
+
+.btn--primary:hover,
+.btn--primary:focus {
+    background-color: #d9a200; /* Darker Gold */
+    border-color: #d9a200;
+    color: var(--palette-blue-main);
+    text-decoration: none;
+}
+
+.btn--outline {
+    color: var(--c-text-main);
+    background-color: transparent;
+    border-color: var(--c-border-main);
+}
+
+.btn--outline:hover,
+.btn--outline:focus {
+    color: var(--c-brand-primary);
+    border-color: var(--c-brand-primary);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.btn--full-width {
+    width: 100%;
+}
+
+/* --- 2. Form Elements (.form-*) --- */
+.form-input,
+.form-select,
+.form-textarea {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--c-text-main);
+    background-color: var(--c-bg-surface);
+    background-clip: padding-box;
+    border: 1px solid var(--c-border-main);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--c-brand-primary);
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(242, 180, 0, 0.25);
+}
+
+/* --- 3. Badges (.badge) --- */
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--radius-sm);
+    color: var(--c-text-muted);
+    background-color: var(--c-bg-body);
+    border: 1px solid var(--c-border-main);
+}
+
+/* --- 4. Alerts/Toasts (.alert) --- */
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+}
+
+.alert--success {
+    color: #065f46;
+    background-color: var(--c-status-success-bg);
+    border-color: #a7f3d0;
+}
+
+.alert--error {
+    color: #991b1b;
+    background-color: var(--c-status-error-bg);
+    border-color: #fecaca;
+}
+
+/* --- 5. Dropdowns (.dropdown) --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown__trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--c-text-main);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s;
+}
+
+.dropdown__trigger:hover {
+    color: var(--c-brand-primary);
+    background-color: var(--c-bg-body);
+}
+
+.dropdown__menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: var(--z-dropdown);
+    min-width: 12rem;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
+    text-align: left;
+    background-color: var(--c-bg-surface);
+    border: 1px solid var(--c-border-main);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    
+    /* Standardmäßig versteckt */
+    display: none;
+}
+
+/* Anzeigen bei Hover oder Focus innerhalb (Barrierefreiheit ohne JS) */
+.dropdown:hover .dropdown__menu,
+.dropdown:focus-within .dropdown__menu {
+    display: block;
+}
+
+/* Dropdown Items (können Links oder Buttons sein) */
+.dropdown__item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: var(--c-text-main);
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.dropdown__item:hover,
+.dropdown__item:focus {
+    color: var(--c-brand-primary);
+    background-color: var(--c-bg-body);
+    text-decoration: none;
+}
+
+/* --- 6. Tables (.table) --- */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-4);
+}
+
+.table th,
+.table td {
+    padding: var(--space-2) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--c-border-main);
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: var(--c-bg-surface);
+    font-weight: var(--font-weight-bold);
+    color: var(--c-text-main);
+}
+
+/* Modifier: Checkbox-Spalte (schmal) */
+.table__col-check {
+    width: 40px;
+    text-align: center;
+}
+
+/* Modifier: Actions-Spalte (rechtsbündig) */
+.table__col-actions {
+    text-align: right;
+}
+
+/* --- Button Modifiers (Ergänzung) --- */
+.btn--sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.btn--danger {
+    background-color: var(--c-status-error-bg);
+    color: #991b1b;
+    border-color: var(--c-status-error);
+}
+
+.btn--danger:hover,
+.btn--danger:focus {
+    background-color: var(--c-status-error);
+    color: var(--c-text-inverse);
+    text-decoration: none;
+}
+
+/* Modifier: Inverse Error Button (für 404 Seite) */
+.btn--error-inverse {
+    background-color: #ffffff;
+    color: #7f1d1d;
+    border-color: #7f1d1d;
+    font-weight: var(--font-weight-bold);
+}
+
+.btn--error-inverse:hover,
+.btn--error-inverse:focus {
+    background-color: #fef2f2; /* Sehr helles Rot beim Hover */
+    color: #7f1d1d;
+    text-decoration: none;
+}
+
+/* --- 7. Loading Spinner (.spinner) --- */
+/* Overlay: Zentriert den Spinner, blockiert aber NICHT per Default (außer visuell) */
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-tooltip);
+    display: none; /* Initial versteckt */
+    justify-content: center;
+    align-items: center;
+    
+    /* Optional: Leichter Dimmer, damit man den Spinner besser sieht */
+    /* FIX: Transparent machen und Klicks durchlassen (Non-Blocking) */
+    background-color: transparent;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .spinner-overlay {
+    background-color: transparent;
+}
+
+/* Modifier für sichtbaren Zustand */
+.spinner-overlay--visible {
+    display: flex;
+}
+
+/* Der eigentliche Spinner */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--c-border-main);
+    border-top-color: var(--c-brand-primary);
+    border-radius: 50%;
+    animation: spinner-spin 1s linear infinite;
+}
+
+@keyframes spinner-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Ergänzung für Dropdown JS-Logik (Mobile Support) */
+.dropdown--open .dropdown__menu {
+    display: block;
+}

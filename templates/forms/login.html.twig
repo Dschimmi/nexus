@@ -12,43 +12,43 @@
 {% block title %}{{ page_title|default('Login') }} – {{ parent() }}{% endblock %}
 
 {% block content %}
-<section class="std-page-container">
-    <div class="login-wrapper">
-        <h1 class="login-title">{{ page_title|default('Login') }}</h1>
+{# Modifier card--auth steuert die max-width und margin:auto #}
+<section class="card card--auth">
+    <h1 class="u-mb-4">{{ page_title|default('Login') }}</h1>
 
-        {# Fehlermeldung anzeigen #}
-        {% if error is defined and error %}
-            <div class="alert alert-error">
-                {{ error }}
-            </div>
-        {% endif %}
+    {# Fehlermeldung anzeigen #}
+    {% if error is defined and error %}
+        <div class="alert alert--error u-mb-4">
+            {{ error }}
+        </div>
+    {% endif %}
 
-        <form action="{{ form_action }}" method="post" class="login-form">
-            {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_login'} %}
-            <div class="form-group">
-                <label for="username" class="form-label">{{ 'login.username_label'|trans }}</label>
-                <input type="text" 
-                       id="username" 
-                       name="username" 
-                       value="{{ last_username|default('') }}" 
-                       class="form-input" 
-                       required 
-                       autofocus>
-            </div>
+    <form action="{{ form_action }}" method="post">
+        {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_login'} %}
+        
+        <div class="u-mb-4">
+            <label for="username" class="u-block u-font-bold u-mb-1">{{ 'login.username_label'|trans }}</label>
+            <input type="text" 
+                   id="username" 
+                   name="username" 
+                   value="{{ last_username|default('') }}" 
+                   class="form-input" 
+                   required 
+                   autofocus>
+        </div>
 
-            <div class="form-group">
-                <label for="password" class="form-label">{{ 'login.password_label'|trans }}</label>
-                <input type="password" 
-                       id="password" 
-                       name="password" 
-                       class="form-input" 
-                       required>
-            </div>
+        <div class="u-mb-4">
+            <label for="password" class="u-block u-font-bold u-mb-1">{{ 'login.password_label'|trans }}</label>
+            <input type="password" 
+                   id="password" 
+                   name="password" 
+                   class="form-input" 
+                   required>
+        </div>
 
-            <button type="submit" class="btn btn-primary btn-block">
-                {{ 'login.submit_btn'|trans }}
-            </button>
-        </form>
-    </div>
+        <button type="submit" class="btn btn--primary btn--full-width">
+            {{ 'login.submit_btn'|trans }}
+        </button>
+    </form>
 </section>
 {% endblock %}

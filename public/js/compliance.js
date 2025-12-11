@@ -94,7 +94,7 @@ function showBanner() {
         
         // 1. Initialen Fokus setzen (Barrierefreiheit)
         // Wir fokussieren den "Alle akzeptieren" Button (Primary), da dies die gewünschte Handlung ist.
-        const primaryBtn = banner.querySelector('.btn-primary');
+        const primaryBtn = banner.querySelector('.btn--primary');
         
         if (primaryBtn) {
             // HACK: Kleiner Timeout (50ms) ist notwendig, da der Browser das Element
@@ -170,7 +170,7 @@ function enforceFocus(e) {
             lastFocusedElement.focus();
         } else {
             // Fallback: Primary Button
-            const primaryBtn = banner.querySelector('.btn-primary');
+            const primaryBtn = banner.querySelector('.btn--primary');
             if (primaryBtn) primaryBtn.focus();
         }
     }

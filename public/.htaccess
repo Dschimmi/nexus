@@ -13,4 +13,32 @@
     RewriteRule . index.php [L]
 </IfModule>
 
-  
+# ----------------------------------------------------------------------
+# OPCACHE FALLBACK (Shared Hosting)
+# ----------------------------------------------------------------------
+# Versucht, Opcache-Einstellungen für Shared-Hosting zu optimieren.
+# Hinweis: opcache.preload kann hier nicht gesetzt werden (PHP_INI_SYSTEM).
+
+<IfModule mod_php.c>
+    php_value opcache.enable 1
+    php_value opcache.memory_consumption 128
+    php_value opcache.interned_strings_buffer 8
+    php_value opcache.max_accelerated_files 10000
+    php_value opcache.revalidate_freq 2
+</IfModule>
+
+<IfModule mod_php7.c>
+    php_value opcache.enable 1
+    php_value opcache.memory_consumption 128
+    php_value opcache.interned_strings_buffer 8
+    php_value opcache.max_accelerated_files 10000
+    php_value opcache.revalidate_freq 2
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_value opcache.enable 1
+    php_value opcache.memory_consumption 128
+    php_value opcache.interned_strings_buffer 8
+    php_value opcache.max_accelerated_files 10000
+    php_value opcache.revalidate_freq 2
+</IfModule>  

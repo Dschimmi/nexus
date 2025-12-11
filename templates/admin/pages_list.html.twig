@@ -9,68 +9,66 @@
 {# Admin-CSS laden #}
 <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
-<section class="std-page-container">
-    <div class="dashboard-header">
+<section class="card">
+    <div class="u-flex u-justify-between u-items-center u-mb-4">
         <h1>{{ 'admin.pages_list_title'|trans }}</h1>
-        <div style="display: flex; gap: 1rem;">
-            <a href="/admin" class="btn btn-outline btn-sm">Zurück</a>
-            <a href="/admin/pages/create" class="btn btn-primary btn-sm">
+        <div class="u-flex u-gap-2">
+            <a href="/admin" class="btn btn--outline btn--sm">Zurück</a>
+            <a href="/admin/pages/create" class="btn btn--primary btn--sm">
                 {{ 'admin.pages_btn_create'|trans }}
             </a>
         </div>
     </div>
 
-    <div class="std-content">
+    <div>
         <form action="/admin/pages/delete" method="post" id="deleteForm">
-            <div class="dashboard-card" style="padding: 0; overflow: hidden;">
-                
-                {% if pages is empty %}
-                    <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
-                        {{ 'admin.pages_empty'|trans }}
-                    </div>
-                {% else %}
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead style="background: var(--bg-surface); border-bottom: 1px solid var(--border-color);">
+            
+            {% if pages is empty %}
+                <div class="u-text-center u-text-muted u-mb-4">
+                    {{ 'admin.pages_empty'|trans }}
+                </div>
+            {% else %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="table__col-check">
+                                <label class="checkbox-label" style="justify-content: center;">
+                                    <input type="checkbox" id="selectAll" style="cursor: pointer;">
+                                </label>
+                            </th>
+                            <th>{{ 'admin.pages_col_title'|trans }}</th>
+                            <th>{{ 'admin.pages_col_slug'|trans }}</th>
+                            <th class="table__col-actions">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for page in pages %}
                             <tr>
-                                <th style="padding: 1rem; text-align: left; width: 40px;">
+                                <td class="table__col-check">
                                     <label class="checkbox-label" style="justify-content: center;">
-                                        <input type="checkbox" id="selectAll" style="cursor: pointer;">
+                                        <input type="checkbox" name="slugs[]" value="{{ page.slug }}" class="page-checkbox">
                                     </label>
-                                </th>
-                                <th style="padding: 1rem; text-align: left;">{{ 'admin.pages_col_title'|trans }}</th>
-                                <th style="padding: 1rem; text-align: left;">{{ 'admin.pages_col_slug'|trans }}</th>
-                                <th style="padding: 1rem; text-align: right;">Link</th>
+                                </td>
+                                <td class="u-font-bold">
+                                    {{ page.title }}
+                                </td>
+                                <td class="u-text-muted" style="font-family: monospace;">
+                                    /{{ page.slug }}
+                                </td>
+                                <td class="table__col-actions">
+                                    <a href="/{{ page.slug }}" target="_blank" class="btn btn--outline btn--sm">
+                                        Vorschau
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for page in pages %}
-                                <tr style="border-bottom: 1px solid var(--border-color);">
-                                    <td style="padding: 1rem;">                                            
-                                        <label class="checkbox-label" style="justify-content: center;">
-                                            <input type="checkbox" name="slugs[]" value="{{ page.slug }}" class="page-checkbox">
-                                        </label>
-                                    </td>
-                                    <td style="padding: 1rem; font-weight: 500;">
-                                        {{ page.title }}
-                                    </td>
-                                    <td style="padding: 1rem; color: var(--text-muted); font-family: monospace;">
-                                        /{{ page.slug }}
-                                    </td>
-                                    <td style="padding: 1rem; text-align: right;">
-                                        <a href="/{{ page.slug }}" target="_blank" class="btn btn-outline btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
-                                            Vorschau
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endif %}
-            </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
 
             {% if pages is not empty %}
-                <div style="margin-top: 1rem; text-align: left;">
-                    <button type="submit" class="btn" style="background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;" onclick="return confirm('Wirklich löschen?');">
+                <div class="u-mt-4">
+                    <button type="submit" class="btn btn--danger" onclick="return confirm('Wirklich löschen?');">
                         {{ 'admin.pages_btn_delete'|trans }}
                     </button>
                 </div>
@@ -80,7 +78,8 @@
 </section>
 
 <script>
-    // "Alle auswählen" Logik
+    
+// "Alle auswählen" Logik
     document.getElementById('selectAll')?.addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('.page-checkbox');
         for (const checkbox of checkboxes) {

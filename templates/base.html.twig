@@ -4,29 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO: Title & Description -->
     <title>{% block title %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}">
     
-    <!-- SEO: Canonical URL -->
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}">
 
-    <!-- 1. Variablen -->
     <link rel="stylesheet" href="{{ asset('variables.css') }}">
-
-    <!-- 2. Basis Styles -->
     <link rel="stylesheet" href="{{ asset('base.css') }}">
 
-    <!-- 3. Layout-Module -->
+    <link rel="stylesheet" href="{{ asset('utilities.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('components.css') }}">
+
     <link rel="stylesheet" href="{{ asset('header.css') }}">
     <link rel="stylesheet" href="{{ asset('subheader.css') }}">
     <link rel="stylesheet" href="{{ asset('content.css') }}">
     <link rel="stylesheet" href="{{ asset('footer.css') }}">
 
-    <!-- 4. Module & Plugins -->
     <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}">
 
-    <!-- Dark Mode Init -->
     <script>
         (function() {
             const saved = localStorage.getItem('theme');
@@ -41,97 +37,85 @@
 </head>
 <body>
         
-    <a href="#main-content" class="skip-link visually-hidden-focusable">Zum Hauptinhalt springen</a>
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
 
-    <!-- Wrapper für Blur-Effekt -->
     <div id="app-wrapper">
         
-        <!-- 1. HEADER -->
-        <header>
-            <div class="header-inner">
-                <!-- Logo Bereich -->
-                <a href="/" class="logo-area">
-                    <img src="/images/logo.png" alt="{{ 'brand.name'|trans }}" class="logo-img">
+        <header class="header">
+            <div class="header__inner">
+                <a href="/" class="header__logo">
+                    <img src="/images/logo.png" alt="{{ 'brand.name'|trans }}" class="header__logo-img">
                 </a>
 
-                <div class="header-actions">
-                    <!-- 1. Suche -->
+                <div class="header__actions">
                     {% if config('module_site_search') %}
-                    <div class="search-wrapper">
-                        <input type="text" class="header-search" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="Suche">
-                        <span class="kbd-badge">{{ 'header.search_shortcut'|trans }}</span>
+                    <div class="header__search">
+                        <input type="text" class="header__search-input" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="Suche">
+                        <span class="header__search-badge">{{ 'header.search_shortcut'|trans }}</span>
                     </div>
                     {% endif %}
 
-                    <!-- 2. Sprache -->
                     {% if config('module_language_selection') %}
-                    <div class="custom-dropdown">
-                        <button class="custom-dropdown-btn" aria-label="Sprache wählen">
+                    <div class="dropdown">
+                        <button class="dropdown__trigger" aria-label="Sprache wählen">
                             {# Icon: Weltkugel #}
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
                             {# Icon: Pfeil klein #}
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </button>
-                        <div class="custom-dropdown-content">
-                            {# PRG-Pattern: Formular statt GET-Link für saubere URLs #}
+                        <div class="dropdown__menu">
+                            {# PRG-Pattern: Formular statt GET-Link #}
                             <form action="/language/switch" method="post" style="margin:0;">
                                 <input type="hidden" name="lang" value="de">
-                                <button type="submit" class="dropdown-link-btn">Deutsch</button>
+                                <button type="submit" class="dropdown__item">Deutsch</button>
                             </form>
                             <form action="/language/switch" method="post" style="margin:0;">
                                 <input type="hidden" name="lang" value="en">
-                                <button type="submit" class="dropdown-link-btn">English</button>
+                                <button type="submit" class="dropdown__item">English</button>
                             </form>
                         </div>
                     </div>
                     {% endif %}
 
-                    <!-- 3. Darkmode Toggle -->
-                    <button id="theme-toggle" class="icon-btn header-btn" aria-label="Design wechseln">
-                        <!-- Sonne (Sichtbar im Dark Mode) -->
-                        <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <button id="theme-toggle" class="header__theme-toggle" aria-label="Design wechseln">
+                        <svg class="header__icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         
-                        <!-- Mond (Sichtbar im Light Mode) -->
-                        <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg class="header__icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </button>
 
-                    <!-- 4. Auth Buttons -->
                     {% if user is defined %}
-                        {# Eingeloggter Zustand: Custom Dropdown #}
-                        <div class="custom-dropdown">
-                            <button class="custom-dropdown-btn">
+                        {# Eingeloggter Zustand: User Dropdown #}
+                        <div class="dropdown">
+                             <button class="dropdown__trigger">
                                 {{ 'header.greeting'|trans({'%name%': user.username}) }}
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
-                            <div class="custom-dropdown-content">
-                                <a href="/admin">Admin Dashboard</a>
-                                <a href="/admin/logout">{{ 'header.logout'|trans|default('Abmelden') }}</a>
+                            <div class="dropdown__menu">
+                                <a href="/admin" class="dropdown__item">Admin Dashboard</a>
+                                <a href="/admin/logout" class="dropdown__item">{{ 'header.logout'|trans|default('Abmelden') }}</a>
                             </div>
                         </div>
                     {% elseif config('module_user_management') %}
                         {# Ausgeloggter Zustand: Login Buttons #}
-                        <div class="auth-buttons">
-                            {# Login führt zum Admin-Bereich #}
-                            <a href="/admin" class="btn btn-outline header-btn">{{ 'header.login'|trans }}</a>
-                            {# Registrieren führt zum Kontaktformular (Account anfragen) #}
-                            <a href="/kontakt" class="btn btn-primary header-btn">{{ 'header.register'|trans }}</a>
+                        <div class="header__actions"> 
+                            <a href="/admin" class="btn btn--outline">{{ 'header.login'|trans }}</a>
+                            <a href="/kontakt" class="btn btn--primary">{{ 'header.register'|trans }}</a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </header>
 
-        <!-- 2. SUBHEADER (Navigation) -->
         <nav class="subheader">
-            <button id="nav-scroll-left" class="nav-arrow nav-arrow-left" style="display: none;">
+            <button id="nav-scroll-left" class="subheader__arrow subheader__arrow--hidden">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
 
-            <div class="nav-scroll-wrapper" id="nav-scroll-wrapper">
-                <ul class="nav-tabs">
+            <div class="subheader__scroll-wrapper" id="nav-scroll-wrapper">
+                <ul class="subheader__tabs">
                     {# Statischer Startseiten-Link #}
                     <li>
-                        <a href="/" class="{% if app.request.pathInfo == '/' %}active{% endif %}">
+                        <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}">
                             {{ 'nav.home'|trans|default('Startseite') }}
                         </a>
                     </li>
@@ -139,7 +123,7 @@
                     {# Dynamische Dummy-Seiten #}
                     {% for page in get_dummy_pages() %}
                         <li>
-                            <a href="/{{ page.slug }}" class="{% if app.request.pathInfo == '/' ~ page.slug %}active{% endif %}">
+                            <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}">
                                 {{ page.title }}
                             </a>
                         </li>
@@ -147,62 +131,84 @@
                 </ul>
             </div>
 
-            <button id="nav-scroll-right" class="nav-arrow nav-arrow-right" style="display: none;">
+            <button id="nav-scroll-right" class="subheader__arrow subheader__arrow--hidden">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>
         </nav>
 
-        <!-- 3. CONTENT -->
-        <main id="main-content">
-    {# Globale Flash-Messages (Zentrales Partial) #}
-    {% include 'partials/flash_messages.html.twig' %}
+        <main id="main-content" class="main-content">
+            {# Globale Flash-Messages (Zentrales Partial) #}
+            {% include 'partials/flash_messages.html.twig' %}
 
-    {# Seiteninhalt wird hier eingefügt #}
-    {% block content %}{% endblock %}
-</main>
+            {# Seiteninhalt #}
+            {% block content %}{% endblock %}
+        </main>
 
-        <!-- 4. FOOTER -->
-        <footer>
-            <div class="footer-inner">
-                <div class="footer-col">
-                    <h4>{{ 'brand.name'|trans }}</h4>
-                    <p class="footer-slogan">
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="footer__col">
+                    <h4 class="footer__title">{{ 'brand.name'|trans }}</h4>
+                    <p class="footer__text">
                         {{ 'brand.slogan'|trans }}
                     </p>
                 </div>
                     
-                    
-                <div class="footer-col">
-                    <h4>{{ 'footer.legal'|trans }}</h4>
-                    <a href="/impressum">{{ 'footer.imprint'|trans }}</a>
-                    <a href="/datenschutz">{{ 'footer.privacy'|trans }}</a>
+                <div class="footer__col">
+                    <h4 class="footer__title">{{ 'footer.legal'|trans }}</h4>
+                    <a href="/impressum" class="footer__link">{{ 'footer.imprint'|trans }}</a>
+                    <a href="/datenschutz" class="footer__link">{{ 'footer.privacy'|trans }}</a>
                     {% if config('module_cookie_banner') %}
-                         {# 'event' übergeben damit JS preventDefault machen kann #}
-                        <a href="#" onclick="showCookieBanner(event)">{{ 'footer.cookie_settings'|trans }}</a>
+                        <a href="#" onclick="showCookieBanner(event)" class="footer__link">{{ 'footer.cookie_settings'|trans }}</a>
                     {% endif %}
                 </div>
 
-  
-
-  
-                <div class="footer-col">
-                    <h4>{{ 'footer.sitemap'|trans }}</h4>
-                    <a href="/">{{ 'nav.home'|trans|default('Startseite') }}</a>
-                    <a href="/admin">{{ 'header.login'|trans }}</a>
+                <div class="footer__col">
+                    <h4 class="footer__title">{{ 'footer.sitemap'|trans }}</h4>
+                    <a href="/" class="footer__link">{{ 'nav.home'|trans|default('Startseite') }}</a>
+                    <a href="/admin" class="footer__link">{{ 'header.login'|trans }}</a>
                 </div>
             </div>
-            <div class="footer-copyright">
+            <div class="footer__copyright">
                 {{ 'footer.copyright'|trans|replace({'%year%': "now"|date("Y")}) }}
             </div>
         </footer>
     </div>
 
-    <!-- 5. COOKIE BANNER -->
     {% include 'partials/cookie_banner.html.twig' %}
     
-    <!-- Scripts -->
     <script src="{{ asset('js/layout.js') }}"></script>
     <script src="{{ asset('js/compliance.js') }}"></script>
     <script src="{{ asset('js/theme.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const spinner = document.getElementById('global-spinner');
+            if (!spinner) return;
+
+            // Global verfügbar machen
+            window.showSpinner = () => {
+                spinner.classList.add('spinner-overlay--visible');
+                spinner.setAttribute('aria-hidden', 'false');
+            };
+
+            window.hideSpinner = () => {
+                spinner.classList.remove('spinner-overlay--visible');
+                spinner.setAttribute('aria-hidden', 'true');
+            };
+
+            // Automatisch bei Formular-Submits aktivieren
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if (!e.defaultPrevented) window.showSpinner();
+                });
+            });
+
+            // Fix für Zurück-Button (Bfcache), damit Spinner verschwindet
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) window.hideSpinner();
+            });
+        });
+    </script>
+
 </body>
 </html>

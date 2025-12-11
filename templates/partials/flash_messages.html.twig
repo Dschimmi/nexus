@@ -1,11 +1,24 @@
-{# templates/partials/flash_messages.html.twig #}
+{# 
+    Partial: Flash Messages 
+    Zweck: Ausgabe von Erfolgs- und Fehlermeldungen.
+    Funktion: get_flashes() (definiert in AppExtension)
+    CSS: components.css (.alert) & utilities.css (.u-flex, etc.)
+#}
 {% for type, messages in get_flashes() %}
     {% for message in messages %}
-        {# Bootstrap Mapping: error -> danger #}
-        <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            {# Optional: Schließen-Button, falls JS aktiv #}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {# Mapping: 'error' -> 'alert--error', sonst Standard 'alert--success' #}
+        {# Wir nutzen Flexbox-Utilities, um Text und Button auszurichten #}
+        <div class="alert alert--{{ type == 'error' ? 'error' : 'success' }} u-mb-4 u-flex u-justify-between u-items-center" role="alert">
+            <span>{{ message|trans }}</span>
+            
+            {# Schließen-Button: Nativ umgesetzt (entfernt das Element via JS) #}
+            <button type="button" 
+                    class="btn" 
+                    style="background: transparent; border: none; font-size: 1.5rem; line-height: 1; padding: 0 0.5rem; color: inherit; opacity: 0.6; cursor: pointer;"
+                    onclick="this.closest('.alert').remove()" 
+                    aria-label="{{ 'action.close'|trans|default('Schließen') }}">
+                &times;
+            </button>
         </div>
     {% endfor %}
 {% endfor %}

@@ -1140,168 +1140,6 @@ return [
        'fixedErrorDiff' => NULL,
     )),
   ),
-  'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php' => 
-  array (
-    0 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Class MrWo\\Nexus\\Service\\AuthenticationService constructor invoked with 4 parameters, 3 required.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'line' => 40,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 40,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'arguments.count',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    1 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #2 $userRepository of class MrWo\\Nexus\\Service\\AuthenticationService constructor expects MrWo\\Nexus\\Repository\\UserRepositoryInterface, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'line' => 42,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 40,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    2 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #3 $logger of class MrWo\\Nexus\\Service\\AuthenticationService constructor expects MrWo\\Nexus\\Service\\SecurityLogger, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'line' => 43,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 40,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-  ),
-  'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php' => 
-  array (
-    0 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #1 $repository of class MrWo\\Nexus\\Service\\ConfigService constructor expects MrWo\\Nexus\\Repository\\ConfigRepositoryInterface, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'line' => 59,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 59,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    1 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #1 $repository of class MrWo\\Nexus\\Service\\ConfigService constructor expects MrWo\\Nexus\\Repository\\ConfigRepositoryInterface, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'line' => 76,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 76,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    2 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #1 $repository of class MrWo\\Nexus\\Service\\ConfigService constructor expects MrWo\\Nexus\\Repository\\ConfigRepositoryInterface, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'line' => 89,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 89,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    3 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Parameter #1 $repository of class MrWo\\Nexus\\Service\\ConfigService constructor expects MrWo\\Nexus\\Repository\\ConfigRepositoryInterface, string given.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'line' => 107,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 107,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'argument.type',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-  ),
-  'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php' => 
-  array (
-    0 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Class MrWo\\Nexus\\Service\\SessionService constructor invoked with 1 parameter, 3 required.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
-       'line' => 39,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 39,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'arguments.count',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    1 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Class MrWo\\Nexus\\Service\\SessionService constructor invoked with 1 parameter, 3 required.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
-       'line' => 104,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 104,
-       'nodeType' => 'PhpParser\\Node\\Expr\\New_',
-       'identifier' => 'arguments.count',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-  ),
 ); },
 	'locallyIgnoredErrorsCallback' => static function (): array { return array (
 ); },
@@ -1701,13 +1539,13 @@ return [
     array (
       0 => 
       array (
-        0 => 'session_destroy',
-        1 => 24,
+        0 => 'session_write_close',
+        1 => 32,
       ),
       1 => 
       array (
-        0 => 'session_id',
-        1 => 101,
+        0 => 'session_write_close',
+        1 => 70,
       ),
     ),
   ),
@@ -1739,6 +1577,7 @@ return [
     'fileHash' => '4e378be3ea1266c031bccbb860a596ef1e4a3ab7',
     'dependentFiles' => 
     array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Controller\\Api\\ApiController.php' => 
@@ -1775,6 +1614,7 @@ return [
     'fileHash' => 'fae84ca5a1462b916f8fc7cd148fba1ea13eea95',
     'dependentFiles' => 
     array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\HomepageControllerTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Controller\\LanguageController.php' => 
@@ -1800,6 +1640,8 @@ return [
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvUserRepository.php',
       2 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\UserRepositoryInterface.php',
       3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
+      4 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php' => 
@@ -1807,6 +1649,7 @@ return [
     'fileHash' => '004051ad4a7bedd701cfdf6a0eb54bd6e787b439',
     'dependentFiles' => 
     array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\KernelTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ApiTokenRepositoryInterface.php' => 
@@ -1832,6 +1675,7 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\FileConfigRepository.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConfigService.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
@@ -1880,6 +1724,7 @@ return [
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\ChainUserRepository.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvUserRepository.php',
       2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ApiTokenAuthenticator.php' => 
@@ -1904,7 +1749,8 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConfigService.php' => 
@@ -1917,8 +1763,9 @@ return [
       2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionFactory.php',
       3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
       4 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
+      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
+      7 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConsentService.php' => 
@@ -1943,7 +1790,8 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\PageManagerServiceTest.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\PageManagerServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\Provider\\PhpFileTranslationProvider.php' => 
@@ -1961,6 +1809,8 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionBag.php' => 
@@ -1996,9 +1846,10 @@ return [
       3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConsentService.php',
       4 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\TranslatorService.php',
       5 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-      7 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
-      8 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\TranslatorServiceTest.php',
+      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      7 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
+      8 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
+      9 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\TranslatorServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\TranslatorService.php' => 
@@ -2008,7 +1859,8 @@ return [
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\TranslatorServiceTest.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\TranslatorServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php' => 
@@ -2018,16 +1870,37 @@ return [
     array (
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php' => 
+  array (
+    'fileHash' => 'dc1fe4a6a6480779d33ea2de5fe47370db7b8d92',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\HomepageControllerTest.php' => 
+  array (
+    'fileHash' => 'd307c488e7847ed2cdf1a45bce969372580460f9',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\KernelTest.php' => 
+  array (
+    'fileHash' => '352bc786782e7bc2cbe454df6c1615c3804712a9',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php' => 
   array (
-    'fileHash' => '8039e12d50a5d92cdbda2a10fd597ee6780ab1ed',
+    'fileHash' => '741f2d85420e56b9e574173d78a4cd3a794ab23f',
     'dependentFiles' => 
     array (
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php' => 
   array (
-    'fileHash' => 'e17325a363ee67a1d4f07fd0ab7bcc8ff6d9cff5',
+    'fileHash' => 'f978fa697458796619355ff7ba6f7555fdbd5b64',
     'dependentFiles' => 
     array (
     ),
@@ -2041,7 +1914,7 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php' => 
   array (
-    'fileHash' => 'b8c68342f207896bc9cf3f218c968218d11f427f',
+    'fileHash' => '7cac988d8f8b8ad5c567e2425d0658de8615cd5a',
     'dependentFiles' => 
     array (
     ),
@@ -8502,12 +8375,1043 @@ return [
       ),
     )),
   ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Tests\\Integration\\AdminControllerTest',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Testet den AdminController (Index-Methode).
+ * (Ticket 0000074: Keine Controller-Tests)
+ * @coversDefaultClass \\MrWo\\Nexus\\Controller\\AdminController
+ */',
+         'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+         'uses' => 
+        array (
+          'testcase' => 'PHPUnit\\Framework\\TestCase',
+          'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+          'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+          'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+          'environment' => 'Twig\\Environment',
+          'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+          'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+          'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+          'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+          'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+          'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+          'user' => 'MrWo\\Nexus\\Entity\\User',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => 'PHPUnit\\Framework\\TestCase',
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'setUp',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => false,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testIndexActionReturnsDashboardForAuthenticatedAdmin',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Index-Aktion bei **erfolgreicher** Authentifizierung (Dashboard).
+     * @covers ::index
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testIndexActionReturnsLoginFormForUnauthenticatedUser',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Index-Aktion bei **fehlender** Authentifizierung (Login-Formular).
+     * @covers ::index
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        3 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testLoginActionFailsOnInvalidCsrfToken',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Login-Aktion bei fehlgeschlagenem CSRF-Token.
+     * Erwartet: RedirectResponse zur Admin-Seite.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        4 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testLoginActionSuccessfulRedirectsToDashboard',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Login-Aktion bei erfolgreicher Authentifizierung.
+     * Erwartet: RedirectResponse zum Dashboard.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        5 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testLoginActionFailsAndRerendersFormWithError',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Login-Aktion bei fehlgeschlagenen Credentials.
+     * Erwartet: Response mit erneut gerendertem Formular und Fehlermeldung.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        6 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testLogoutActionInvalidatesSessionAndRedirects',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Logout-Aktion.
+     * Erwartet: Aufruf von authService->logout() und RedirectResponse zur Admin-Seite.
+     * @covers ::logout
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        7 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testSaveConfigActionDeniesAccessAndRedirects',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die saveConfig-Aktion bei fehlender Authentifizierung.
+     * Erwartet: Direkter Redirect zur Admin-Seite.
+     * @covers ::saveConfig
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        8 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testSaveConfigActionSuccessfullySavesConfig',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die saveConfig-Aktion bei erfolgreicher Authentifizierung.
+     * Erwartet: Aktualisierung der Config, Erfolgsmeldung und Redirect.
+     * @covers ::saveConfig
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        9 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testCreatePageActionDeniesAccessAndRedirects',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die createPage-Aktion bei fehlender Authentifizierung (GET oder POST).
+     * Erwartet: Direkter Redirect zur Admin-Seite.
+     * @covers ::createPage
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        10 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testCreatePageActionRendersFormOnGetRequest',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die createPage-Aktion bei einem GET-Request (Formular anzeigen).
+     * Erwartet: Erfolgreicher 200 Response mit dem Erstellungs-Formular.
+     * @covers ::createPage
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        11 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testCreatePageActionHandlesPostSuccess',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die createPage-Aktion bei erfolgreichem POST-Request.
+     * Erwartet: Aufruf von PageManager->createPage, Flash-Message und Redirect.
+     * @covers ::createPage
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        12 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testCreatePageActionRendersFormOnPostFailure',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die createPage-Aktion bei POST-Fehler (RuntimeException).
+     * Erwartet: Response mit erneut gerendertem Formular und Fehlermeldung.
+     * @covers ::createPage
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        13 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testListPagesActionDeniesAccessAndRedirects',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die listPages-Aktion bei fehlender Authentifizierung.
+     * Erwartet: Direkter Redirect zur Admin-Seite.
+     * @covers ::listPages
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        14 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testListPagesActionRendersPageListSuccessfully',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die listPages-Aktion bei erfolgreicher Authentifizierung.
+     * Erwartet: Erfolgreicher 200 Response mit der Seitenliste.
+     * @covers ::listPages
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        15 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testDeletePagesActionDeniesAccessAndRedirects',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die deletePages-Aktion bei fehlender Authentifizierung.
+     * Erwartet: Direkter Redirect zur Admin-Seite.
+     * @covers ::deletePages
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        16 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testDeletePagesActionSuccessfullyDeletesPages',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die deletePages-Aktion bei erfolgreicher Löschung.
+     * Erwartet: Aufruf von deletePages, Erfolgsmeldung und Redirect.
+     * @covers ::deletePages
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        17 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testDeletePagesActionShowsInfoIfNoSlugsSelected',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die deletePages-Aktion, wenn keine Seiten ausgewählt wurden.
+     * Erwartet: Info-Flash-Message und Redirect.
+     * @covers ::deletePages
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+              'redirectresponse' => 'Symfony\\Component\\HttpFoundation\\RedirectResponse',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'environment' => 'Twig\\Environment',
+              'admincontroller' => 'MrWo\\Nexus\\Controller\\AdminController',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'translatorservice' => 'MrWo\\Nexus\\Service\\TranslatorService',
+              'pagemanagerservice' => 'MrWo\\Nexus\\Service\\PageManagerService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\HomepageControllerTest.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Tests\\Integration\\HomepageControllerTest',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Testet den HomepageController, der als Invokable Controller (über __invoke) fungiert.
+ * (Ticket 0000074: Keine Controller-Tests)
+ * @coversDefaultClass \\MrWo\\Nexus\\Controller\\HomepageController
+ */',
+         'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+         'uses' => 
+        array (
+          'testcase' => 'PHPUnit\\Framework\\TestCase',
+          'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+          'homepagecontroller' => 'MrWo\\Nexus\\Controller\\HomepageController',
+          'environment' => 'Twig\\Environment',
+          'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => 'PHPUnit\\Framework\\TestCase',
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testInvokeActionReturnsSuccessfulResponse',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die Standard-Aktion des Controllers, die über __invoke aufgerufen wird.
+     * @covers ::__invoke
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'homepagecontroller' => 'MrWo\\Nexus\\Controller\\HomepageController',
+              'environment' => 'Twig\\Environment',
+              'response' => 'Symfony\\Component\\HttpFoundation\\Response',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\KernelTest.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Tests\\Integration\\KernelTest',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Testet den kompletten Request-Lifecycle des Kernels.
+ * (Ticket 0000074: Test-Suite für Kernkomponenten)
+ * @coversDefaultClass \\MrWo\\Nexus\\Kernel\\Kernel
+ */',
+         'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+         'uses' => 
+        array (
+          'testcase' => 'PHPUnit\\Framework\\TestCase',
+          'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+          'kernel' => 'MrWo\\Nexus\\Kernel\\Kernel',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => 'PHPUnit\\Framework\\TestCase',
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testKernelHandlesBasicRequest',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet, ob der Kernel eine einfache GET-Anfrage zur Homepage verarbeiten kann 
+     * und eine Symfony Response mit 200 OK zurückgibt.
+     * @covers ::handleRequest
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'kernel' => 'MrWo\\Nexus\\Kernel\\Kernel',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testKernelHandlesNotFoundRoute',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet, ob der Kernel korrekt mit einer nicht existierenden Route umgeht 
+     * und eine 404 Not Found Response generiert.
+     * @covers ::handleRequest
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Integration',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'request' => 'Symfony\\Component\\HttpFoundation\\Request',
+              'kernel' => 'MrWo\\Nexus\\Kernel\\Kernel',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
   'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php' => 
   array (
     0 => 
     \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
        'name' => 'MrWo\\Nexus\\Tests\\Unit\\Service\\AuthenticationServiceTest',
-       'phpDoc' => NULL,
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Testet den AuthenticationService.
+ * @coversDefaultClass \\MrWo\\Nexus\\Service\\AuthenticationService
+ */',
+         'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+         'uses' => 
+        array (
+          'testcase' => 'PHPUnit\\Framework\\TestCase',
+          'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+          'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+          'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+          'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+          'user' => 'MrWo\\Nexus\\Entity\\User',
+          'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+          'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
        'abstract' => false,
        'final' => false,
        'extends' => 'PHPUnit\\Framework\\TestCase',
@@ -8543,7 +9447,28 @@ return [
         1 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testLoginSuccessWithUsername',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet erfolgreichen Login mit Benutzernamen.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8561,7 +9486,28 @@ return [
         2 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testLoginSuccessWithEmail',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet erfolgreichen Login mit E-Mail.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8579,7 +9525,28 @@ return [
         3 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testLoginFailureWrongPassword',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet fehlgeschlagenen Login wegen falschem Passwort.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8597,7 +9564,28 @@ return [
         4 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testLoginFailureUnknownUser',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet fehlgeschlagenen Login, da Benutzer nicht gefunden.
+     * @covers ::login
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8615,7 +9603,28 @@ return [
         5 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testLogout',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet erfolgreiches Logout.
+     * @covers ::logout
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8633,7 +9642,28 @@ return [
         6 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testGetUser',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet das Laden des eingeloggten Benutzers.
+     * @covers ::getUser
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8651,7 +9681,28 @@ return [
         7 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testIsAdminReturnsTrue',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet isAdmin, wenn der Benutzer Admin-Rechte hat.
+     * @covers ::isAdmin
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8669,7 +9720,67 @@ return [
         8 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'testIsAdminReturnsFalse',
-           'phpDoc' => NULL,
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet isAdmin, wenn der Benutzer keine Admin-Rechte hat.
+     * @covers ::isAdmin
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        9 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testIsAdminReturnsFalseWhenNotLoggedIn',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet isAdmin, wenn kein Benutzer eingeloggt ist.
+     * @covers ::isAdmin
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'authenticationservice' => 'MrWo\\Nexus\\Service\\AuthenticationService',
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'user' => 'MrWo\\Nexus\\Entity\\User',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
            'byRef' => false,
            'public' => true,
            'private' => false,
@@ -8699,12 +9810,15 @@ return [
       \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
          'phpDocString' => '/**
  * Testet den ConfigService.
- * Fokus: Laden von Defaults aus ENV, Lesen/Schreiben der JSON-Datei.
+ * Fokus: Aggregation von Defaults, ENV-Variablen und persistierten Einstellungen.
+ * Der Test wird auf den neuen DI-Container-Ansatz umgestellt.
+ * @coversDefaultClass \\MrWo\\Nexus\\Service\\ConfigService
  */',
          'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
          'uses' => 
         array (
           'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+          'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
           'testcase' => 'PHPUnit\\Framework\\TestCase',
         ),
          'constUses' => 
@@ -8731,13 +9845,13 @@ return [
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * Bereitet die Testumgebung vor.
-     * Erstellt ein temporäres Verzeichnis und setzt ENV-Variablen.
+     * Speichert und setzt temporäre ENV-Variablen für den Test.
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -8764,12 +9878,13 @@ return [
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * Räumt nach dem Test auf.
+     * Stellt die ursprünglichen ENV-Variablen wieder her.
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -8792,17 +9907,20 @@ return [
         )),
         2 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testLoadDefaultsFromEnv',
+           'name' => 'testLoadDefaultsFromEnvAndSystem',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * Prüft, ob Defaults korrekt aus der Umgebung geladen werden,
-     * wenn keine Konfigurationsdatei existiert.
+     * Prüft, ob ENV- und System-Defaults korrekt geladen werden,
+     * wenn das Repository leer ist.
+     * @covers ::__construct
+     * @covers ::get
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -8829,12 +9947,15 @@ return [
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * Prüft, ob Werte aus einer existierenden Datei die Defaults überschreiben.
+     * Prüft, ob Werte aus dem Repository die Defaults überschreiben.
+     * @covers ::__construct
+     * @covers ::get
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -8857,16 +9978,19 @@ return [
         )),
         4 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testSetSavesConfigToFile',
+           'name' => 'testSetSavesConfigViaRepository',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
      * Prüft das Speichern von Werten.
+     * @covers ::set
+     * @covers ::get
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -8889,16 +10013,52 @@ return [
         )),
         5 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testGracefulFallbackOnCorruptJson',
+           'name' => 'testGetAllReturnsMergedSettings',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * Prüft das Verhalten bei defekter JSON-Datei (Fallback auf Defaults).
+     * Prüft die getAll Methode.
+     * @covers ::getAll
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
             array (
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        6 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testIsEnabledReturnsCorrectBoolean',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft die isEnabled Methode.
+     * @covers ::isEnabled
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'configrepositoryinterface' => 'MrWo\\Nexus\\Repository\\ConfigRepositoryInterface',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
             ),
              'constUses' => 
@@ -9111,7 +10271,9 @@ return [
       \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
          'phpDocString' => '/**
  * Testet die Logik des SessionService.
- * Mockt den ConfigService, um Abhängigkeiten zu isolieren.
+ * Fokus: Bag-Verwaltung, Flash Messages, CSRF und interne Session-Funktionen.
+ * @coversDefaultClass \\MrWo\\Nexus\\Service\\SessionService
+ * @runInSeparateProcess
  */',
          'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
          'uses' => 
@@ -9119,7 +10281,10 @@ return [
           'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
           'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
           'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+          'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
           'testcase' => 'PHPUnit\\Framework\\TestCase',
+          'sessionhandlerinterface' => 'SessionHandlerInterface',
+          'runtimeexception' => 'RuntimeException',
         ),
          'constUses' => 
         array (
@@ -9159,26 +10324,10 @@ return [
         )),
         1 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testGetBagCreatesNewBag',
-           'phpDoc' => 
-          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
-             'phpDocString' => '/**
-     * @runInSeparateProcess
-     */',
-             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
-             'uses' => 
-            array (
-              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
-              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
-              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
-              'testcase' => 'PHPUnit\\Framework\\TestCase',
-            ),
-             'constUses' => 
-            array (
-            ),
-          )),
+           'name' => 'tearDown',
+           'phpDoc' => NULL,
            'byRef' => false,
-           'public' => true,
+           'public' => false,
            'private' => false,
            'abstract' => false,
            'final' => false,
@@ -9193,11 +10342,13 @@ return [
         )),
         2 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testDataPersistenceBetweenBags',
+           'name' => 'testGetBagCreatesNewBagAndStartsSession',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * @runInSeparateProcess
+     * Prüft, ob getBag die Session startet, einen Bag erstellt und das Bag-Objekt zurückgibt.
+     * @covers ::getBag
+     * @covers ::start
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
@@ -9205,7 +10356,10 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
             ),
              'constUses' => 
             array (
@@ -9227,11 +10381,12 @@ return [
         )),
         3 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testAddAndGetFlashMessages',
+           'name' => 'testDataPersistenceViaSave',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * @runInSeparateProcess
+     * Prüft, ob Daten über save() in $_SESSION geschrieben werden.
+     * @covers ::save
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
@@ -9239,7 +10394,10 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
             ),
              'constUses' => 
             array (
@@ -9261,11 +10419,13 @@ return [
         )),
         4 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
-           'name' => 'testInvalidateClearsEverything',
+           'name' => 'testCsrfTokenGenerationAndValidation',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
              'phpDocString' => '/**
-     * @runInSeparateProcess
+     * Testet die CSRF-Logik, die intern den \'security\' Bag nutzt.
+     * @covers ::generateCsrfToken
+     * @covers ::isCsrfTokenValid
      */',
              'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
              'uses' => 
@@ -9273,7 +10433,125 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        5 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testAddAndGetFlashMessages',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die addFlash/getFlashes Shortcut-Methoden.
+     * @covers ::addFlash
+     * @covers ::getFlashes
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        6 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testMigrateRegeneratesId',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die migrate-Methode.
+     * @covers ::migrate
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        7 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'testInvalidateDestroysSessionAndClearsBags',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Testet die invalidate-Methode.
+     * @covers ::invalidate
+     */',
+             'namespace' => 'MrWo\\Nexus\\Tests\\Unit\\Service',
+             'uses' => 
+            array (
+              'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
+              'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
+              'configservice' => 'MrWo\\Nexus\\Service\\ConfigService',
+              'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+              'testcase' => 'PHPUnit\\Framework\\TestCase',
+              'sessionhandlerinterface' => 'SessionHandlerInterface',
+              'runtimeexception' => 'RuntimeException',
             ),
              'constUses' => 
             array (

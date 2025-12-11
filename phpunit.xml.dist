@@ -7,8 +7,10 @@
     
     <testsuites>
         <testsuite name="Unit">
-            <!-- Hier liegen unsere neuen Tests -->
             <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
 
@@ -17,4 +19,16 @@
             <directory>src</directory>
         </include>
     </source>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <clover outputFile="coverage.xml"/>
+            <html outputDirectory="coverage/html"/>
+            <text showUncoveredFiles="false" showOnlySummary="true" min="90" />
+        </report>
+    </coverage>
+
 </phpunit>

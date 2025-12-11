@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace MrWo\Nexus\Tests\Unit\Service;
 
 use MrWo\Nexus\Service\ConfigService;
+use MrWo\Nexus\Repository\ConfigRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Testet den ConfigService.
- * Fokus: Laden von Defaults aus ENV, Lesen/Schreiben der JSON-Datei.
+ * Fokus: Aggregation von Defaults, ENV-Variablen und persistierten Einstellungen.
+ * Der Test wird auf den neuen DI-Container-Ansatz umgestellt.
+ * @coversDefaultClass \MrWo\Nexus\Service\ConfigService
  */
 class ConfigServiceTest extends TestCase
 {
-    private string $projectDir;
-    private string $configFile;
+    private array $defaultsBeforeTest = [];
 
     /**
-     * Bereitet die Testumgebung vor.
-     * Erstellt ein temporäres Verzeichnis und setzt ENV-Variablen.
+     * Speichert und setzt temporäre ENV-Variablen für den Test.
      */
     protected function setUp(): void
     {
-        $this->projectDir = sys_get_temp_dir() . '/nexus_config_test_' . uniqid();
-        mkdir($this->projectDir . '/config', 0777, true);
-        $this->configFile = $this->projectDir . '/config/modules.json';
+        // Sicherung der globalen Umgebungsvariablen
+        $this->defaultsBeforeTest['APP_NAME'] = $_ENV['APP_NAME'] ?? null;
+        $this->defaultsBeforeTest['SESSION_LIFETIME'] = $_ENV['SESSION_LIFETIME'] ?? null;
 
         // ENV-Variablen für den Test isolieren/setzen
         $_ENV['APP_NAME'] = 'TestApp';
@@ -32,81 +33,149 @@ class ConfigServiceTest extends TestCase
     }
 
     /**
-     * Räumt nach dem Test auf.
+     * Stellt die ursprünglichen ENV-Variablen wieder her.
      */
     protected function tearDown(): void
     {
-        if (file_exists($this->configFile)) {
-            unlink($this->configFile);
-        }
-        if (is_dir($this->projectDir . '/config')) {
-            rmdir($this->projectDir . '/config');
-        }
-        if (is_dir($this->projectDir)) {
-            rmdir($this->projectDir);
+        // ENV aufräumen
+        if ($this->defaultsBeforeTest['APP_NAME'] === null) {
+            unset($_ENV['APP_NAME']);
+        } else {
+            $_ENV['APP_NAME'] = $this->defaultsBeforeTest['APP_NAME'];
         }
         
-        // ENV aufräumen
-        unset($_ENV['APP_NAME'], $_ENV['SESSION_LIFETIME']);
+        if ($this->defaultsBeforeTest['SESSION_LIFETIME'] === null) {
+            unset($_ENV['SESSION_LIFETIME']);
+        } else {
+            $_ENV['SESSION_LIFETIME'] = $this->defaultsBeforeTest['SESSION_LIFETIME'];
+        }
     }
 
     /**
-     * Prüft, ob Defaults korrekt aus der Umgebung geladen werden,
-     * wenn keine Konfigurationsdatei existiert.
+     * Erstellt eine Instanz des ConfigService mit einem gemockten Repository.
      */
-    public function testLoadDefaultsFromEnv(): void
+    private function createService(array $persistedSettings = []): ConfigService
     {
-        $config = new ConfigService($this->projectDir);
+        // MOCK: ConfigRepositoryInterface erstellen
+        $repositoryMock = $this->createMock(ConfigRepositoryInterface::class);
 
+        // Verhalten: load() gibt persistierte Settings zurück
+        $repositoryMock->method('load')->willReturn($persistedSettings);
+
+        return new ConfigService($repositoryMock);
+    }
+    
+    /**
+     * Prüft, ob ENV- und System-Defaults korrekt geladen werden,
+     * wenn das Repository leer ist.
+     * @covers ::__construct
+     * @covers ::get
+     */
+    public function testLoadDefaultsFromEnvAndSystem(): void
+    {
+        $config = $this->createService([]); // Leeres Repository
+
+        // ENV-Wert
         $this->assertEquals('TestApp', $config->get('app.name'));
         $this->assertEquals(999, $config->get('session.lifetime'));
         
-        // Prüfen eines internen Defaults (Fallback)
+        // Interner Default (Muss in ConfigService::defaults definiert sein)
         $this->assertEquals(true, $config->get('module_cookie_banner'));
+        
+        // Prüfen eines nicht existierenden Keys mit Default-Rückgabe
+        $this->assertEquals('default', $config->get('nonexistent.key', 'default'));
     }
 
     /**
-     * Prüft, ob Werte aus einer existierenden Datei die Defaults überschreiben.
+     * Prüft, ob Werte aus dem Repository die Defaults überschreiben.
+     * @covers ::__construct
+     * @covers ::get
      */
     public function testLoadExistingConfigOverridesDefaults(): void
     {
-        // Datei anlegen, die den Namen überschreibt
-        file_put_contents($this->configFile, json_encode(['app.name' => 'OverriddenApp']));
+        // Simuliere persistierte Einstellung, die app.name überschreibt
+        $persisted = [
+            'app.name' => 'OverriddenApp',
+            'module_site_search' => true // Persistiert
+        ];
 
-        $config = new ConfigService($this->projectDir);
+        $config = $this->createService($persisted);
 
-        // Datei gewinnt
+        // Repository-Wert gewinnt
         $this->assertEquals('OverriddenApp', $config->get('app.name'));
+        
+        // Interner Default wird überschrieben
+        $this->assertTrue($config->get('module_site_search'));
+
         // ENV bleibt als Fallback für fehlende Keys
         $this->assertEquals(999, $config->get('session.lifetime'));
     }
 
     /**
      * Prüft das Speichern von Werten.
+     * @covers ::set
+     * @covers ::get
      */
-    public function testSetSavesConfigToFile(): void
+    public function testSetSavesConfigViaRepository(): void
     {
-        $config = new ConfigService($this->projectDir);
+        // MOCK: ConfigRepositoryInterface erstellen
+        $repositoryMock = $this->createMock(ConfigRepositoryInterface::class);
+        $repositoryMock->method('load')->willReturn([]);
+
+        // Erwartung: save() wird einmal aufgerufen, mit den neuen Settings
+        $repositoryMock->expects($this->once())
+             ->method('save')
+             ->with(['new_setting' => 'value']);
+
+        $config = new ConfigService($repositoryMock);
         
         $config->set('new_setting', 'value');
 
-        // Prüfen, ob Datei existiert und Inhalt hat
-        $this->assertFileExists($this->configFile);
-        $content = json_decode(file_get_contents($this->configFile), true);
+        // Prüfen, ob der neue Wert sofort lesbar ist
+        $this->assertEquals('value', $config->get('new_setting'));
+    }
+    
+    /**
+     * Prüft die getAll Methode.
+     * @covers ::getAll
+     */
+    public function testGetAllReturnsMergedSettings(): void
+    {
+        // Simuliere persistierte Einstellung
+        $persisted = ['module_cookie_banner' => false];
+
+        $config = $this->createService($persisted);
+
+        $allSettings = $config->getAll();
         
-        $this->assertEquals('value', $content['new_setting']);
+        // Prüfen, ob der ENV-Wert dabei ist (aus Defaults)
+        $this->assertEquals('TestApp', $allSettings['app.name']);
+
+        // Prüfen, ob die persistierte Einstellung die Defaults überschreibt
+        // Default ist TRUE, persistiert ist FALSE
+        $this->assertFalse($allSettings['module_cookie_banner']);
     }
 
     /**
-     * Prüft das Verhalten bei defekter JSON-Datei (Fallback auf Defaults).
+     * Prüft die isEnabled Methode.
+     * @covers ::isEnabled
      */
-    public function testGracefulFallbackOnCorruptJson(): void
+    public function testIsEnabledReturnsCorrectBoolean(): void
     {
-        file_put_contents($this->configFile, '{invalid_json');
+        $persisted = [
+            'is_true' => true,
+            'is_false' => false,
+            'is_string_true' => '1',
+            'is_null' => null
+        ];
+        $config = $this->createService($persisted);
 
-        $config = new ConfigService($this->projectDir);
-
-        // Sollte nicht crashen, sondern Defaults nutzen
-        $this->assertEquals('TestApp', $config->get('app.name'));
+        $this->assertTrue($config->isEnabled('is_true'));
+        $this->assertFalse($config->isEnabled('is_false'));
+        $this->assertTrue($config->isEnabled('is_string_true'));
+        $this->assertFalse($config->isEnabled('is_null'));
+        
+        // Nicht existierend sollte false zurückgeben
+        $this->assertFalse($config->isEnabled('nonexistent'));
     }
 }

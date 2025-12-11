@@ -30,7 +30,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, pdo, pdo_sqlite
-          coverage: none # Coverage erst später aktivieren, spart Zeit
+          coverage: xdebug # FIX: Coverage aktivieren (Tickets 0000043/0000072)
 
       # 3. Abhängigkeiten installieren
       - name: Install Dependencies
@@ -51,9 +51,60 @@ jobs:
           echo "APP_ENV=test" >> .env
           echo "ADMIN_USER=admin" >> .env
           echo "ADMIN_EMAIL=admin@localhost" >> .env
-          # Ein echter Hash für 'testpass'
           echo "ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=4,p=1$NEF6R28u...' " >> .env
 
-      # 6. Tests ausführen
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --testdox
+      # 7. Linting (PHP-CS-Fixer Dry Run) (Ticket 0000075)
+      # Prüft Code-Style, bricht bei Verletzung ab.
+      - name: Run PHP-CS-Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --verbose
+
+      # 8. Statische Analyse (PHPStan) (Ticket 0000075)
+      # Prüft Code-Qualität und Typ-Konsistenz.
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github
+
+      # 9. Tests ausführen & Coverage Report generieren (Tickets 0000074/0000072)
+      # Führt Tests aus und generiert den Report zur späteren Auswertung.
+      - name: Run PHPUnit with Coverage
+        run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml
+        
+      # 10. Upload Coverage Report (für GitHub UI/Artifacts)
+      # Wird von Schritt 9 generiert.
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report-${{ matrix.php-versions }}
+          path: coverage.xml
+          if-no-files-found: error # Stellt sicher, dass der Report generiert wurde
+
+  # KORRIGIERT: Der neue Job muss direkt unter 'jobs:' stehen.
+  release_and_deploy:
+    name: Versioning & Deployment
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    # Läuft nur bei Push auf main/master (nicht bei PRs)
+    if: success() && github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    steps:
+      - name: Checkout Code (Full History)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Wichtig für Git-Operationen (Tagging)
+
+      # 1. Versionierung: Automatisches Tagging (Ticket 0000044)
+      - name: Create Version Tag (v0.8.14)
+        run: |
+          # Das manuelle Setzen der Version für den ersten Durchlauf.
+          TAG_NAME="v0.8.14"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # 2. Deployment Placeholder (Ticket 0000075)
+      # FIX: Doppelpunkt im Namen durch Bindestrich ersetzt, um YAML-Fehler zu beheben.
+      - name: CD Placeholder - Deploy Artifact
+        run: |
+          echo "Deployment der Version v0.8.14 zur Staging/Production Umgebung gestartet."
+          echo "Dieser Schritt ist ein Placeholder für den eigentlichen CD-Prozess (z.B. SSH/SCP)."
+          echo "Deployment Placeholder Complete."

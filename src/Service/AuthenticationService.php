@@ -17,6 +17,7 @@ class AuthenticationService
         private SessionService $session,
         private UserRepositoryInterface $userRepository,
         private SecurityLogger $logger,
+        private RateLimiter $rateLimiter,
     ) {}
 
     /**
@@ -28,6 +29,18 @@ class AuthenticationService
      */
     public function login(string $identifier, string $password): bool
     {
+        // 0. Rate Limiting Check (Ticket 34)
+        $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+
+        // Wenn die IP gesperrt ist, sofort abbrechen.
+        if ($this->rateLimiter->isRateLimited($clientIp)) {
+            $this->logger->log('auth_login_failure', [
+                'reason' => 'rate_limit_ip', 
+                'identifier' => $identifier
+            ]);
+            return false;
+        }
+
         // 1. User über das Repository suchen (egal ob Env, DB oder LDAP)
         $user = $this->userRepository->findByIdentifier($identifier);
 
@@ -37,6 +50,10 @@ class AuthenticationService
                 'reason' => 'user_not_found', 
                 'identifier' => $identifier
             ]);
+
+            // Fehlschlag auf IP und Identifier aufzeichnen
+            $this->rateLimiter->recordFailedAttempt($clientIp);
+            $this->rateLimiter->recordFailedAttempt($identifier);
             return false;
         }
 
@@ -61,6 +78,10 @@ class AuthenticationService
             'reason' => 'invalid_password', 
             'identifier' => $identifier
         ]);
+
+        // Fehlschlag auf IP und Identifier aufzeichnen
+        $this->rateLimiter->recordFailedAttempt($clientIp);
+        $this->rateLimiter->recordFailedAttempt($identifier);
 
         return false;
     }

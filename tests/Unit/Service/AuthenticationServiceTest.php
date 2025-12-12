@@ -9,6 +9,7 @@ use MrWo\Nexus\Service\AuthenticationService;
 use MrWo\Nexus\Service\SessionService;
 use MrWo\Nexus\Service\SecurityLogger;
 use MrWo\Nexus\Repository\UserRepositoryInterface;
+use MrWo\Nexus\Service\RateLimiter;
 use MrWo\Nexus\Entity\User;
 use MrWo\Nexus\Service\SessionBag;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -23,6 +24,7 @@ class AuthenticationServiceTest extends TestCase
     private $securityBagMock;
     private $userRepoMock;
     private $loggerMock;
+    private $rateLimiterMock;
     private $authService;
 
     // Test-Konstanten
@@ -39,6 +41,7 @@ class AuthenticationServiceTest extends TestCase
         $this->securityBagMock = $this->createMock(SessionBag::class);
         $this->userRepoMock = $this->createMock(UserRepositoryInterface::class);
         $this->loggerMock = $this->createMock(SecurityLogger::class);
+        $this->rateLimiterMock = $this->createMock(RateLimiter::class);
 
         // 2. SessionService muss den Security Bag zurückgeben
         $this->sessionMock->method('getBag')
@@ -63,7 +66,8 @@ class AuthenticationServiceTest extends TestCase
         $this->authService = new AuthenticationService(
             $this->sessionMock,
             $this->userRepoMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->rateLimiterMock
         );
     }
 

@@ -1063,75 +1063,18 @@ return [
 	'projectExtensionFiles' => array (
 ),
 	'errorsCallback' => static function (): array { return array (
-  'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php' => 
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php' => 
   array (
     0 => 
     \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Variable $isApiRequest in isset() always exists and is not nullable.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
-       'line' => 143,
+       'message' => 'Property MrWo\\Nexus\\Repository\\DatabaseRateLimit::$db is never read, only written.',
+       'file' => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php',
+       'line' => 17,
        'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 143,
-       'nodeType' => 'PhpParser\\Node\\Expr\\Isset_',
-       'identifier' => 'isset.variable',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-    1 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Variable $isCli in isset() always exists and is not nullable.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
-       'line' => 143,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
-       'traitFilePath' => NULL,
-       'tip' => NULL,
-       'nodeLine' => 143,
-       'nodeType' => 'PhpParser\\Node\\Expr\\Isset_',
-       'identifier' => 'isset.variable',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-  ),
-  'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionBag.php' => 
-  array (
-    0 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Property MrWo\\Nexus\\Service\\SessionBag::$name is never read, only written.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionBag.php',
-       'line' => 21,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionBag.php',
+       'filePath' => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php',
        'traitFilePath' => NULL,
        'tip' => 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
        'nodeLine' => 14,
-       'nodeType' => 'PHPStan\\Node\\ClassPropertiesNode',
-       'identifier' => 'property.onlyWritten',
-       'metadata' => 
-      array (
-      ),
-       'fixedErrorDiff' => NULL,
-    )),
-  ),
-  'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php' => 
-  array (
-    0 => 
-    \PHPStan\Analyser\Error::__set_state(array(
-       'message' => 'Property MrWo\\Nexus\\Service\\SessionService::$config is never read, only written.',
-       'file' => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
-       'line' => 44,
-       'canBeIgnored' => true,
-       'filePath' => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
-       'traitFilePath' => NULL,
-       'tip' => 'See: https://phpstan.org/developing-extensions/always-read-written-properties',
-       'nodeLine' => 19,
        'nodeType' => 'PHPStan\\Node\\ClassPropertiesNode',
        'identifier' => 'property.onlyWritten',
        'metadata' => 
@@ -1259,7 +1202,7 @@ return [
           0 => 'Symfony\\Component\\Routing\\RequestContext',
         ),
         1 => 'fromRequest',
-        2 => 162,
+        2 => 228,
       ),
     ),
     'PHPStan\\Rules\\DeadCode\\PossiblyPureStaticCallCollector' => 
@@ -1268,13 +1211,35 @@ return [
       array (
         0 => 'Tracy\\Debugger',
         1 => 'log',
-        2 => 112,
+        2 => 176,
       ),
       1 => 
       array (
         0 => 'Tracy\\Debugger',
         1 => 'log',
-        2 => 132,
+        2 => 196,
+      ),
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php' => 
+  array (
+    'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
+    array (
+      0 => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
+    ),
+    'PHPStan\\Rules\\DeadCode\\MethodWithoutImpurePointsCollector' => 
+    array (
+      0 => 
+      array (
+        0 => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
+        1 => 'getAttempts',
+        2 => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
+      ),
+      1 => 
+      array (
+        0 => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
+        1 => 'getLockoutExpiry',
+        2 => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
       ),
     ),
   ),
@@ -1396,6 +1361,13 @@ return [
       0 => 'MrWo\\Nexus\\Service\\Provider\\PhpFileTranslationProvider',
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php' => 
+  array (
+    'PHPStan\\Rules\\DeadCode\\ConstructorWithoutImpurePointsCollector' => 
+    array (
+      0 => 'MrWo\\Nexus\\Service\\RateLimiter',
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SecurityLogger.php' => 
   array (
     'PHPStan\\Rules\\DeadCode\\PossiblyPureStaticCallCollector' => 
@@ -1419,16 +1391,22 @@ return [
       0 => 
       array (
         0 => 'MrWo\\Nexus\\Service\\SessionBag',
-        1 => 'get',
+        1 => 'getName',
         2 => 'MrWo\\Nexus\\Service\\SessionBag',
       ),
       1 => 
       array (
         0 => 'MrWo\\Nexus\\Service\\SessionBag',
-        1 => 'has',
+        1 => 'get',
         2 => 'MrWo\\Nexus\\Service\\SessionBag',
       ),
       2 => 
+      array (
+        0 => 'MrWo\\Nexus\\Service\\SessionBag',
+        1 => 'has',
+        2 => 'MrWo\\Nexus\\Service\\SessionBag',
+      ),
+      3 => 
       array (
         0 => 'MrWo\\Nexus\\Service\\SessionBag',
         1 => 'all',
@@ -1646,7 +1624,7 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php' => 
   array (
-    'fileHash' => '004051ad4a7bedd701cfdf6a0eb54bd6e787b439',
+    'fileHash' => '9c927e5657de5dc36b0b0d9f92ee29b6b98eb711',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\KernelTest.php',
@@ -1678,6 +1656,13 @@ return [
       2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php' => 
+  array (
+    'fileHash' => '56d9194354cdab8d0e9e43191206e4adae90a4c2',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
   array (
     'fileHash' => '898b0f595e0c2b859299944c0a891c1c2a20b38f',
@@ -1706,6 +1691,13 @@ return [
     array (
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\InMemoryRateLimit.php' => 
+  array (
+    'fileHash' => '3a929b27ed66dcfa25fceedccc7f719394f3bc2e',
+    'dependentFiles' => 
+    array (
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\PageRepositoryInterface.php' => 
   array (
     'fileHash' => '491c7f1245242476702ce6f79a1587d2065cfa0a',
@@ -1714,6 +1706,16 @@ return [
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\FilePageRepository.php',
       1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\PageManagerService.php',
       2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\PageManagerServiceTest.php',
+    ),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\RateLimitInterface.php' => 
+  array (
+    'fileHash' => 'e0db2736151fb96c8629febf691d4555a866c513',
+    'dependentFiles' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\InMemoryRateLimit.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\UserRepositoryInterface.php' => 
@@ -1744,7 +1746,7 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php' => 
   array (
-    'fileHash' => '2e55a2d87c2ab887310b06652de9164f4b31e459',
+    'fileHash' => '62502aebb2f678ccc6606c1928ed97c7c1fd7b3a',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
@@ -1755,17 +1757,19 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConfigService.php' => 
   array (
-    'fileHash' => '708b9daff9377447bdaaae158f7c11d8e91a449d',
+    'fileHash' => '2e4e09b110c4b585604c39bc222aa1bc0f2c75c6',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
-      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionFactory.php',
-      3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
-      4 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
-      5 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
-      6 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
-      7 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Kernel\\Kernel.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\DatabaseService.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php',
+      4 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionFactory.php',
+      5 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
+      6 => 'C:\\xampp\\htdocs\\nexus\\src\\Twig\\AppExtension.php',
+      7 => 'C:\\xampp\\htdocs\\nexus\\tests\\Integration\\AdminControllerTest.php',
+      8 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\ConfigServiceTest.php',
+      9 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\ConsentService.php' => 
@@ -1781,6 +1785,7 @@ return [
     'fileHash' => 'b9edb7ec2c3f7827d38f744febc1182ff9f894f2',
     'dependentFiles' => 
     array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\PageManagerService.php' => 
@@ -1802,20 +1807,30 @@ return [
       0 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\TranslatorServiceTest.php',
     ),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php' => 
+  array (
+    'fileHash' => 'a0b647793687c1e7b095eece1c797e8cb25db946',
+    'dependentFiles' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
+    ),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SecurityLogger.php' => 
   array (
     'fileHash' => 'd20763e270e42a72a3114424b8f30f319a99c5f0',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\AuthenticationService.php',
-      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
-      2 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
-      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
+      1 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php',
+      2 => 'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php',
+      3 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php',
+      4 => 'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\SessionServiceTest.php',
     ),
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionBag.php' => 
   array (
-    'fileHash' => '6ca2a2b1ce54d1d8f984b59ceb0383db7c36fcc4',
+    'fileHash' => 'f39f4796a946d7e7eca772b7dc10b889a868c06f',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\LanguageController.php',
@@ -1837,7 +1852,7 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SessionService.php' => 
   array (
-    'fileHash' => '2246853b358fe5e69fb3024341ef0b56cd0d3714',
+    'fileHash' => '7d5a35ae0d12c155167a1b918ddd96fd1ab2dfcd',
     'dependentFiles' => 
     array (
       0 => 'C:\\xampp\\htdocs\\nexus\\src\\Controller\\AdminController.php',
@@ -1893,7 +1908,7 @@ return [
   ),
   'C:\\xampp\\htdocs\\nexus\\tests\\Unit\\Service\\AuthenticationServiceTest.php' => 
   array (
-    'fileHash' => '741f2d85420e56b9e574173d78a4cd3a794ab23f',
+    'fileHash' => '9ad415215af353e46c778aebdade44effe3b7206',
     'dependentFiles' => 
     array (
     ),
@@ -4410,6 +4425,215 @@ return [
       ),
     )),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\DatabaseRateLimit.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Repository\\DatabaseRateLimit',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Datenbank-Implementierung des RateLimitInterface.
+ * Dient als Placeholder und soll später die Persistence über die Datenbank
+ * (DatabaseService) regeln.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Repository',
+         'uses' => 
+        array (
+          'databaseservice' => 'MrWo\\Nexus\\Service\\DatabaseService',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+        0 => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => '__construct',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => NULL,
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'db',
+               'type' => 'MrWo\\Nexus\\Service\\DatabaseService',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'recordAttempt',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getAttempts',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'windowInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        3 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'setLockout',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'lockoutTimeInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        4 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getLockoutExpiry',
+           'phpDoc' => NULL,
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\EnvApiTokenRepository.php' => 
   array (
     0 => 
@@ -5018,6 +5242,239 @@ return [
       ),
     )),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\InMemoryRateLimit.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Repository\\InMemoryRateLimit',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * In-Memory Implementierung des RateLimitInterface.
+ * Achtung: Speichert Daten nur für die Dauer eines Requests (statische Variable). 
+ * Dient als Fallback und für isolierte Tests.
+ */',
+         'namespace' => 'MrWo\\Nexus\\Repository',
+         'uses' => 
+        array (
+          'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+        0 => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'recordAttempt',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Zählt einen fehlgeschlagenen Login-Versuch für einen gegebenen Identifier.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getAttempts',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Ruft die Anzahl der fehlgeschlagenen Versuche für einen Identifier innerhalb
+     * eines definierten Zeitfensters ab.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'windowInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'setLockout',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Speichert einen Sperr-Zeitstempel (Lockout) für einen Identifier.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'lockoutTimeInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        3 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getLockoutExpiry',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Ruft den Sperr-Zeitstempel (Timestamp) für einen Identifier ab.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Repository\\PageRepositoryInterface.php' => 
   array (
     0 => 
@@ -5206,6 +5663,234 @@ return [
             0 => 
             \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
                'name' => 'slug',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+    )),
+  ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Repository\\RateLimitInterface.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedInterfaceNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Definiert die Schnittstelle für die Speicherung und Abfrage von
+ * Login-Limitierungsdaten (z.B. fehlgeschlagene Versuche, Sperrzeiten).
+ */',
+         'namespace' => 'MrWo\\Nexus\\Repository',
+         'uses' => 
+        array (
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'extends' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'recordAttempt',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Zählt einen fehlgeschlagenen Login-Versuch für einen gegebenen Identifier.
+     *
+     * @param string $identifier Der Benutzername, die E-Mail oder die IP-Adresse.
+     * @return void
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getAttempts',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Ruft die Anzahl der fehlgeschlagenen Versuche für einen Identifier innerhalb
+     * eines definierten Zeitfensters ab.
+     *
+     * @param string $identifier Der Benutzername, die E-Mail oder die IP-Adresse.
+     * @param int $windowInSeconds Das Zeitfenster, in dem gezählt wird (z.B. 3600 Sekunden).
+     * @return int Die aktuelle Anzahl der Versuche.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'windowInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'setLockout',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Speichert einen Sperr-Zeitstempel (Lockout) für einen Identifier.
+     *
+     * @param string $identifier Der Benutzername, die E-Mail oder die IP-Adresse.
+     * @param int $lockoutTimeInSeconds Die Dauer der Sperrung in Sekunden.
+     * @return void
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'lockoutTimeInSeconds',
+               'type' => 'int',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        3 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getLockoutExpiry',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Ruft den Sperr-Zeitstempel (Timestamp) für einen Identifier ab.
+     *
+     * @param string $identifier Der Benutzername, die E-Mail oder die IP-Adresse.
+     * @return int Der Timestamp der Sperr-Freigabe, oder 0, wenn nicht gesperrt.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Repository',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'int',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
                'type' => 'string',
                'byRef' => false,
                'variadic' => false,
@@ -5611,6 +6296,17 @@ return [
             \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
                'name' => 'logger',
                'type' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            3 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'rateLimiter',
+               'type' => 'MrWo\\Nexus\\Service\\RateLimiter',
                'byRef' => false,
                'variadic' => false,
                'hasDefault' => false,
@@ -6791,6 +7487,255 @@ return [
       ),
     )),
   ),
+  'C:\\xampp\\htdocs\\nexus\\src\\Service\\RateLimiter.php' => 
+  array (
+    0 => 
+    \PHPStan\Dependency\ExportedNode\ExportedClassNode::__set_state(array(
+       'name' => 'MrWo\\Nexus\\Service\\RateLimiter',
+       'phpDoc' => 
+      \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+         'phpDocString' => '/**
+ * Service zur Implementierung von Rate Limiting, insbesondere für
+ * fehlgeschlagene Anmeldeversuche (Brute-Force-Schutz).
+ */',
+         'namespace' => 'MrWo\\Nexus\\Service',
+         'uses' => 
+        array (
+          'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+          'throwable' => 'Throwable',
+        ),
+         'constUses' => 
+        array (
+        ),
+      )),
+       'abstract' => false,
+       'final' => false,
+       'extends' => NULL,
+       'implements' => 
+      array (
+      ),
+       'usedTraits' => 
+      array (
+      ),
+       'traitUseAdaptations' => 
+      array (
+      ),
+       'statements' => 
+      array (
+        0 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => '__construct',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * @param ConfigService $config Der Konfigurations-Service für die Grenzwerte.
+     * @param RateLimitInterface $repository Das Repository für die Speicherung der Zähler.
+     * @param SecurityLogger $logger Der Logger für die Protokollierung von Sperrungen.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+              'throwable' => 'Throwable',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => NULL,
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'config',
+               'type' => 'MrWo\\Nexus\\Service\\ConfigService',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            1 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'repository',
+               'type' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+            2 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'logger',
+               'type' => 'MrWo\\Nexus\\Service\\SecurityLogger',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        1 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'isRateLimited',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft, ob der gegebene Identifier (Username, E-Mail oder IP)
+     * aktuell von einer Sperre betroffen ist.
+     *
+     * @param string $identifier Benutzername, E-Mail oder anonymisierte IP-Adresse.
+     * @return bool True, wenn der Identifier gesperrt ist.
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+              'throwable' => 'Throwable',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'bool',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'checkAndLockout',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Prüft, ob die maximale Anzahl fehlgeschlagener Versuche erreicht wurde
+     * und verhängt ggf. eine Sperre (Lockout).
+     *
+     * @param string $identifier Benutzername, E-Mail oder anonymisierte IP-Adresse.
+     * @return void
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+              'throwable' => 'Throwable',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        3 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'recordFailedAttempt',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Zeichnet einen fehlgeschlagenen Versuch auf und führt ggf. die Sperrprüfung durch.
+     * Diese Methode wird vom AuthenticationService nach einem fehlgeschlagenen Login aufgerufen.
+     *
+     * @param string $identifier
+     * @return void
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+              'ratelimitinterface' => 'MrWo\\Nexus\\Repository\\RateLimitInterface',
+              'throwable' => 'Throwable',
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'void',
+           'parameters' => 
+          array (
+            0 => 
+            \PHPStan\Dependency\ExportedNode\ExportedParameterNode::__set_state(array(
+               'name' => 'identifier',
+               'type' => 'string',
+               'byRef' => false,
+               'variadic' => false,
+               'hasDefault' => false,
+               'attributes' => 
+              array (
+              ),
+            )),
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+      ),
+       'attributes' => 
+      array (
+      ),
+    )),
+  ),
   'C:\\xampp\\htdocs\\nexus\\src\\Service\\SecurityLogger.php' => 
   array (
     0 => 
@@ -7017,6 +7962,37 @@ return [
         )),
         1 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
+           'name' => 'getName',
+           'phpDoc' => 
+          \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
+             'phpDocString' => '/**
+     * Gibt den Namen (Namespace) des Bags zurück.
+     * * @return string
+     */',
+             'namespace' => 'MrWo\\Nexus\\Service',
+             'uses' => 
+            array (
+            ),
+             'constUses' => 
+            array (
+            ),
+          )),
+           'byRef' => false,
+           'public' => true,
+           'private' => false,
+           'abstract' => false,
+           'final' => false,
+           'static' => false,
+           'returnType' => 'string',
+           'parameters' => 
+          array (
+          ),
+           'attributes' => 
+          array (
+          ),
+        )),
+        2 => 
+        \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'set',
            'phpDoc' => 
           \PHPStan\Dependency\ExportedNode\ExportedPhpDocNode::__set_state(array(
@@ -7071,7 +8047,7 @@ return [
           array (
           ),
         )),
-        2 => 
+        3 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'get',
            'phpDoc' => 
@@ -7127,7 +8103,7 @@ return [
           array (
           ),
         )),
-        3 => 
+        4 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'has',
            'phpDoc' => 
@@ -7171,7 +8147,7 @@ return [
           array (
           ),
         )),
-        4 => 
+        5 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'remove',
            'phpDoc' => 
@@ -7214,7 +8190,7 @@ return [
           array (
           ),
         )),
-        5 => 
+        6 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'all',
            'phpDoc' => 
@@ -7247,7 +8223,7 @@ return [
           array (
           ),
         )),
-        6 => 
+        7 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'clear',
            'phpDoc' => 
@@ -7277,7 +8253,7 @@ return [
           array (
           ),
         )),
-        7 => 
+        8 => 
         \PHPStan\Dependency\ExportedNode\ExportedMethodNode::__set_state(array(
            'name' => 'add',
            'phpDoc' => 
@@ -9404,6 +10380,7 @@ return [
           'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
           'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
           'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+          'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
           'user' => 'MrWo\\Nexus\\Entity\\User',
           'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
           'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9461,6 +10438,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9500,6 +10478,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9539,6 +10518,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9578,6 +10558,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9617,6 +10598,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9656,6 +10638,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9695,6 +10678,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9734,6 +10718,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',
@@ -9773,6 +10758,7 @@ return [
               'sessionservice' => 'MrWo\\Nexus\\Service\\SessionService',
               'securitylogger' => 'MrWo\\Nexus\\Service\\SecurityLogger',
               'userrepositoryinterface' => 'MrWo\\Nexus\\Repository\\UserRepositoryInterface',
+              'ratelimiter' => 'MrWo\\Nexus\\Service\\RateLimiter',
               'user' => 'MrWo\\Nexus\\Entity\\User',
               'sessionbag' => 'MrWo\\Nexus\\Service\\SessionBag',
               'session' => 'Symfony\\Component\\HttpFoundation\\Session\\Session',

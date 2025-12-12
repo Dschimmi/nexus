@@ -41,7 +41,7 @@ class SessionService
      * @param SessionHandlerInterface $handler Der Speicher-Handler (File, Redis, etc.).
      */
     public function __construct(
-        private ConfigService $config,
+        ConfigService $config, // 'private' entfernt, da nur zur Initialisierung genutzt
         private SessionHandlerInterface $handler,
         private SecurityLogger $logger
     ) {

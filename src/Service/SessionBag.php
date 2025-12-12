@@ -23,6 +23,15 @@ class SessionBag
     ) {}
 
     /**
+     * Gibt den Namen (Namespace) des Bags zurück.
+     * * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Setzt einen Wert für einen bestimmten Schlüssel.
      * Überschreibt vorhandene Werte.
      * 

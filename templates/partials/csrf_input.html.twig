@@ -1,3 +1,7 @@
 {# templates/partials/csrf_input.html.twig #}
 {# Erwartet Variable 'token_id' #}
-<input type="hidden" name="_csrf_token" value="{{ csrf_token(token_id) }}">
+<input type="hidden" 
+       name="_csrf_token" 
+       value="{{ csrf_token(token_id) }}"
+       {% if nonce is defined %}nonce="{{ nonce }}"{% endif %}
+>

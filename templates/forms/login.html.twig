@@ -24,7 +24,7 @@
     {% endif %}
 
     <form action="{{ form_action }}" method="post">
-        {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_login'} %}
+        {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_login', 'nonce': app.csp_nonce} %}
         
         <div class="u-mb-4">
             <label for="username" class="u-block u-font-bold u-mb-1">{{ 'login.username_label'|trans }}</label>

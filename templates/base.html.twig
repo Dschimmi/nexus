@@ -9,21 +9,22 @@
     
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}">
 
-    <link rel="stylesheet" href="{{ asset('variables.css') }}">
-    <link rel="stylesheet" href="{{ asset('base.css') }}">
+    {# WICHTIG: NONCE zu allen Stylesheets hinzufügen (Ticket 34) #}
+    <link rel="stylesheet" href="{{ asset('variables.css') }}" nonce="{{ app.csp_nonce }}">
+    <link rel="stylesheet" href="{{ asset('base.css') }}" nonce="{{ app.csp_nonce }}">
 
-    <link rel="stylesheet" href="{{ asset('utilities.css') }}">
+    <link rel="stylesheet" href="{{ asset('utilities.css') }}" nonce="{{ app.csp_nonce }}">
 
-    <link rel="stylesheet" href="{{ asset('components.css') }}">
+    <link rel="stylesheet" href="{{ asset('components.css') }}" nonce="{{ app.csp_nonce }}">
 
-    <link rel="stylesheet" href="{{ asset('header.css') }}">
-    <link rel="stylesheet" href="{{ asset('subheader.css') }}">
-    <link rel="stylesheet" href="{{ asset('content.css') }}">
-    <link rel="stylesheet" href="{{ asset('footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('header.css') }}" nonce="{{ app.csp_nonce }}">
+    <link rel="stylesheet" href="{{ asset('subheader.css') }}" nonce="{{ app.csp_nonce }}">
+    <link rel="stylesheet" href="{{ asset('content.css') }}" nonce="{{ app.csp_nonce }}">
+    <link rel="stylesheet" href="{{ asset('footer.css') }}" nonce="{{ app.csp_nonce }}">
 
-    <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}">
+    <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}" nonce="{{ app.csp_nonce }}">
 
-    <script>
+    <script nonce="{{ app.csp_nonce }}">
         (function() {
             const saved = localStorage.getItem('theme');
             const sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -176,11 +177,12 @@
 
     {% include 'partials/cookie_banner.html.twig' %}
     
-    <script src="{{ asset('js/layout.js') }}"></script>
-    <script src="{{ asset('js/compliance.js') }}"></script>
-    <script src="{{ asset('js/theme.js') }}"></script>
+    {# WICHTIG: NONCE zu allen Skript-Tags hinzufügen (Ticket 34) #}
+    <script src="{{ asset_url('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    <script src="{{ asset_url('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    <script src="{{ asset_url('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
 
-    <script>
+    <script nonce="{{ app.csp_nonce }}">
         document.addEventListener('DOMContentLoaded', () => {
             const spinner = document.getElementById('global-spinner');
             if (!spinner) return;

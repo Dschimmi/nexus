@@ -81,6 +81,7 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference('session_service'))
         ->addArgument(new Reference(MrWo\Nexus\Repository\UserRepositoryInterface::class)) // Injiziertes Repo
         ->addArgument(new Reference('security_logger')) // Security-Logger
+        ->addArgument(new Reference(\MrWo\Nexus\Service\RateLimiter::class)) // HINZUGEFÜGT: Ticket 34 Rate Limiting
         ->setPublic(true);
 
     // Der Service für Dummy-Seiten und Sitemap
@@ -103,6 +104,13 @@ return function(ContainerBuilder $container) {
     // Datenbank-Service (PDO Wrapper)
     $container->register('database_service', MrWo\Nexus\Service\DatabaseService::class)
         ->addArgument(new Reference('config_service'))
+        ->setPublic(true);
+
+    // Rate Limiter Service (Ticket 34)
+    $container->register(\MrWo\Nexus\Service\RateLimiter::class, \MrWo\Nexus\Service\RateLimiter::class)
+        ->addArgument(new Reference('config_service'))
+        ->addArgument(new Reference(\MrWo\Nexus\Repository\RateLimitInterface::class)) // Injiziert das Interface (wird von der Weiche aufgelöst)
+        ->addArgument(new Reference('security_logger'))
         ->setPublic(true);
 
     // =========================================================================
@@ -148,6 +156,17 @@ return function(ContainerBuilder $container) {
     // API V1 Status Controller
     $container->register(MrWo\Nexus\Controller\Api\V1\StatusController::class, MrWo\Nexus\Controller\Api\V1\StatusController::class)
         ->setPublic(true);
+
+    // =========================================================================
+    // RATE LIMITING REPOSITORIES (Ticket 34)
+    // =========================================================================
+    
+    // Fallback: In-Memory Implementierung (keine Datenbank erforderlich)
+    $container->register(\MrWo\Nexus\Repository\InMemoryRateLimit::class, \MrWo\Nexus\Repository\InMemoryRateLimit::class);
+
+    // Datenbank-Implementierung (wird nur verwendet, wenn DB_DSN gesetzt ist)
+    $container->register(\MrWo\Nexus\Repository\DatabaseRateLimit::class, \MrWo\Nexus\Repository\DatabaseRateLimit::class)
+        ->addArgument(new Reference('database_service')); // Benötigt DatabaseService
 
     // =========================================================================
     // REPOSITORIES

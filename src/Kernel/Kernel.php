@@ -26,6 +26,13 @@ class Kernel
      */
     private string $appEnv;
 
+    // CSP Nonce und Regel
+    /** @var string Der Zufallswert für die CSP Nonce (Number used once). */
+    private string $cspNonce;
+    
+    /** @var string Standard CSP-Regel. Wird in der Regel von der Config überschrieben. */
+    private const DEFAULT_CSP = "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'";
+
     /**
      * @var ContainerBuilder Der zentrale DI-Container für alle Services.
      */
@@ -38,6 +45,58 @@ class Kernel
     {
         $this->appEnv = $appEnv;
         $this->container = new ContainerBuilder();
+        $this->cspNonce = $this->generateCspNonce(); // CSP Nonce generieren
+    }
+
+    // HINZUFÜGEN START: CSP-Hilfsmethoden
+    /**
+     * Generiert einen Base64-kodierten, kryptografisch sicheren Zufallswert
+     * für die Content Security Policy Nonce.
+     * @return string
+     */
+    private function generateCspNonce(): string
+    {
+        // 16 Bytes * 8 Bits/Byte = 128 Bits Entropie
+        return base64_encode(random_bytes(16));
+    }
+
+    /**
+     * Setzt den CSP-Header und ersetzt den Nonce-Placeholder sowie weitere
+     * wichtige, gehärtete Sicherheits-Header (OWASP A05/A03/A07).
+     * @param Response $response
+     * @return void
+     */
+    private function setSecurityHeaders(Response $response): void
+    {
+        /** @var \MrWo\Nexus\Service\ConfigService $configService */
+        // ConfigService aus dem kompilierten Container abrufen.
+        $configService = $this->container->get(\MrWo\Nexus\Service\ConfigService::class);
+        
+        // 1. Content Security Policy (CSP)
+        // HOLEN: Holen Sie die CSP-Policy aus dem ConfigService anstelle des Hardcodes.
+        $csp = $configService->get('security.content_security_policy', self::DEFAULT_CSP);
+        
+        // Ersetze den Platzhalter im CSP-Header durch den generierten Nonce-Wert
+        $policy = str_replace('CSP_NONCE', $this->cspNonce, $csp);
+        
+        $response->headers->set('Content-Security-Policy', $policy);
+        
+        // 2. Weitere Härtungs-Header hinzufügen (Best Practice)
+        
+        // Anti-Clickjacking: Frames nur vom eigenen Ursprung erlauben
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN'); 
+        
+        // MIME-Sniffing verhindern (XSS-Vektor)
+        $response->headers->set('X-Content-Type-Options', 'nosniff'); 
+        
+        // Moderne Referrer-Policy: Datenschutzerklärung für Benutzer
+        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        
+        // Nur über HTTPS zugänglich machen, wenn einmal besucht (HSTS)
+        // WICHTIG: Nur in der Produktivumgebung setzen!
+        if ($this->appEnv !== 'development') {
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        }
     }
 
     /**
@@ -85,7 +144,12 @@ class Kernel
         // Wir stellen das 'app' Objekt global für Twig bereit (für app.request.pathInfo etc.)
         /** @var Environment $twig */
         $twig = $this->container->get(Environment::class);
-        $twig->addGlobal('app', ['request' => $request]);
+        
+        // Globales App-Objekt um die CSP Nonce erweitern (Ticket 34)
+        $twig->addGlobal('app', [
+            'request' => $request,
+            'csp_nonce' => $this->cspNonce, 
+        ]);
 
         // Initialisiere die Sprache (i18n) basierend auf der Session/Config
         /** @var TranslatorService $translator */
@@ -140,10 +204,12 @@ class Kernel
         } finally {
             // WICHTIG: Session-Daten zurückschreiben, egal ob Erfolg oder Fehler.
             // Aber nur, wenn wir überhaupt eine Session haben (kein CLI/API).
-            if (isset($isCli) && !$isCli && isset($isApiRequest) && !$isApiRequest) {
+            if (!$isCli && !$isApiRequest) {
                 $sessionService->save();
             }
         }
+
+        $this->setSecurityHeaders($response); // Security Header zur Response hinzufügen (Ticket 34)
 
         return $response;
     }

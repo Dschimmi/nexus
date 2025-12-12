@@ -35,6 +35,14 @@ class ConfigService
             'module_cookie_banner'      => true,
             'module_language_selection' => true,
 
+            // Rate Limiting Konfiguration (Ticket 34)
+            'security.login_max_attempts'   => (int) ($_ENV['LOGIN_MAX_ATTEMPTS'] ?? 5),    // Max. Versuche pro Zeitfenster
+            'security.login_lockout_time'   => (int) ($_ENV['LOGIN_LOCKOUT_TIME'] ?? 300),  // Sekunden der Sperrung (5 Minuten)
+            'security.login_attempt_window' => (int) ($_ENV['LOGIN_ATTEMPT_WINDOW'] ?? 3600), // Sekunden für Zählfenster (1 Stunde)
+
+            // Content Security Policy (Ticket 34)
+            'security.content_security_policy' => $_ENV['CSP_POLICY'] ?? "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'",
+
             'database.dsn'      => $_ENV['DB_DSN'] ?? null,
             'database.user'     => $_ENV['DB_USER'] ?? null,
             'database.password' => $_ENV['DB_PASSWORD'] ?? null,

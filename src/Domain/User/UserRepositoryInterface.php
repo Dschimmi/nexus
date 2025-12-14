@@ -32,4 +32,14 @@ interface UserRepositoryInterface
      * @return void
      */
     public function upgradePassword(User $user, string $newHash): void;
+
+    /**
+     * Speichert oder aktualisiert einen Benutzer.
+     * Essenziell für Just-in-Time Provisioning (automatisches Anlegen bei Login)
+     * und allgemeine Benutzerverwaltung.
+     * 
+     * @param User $user Der zu speichernde Benutzer.
+     * @return void
+     */
+    public function save(User $user): void;
 }

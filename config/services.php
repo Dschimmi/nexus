@@ -35,7 +35,7 @@ use MrWo\Nexus\Domain\User\UserRepositoryInterface;
 
 // Alte Repository Location (Nicht verschoben)
 use MrWo\Nexus\Repository\ConfigRepositoryInterface; 
-use MrWo\Nexus\Repository\ChainUserRepository;
+use MrWo\Nexus\Infrastructure\Persistence\ChainUserRepository;
 use MrWo\Nexus\Repository\ApiTokenRepositoryInterface;
 use MrWo\Nexus\Repository\EnvApiTokenRepository;
 use MrWo\Nexus\Repository\InMemoryRateLimit;

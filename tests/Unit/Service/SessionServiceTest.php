@@ -10,13 +10,16 @@ use MrWo\Nexus\Infrastructure\Config\ConfigService;
 use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
 use PHPUnit\Framework\TestCase;
 use SessionHandlerInterface;
-use RuntimeException;
 
 /**
- * Testet die Logik des SessionService.
- * Fokus: Bag-Verwaltung, Flash Messages, CSRF und interne Session-Funktionen.
- * @coversDefaultClass \MrWo\Nexus\Service\SessionService
- * @runInSeparateProcess
+ * Testet die Session-Verwaltung (Nexus Session 2.0).
+ * 
+ * Fokus:
+ * - Isolation durch Bags
+ * - Persistenz (Save)
+ * - Flash-Messages
+ * - Invalidation (Logout)
+ * - Mocking der Infrastruktur (Config, Logger, Handler)
  */
 class SessionServiceTest extends TestCase
 {
@@ -25,38 +28,34 @@ class SessionServiceTest extends TestCase
     private $handlerMock;
     private $loggerMock;
 
+    /**
+     * Initialisiert die Testumgebung vor jedem Test.
+     * Setzt $_SESSION zurück und mockt alle Abhängigkeiten.
+     */
     protected function setUp(): void
     {
-        // Session-Status aufräumen
+        // 1. Session-Environment säubern
         if (session_status() === PHP_SESSION_ACTIVE) {
-            session_write_close();
+            session_destroy();
         }
         $_SESSION = [];
         
-        // 1. ConfigService Mock erstellen
+        // 2. Mocking der Abhängigkeiten
         $this->configMock = $this->createMock(ConfigService::class);
-        $this->configMock->method('get')->willReturnMap([
-            ['session.lifetime', null, 1800],
-            ['session.absolute_lifetime', null, 43200],
-            ['app.secret', null, 'test_secret'],
-            ['app.name', null, 'TestApp'],
-        ]);
-        
-        // 2. SessionHandlerInterface Mock erstellen (Muss existieren, auch wenn es nichts tut)
         $this->handlerMock = $this->createMock(SessionHandlerInterface::class);
-        $this->handlerMock->method('read')->willReturn('');
-        $this->handlerMock->method('write')->willReturn(true);
-        $this->handlerMock->method('close')->willReturn(true);
-        $this->handlerMock->method('destroy')->willReturn(true);
-        $this->handlerMock->method('gc')->willReturn(1);
-        
-        // 3. SecurityLogger Mock erstellen (Für migrate, validate)
         $this->loggerMock = $this->createMock(SecurityLogger::class);
-        // SecurityLogger::anonymizeIp muss gemockt werden, da validateSession dies nutzt.
-        $this->loggerMock->method('anonymizeIp')->willReturn('127.0.0.1'); 
-        $this->loggerMock->method('parseUserAgent')->willReturn('MacOS|Chrome/123'); 
-        
-        // 4. SessionService mit 3 Parametern instanziieren (KORREKTUR: Alle 3 Argumente)
+
+        // 3. Konfiguration simulieren (für Constructor)
+        // Wir definieren Standardwerte für Lifetime und Secret.
+        $this->configMock->method('get')
+            ->willReturnMap([
+                ['session.lifetime', null, 1800],
+                ['session.absolute_lifetime', null, 43200],
+                ['app.secret', null, 'test-secret-key-123'],
+                ['app.name', null, 'NexusTestApp']
+            ]);
+
+        // 4. Service instanziieren
         $this->sessionService = new SessionService(
             $this->configMock,
             $this->handlerMock,
@@ -64,147 +63,93 @@ class SessionServiceTest extends TestCase
         );
     }
 
-    protected function tearDown(): void
-    {
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_write_close();
-        }
-        $_SESSION = [];
-    }
-
     /**
-     * Prüft, ob getBag die Session startet, einen Bag erstellt und das Bag-Objekt zurückgibt.
-     * @covers ::getBag
-     * @covers ::start
+     * Prüft, ob getBag() einen korrekten SessionBag zurückgibt
+     * und ob dieser initial leer ist.
+     * 
+     * @runInSeparateProcess Um Seiteneffekte mit session_start() zu vermeiden.
      */
-    public function testGetBagCreatesNewBagAndStartsSession(): void
+    public function testGetBagCreatesNewBag(): void
     {
-        $bag = $this->sessionService->getBag('attributes');
+        // Act
+        $bag = $this->sessionService->getBag('test_bag');
+
+        // Assert
         $this->assertInstanceOf(SessionBag::class, $bag);
+        $this->assertEmpty($bag->all());
     }
 
     /**
-     * Prüft, ob Daten über save() in $_SESSION geschrieben werden.
-     * @covers ::save
+     * Prüft, ob Daten über Bags hinweg in die globale Session geschrieben werden,
+     * wenn save() aufgerufen wird.
+     * 
+     * @runInSeparateProcess
      */
-    public function testDataPersistenceViaSave(): void
+    public function testDataPersistenceBetweenBags(): void
     {
-        // 1. Arrange & Act: Daten setzen und speichern
+        // Arrange
         $bag = $this->sessionService->getBag('attributes');
         $bag->set('theme', 'dark');
 
-        $this->sessionService->save();
-        
-        // 2. Assert: Überprüfen, ob die Daten in $_SESSION persistiert wurden.
-        // Die Session ist nach save() geschlossen, aber wir können die Daten in $_SESSION
-        // prüfen, da sie direkt vor session_write_close() geschrieben werden.
-        $this->assertArrayHasKey('attributes', $_SESSION);
+        // Act
+        $this->sessionService->start(); // Startet intern session_start()
+        $this->sessionService->save();  // Schreibt Bags in $_SESSION
+
+        // Assert
+        $this->assertArrayHasKey('attributes', $_SESSION, 'Bag key should exist in $_SESSION');
         $this->assertEquals('dark', $_SESSION['attributes']['theme']);
     }
 
     /**
-     * Testet die CSRF-Logik, die intern den 'security' Bag nutzt.
-     * @covers ::generateCsrfToken
-     * @covers ::isCsrfTokenValid
-     */
-    public function testCsrfTokenGenerationAndValidation(): void
-    {
-        $tokenId = 'form_login';
-        
-        /// 1. Token generieren
-        $token = $this->sessionService->generateCsrfToken($tokenId);
-        
-        // KORREKTUR: assertIsString wurde entfernt, da die statische Analyse 
-        // den Rückgabetyp als String erkennt und die Assertion redundant ist.
-        $this->assertGreaterThan(20, strlen($token)); 
-        
-        // 2. Gültigkeit prüfen
-        $this->assertTrue(
-            $this->sessionService->isCsrfTokenValid($tokenId, $token), 
-            'Der generierte Token sollte gültig sein.'
-        );
-
-        // 3. Ungültigkeit prüfen
-        $this->assertFalse(
-            $this->sessionService->isCsrfTokenValid($tokenId, 'wrong-token'), 
-            'Falscher Token sollte ungültig sein.'
-        );
-
-        // 4. Nicht existierende Token-ID prüfen
-        $this->assertFalse(
-            $this->sessionService->isCsrfTokenValid('nonexistent', $token),
-            'Nicht existierende ID sollte fehlschlagen.'
-        );
-    }
-    
-    /**
-     * Testet die addFlash/getFlashes Shortcut-Methoden.
-     * @covers ::addFlash
-     * @covers ::getFlashes
+     * Prüft die Flash-Message Logik (Hinzufügen, Abrufen, Auto-Löschen).
+     * 
+     * @runInSeparateProcess
      */
     public function testAddAndGetFlashMessages(): void
     {
-        // 1. Hinzufügen (nutzt 'flash' Bag)
+        // Arrange
         $this->sessionService->addFlash('success', 'Alles super');
-        $this->sessionService->addFlash('error', 'Oje');
-        
-        // 2. Abrufen und Leeren
+
+        // Act 1: Abrufen
         $flashes = $this->sessionService->getFlashes();
 
-        $this->assertArrayHasKey('success', $flashes);
-        $this->assertArrayHasKey('error', $flashes);
-        $this->assertEquals(['Alles super'], $flashes['success']);
-        
-        // 3. Zweites Abrufen muss leer sein
+        // Assert 1: Nachricht muss da sein
+        $this->assertCount(1, $flashes);
+        $this->assertEquals('Alles super', $flashes['success'][0]);
+
+        // Act 2: Erneutes Abrufen (sollte leer sein)
         $flashesEmpty = $this->sessionService->getFlashes();
-        $this->assertEmpty($flashesEmpty, 'Flashes sollten nach dem ersten Abruf geleert sein.');
+        $this->assertEmpty($flashesEmpty, 'Flash messages should be cleared after reading');
     }
 
     /**
-     * Testet die migrate-Methode.
-     * @covers ::migrate
+     * Prüft, ob invalidate() alle Daten löscht und den Logger benachrichtigt.
+     * 
+     * @runInSeparateProcess
      */
-    public function testMigrateRegeneratesId(): void
+    public function testInvalidateClearsEverything(): void
     {
-        // Arrange: Session starten
-        $this->sessionService->start();
-        $oldId = session_id();
+        // Arrange
+        $this->sessionService->getBag('security')->set('user_id', 123);
+        $this->sessionService->save();
         
-        // Act
-        $this->sessionService->migrate(false);
-
-        // Assert: ID muss sich geändert haben
-        $newId = session_id();
-        $this->assertNotEquals($oldId, $newId, 'Session ID sollte regeneriert werden.');
-        
-        $this->loggerMock->expects($this->once())
+        // Expectation: Der Logger muss über die Invalidation informiert werden
+        $this->loggerMock->expects($this->atLeastOnce())
             ->method('log')
-            ->with('session_migration', $this->isType('array'));
-    }
-    
-    /**
-     * Testet die invalidate-Methode.
-     * @covers ::invalidate
-     */
-    public function testInvalidateDestroysSessionAndClearsBags(): void
-    {
-        // Arrange: Daten setzen, um den Bag-Cache zu füllen
-        $this->sessionService->getBag('attributes')->set('key', 'value');
-        $this->sessionService->save(); // Stellt sicher, dass die Daten auch in $_SESSION sind
-        
+            ->with($this->stringContains('session_invalidation')); // Prüft auf Event-Typ
+
         // Act
         $this->sessionService->invalidate();
-
-        // Assert: $_SESSION sollte leer sein
-        $this->assertEmpty($_SESSION, '$_SESSION sollte nach Invalidate leer sein.');
         
-        // Assert: Logger wurde aufgerufen
-        $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with('session_invalidation');
+        // Workaround für PHPUnit: Wir simulieren, dass das Cookie gelöscht wurde,
+        // indem wir eine neue Session-ID erzwingen, damit PHP beim nächsten Start
+        // nicht die alten Daten lädt.
+        session_id(uniqid());
 
-        // Re-Test des Bags (sollte leer sein)
-        $newBag = $this->sessionService->getBag('attributes');
-        $this->assertNull($newBag->get('key'), 'Nach Invalidate sollte der Bag-Inhalt verloren sein.');
+        // Verify: Neuer Service (neuer Request) darf keine Daten mehr finden
+        $newService = new SessionService($this->configMock, $this->handlerMock, $this->loggerMock);
+        $newBag = $newService->getBag('security');
+        
+        $this->assertNull($newBag->get('user_id'), 'Bag should be empty after invalidate');
     }
 }

@@ -27,7 +27,7 @@ use MrWo\Nexus\Infrastructure\Persistence\FilePageRepository;
 // Application Services (Verschoben)
 use MrWo\Nexus\Application\Auth\AuthenticationService;
 use MrWo\Nexus\Application\Page\PageManager;
-use MrWo\Nexus\Application\Page\PageRepositoryInterface;
+use MrWo\Nexus\Domain\Page\PageRepositoryInterface;
 
 // Domain Interfaces
 use MrWo\Nexus\Domain\User\UserRepositoryInterface;

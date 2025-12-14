@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MrWo\Nexus\Application\Page;
 
 // Vorgriff auf Domain-Schicht (wird in Schritt 1.x noch verschoben)
-use MrWo\Nexus\Application\Page\PageRepositoryInterface;
+use MrWo\Nexus\Domain\Page\PageRepositoryInterface;
 use RuntimeException;
 
 /**

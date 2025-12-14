@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Infrastructure\Persistence;
 
-use MrWo\Nexus\Application\Page\PageRepositoryInterface;
+use MrWo\Nexus\Domain\Page\PageRepositoryInterface;
 use RuntimeException;
 
 /**

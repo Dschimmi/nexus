@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MrWo\Nexus\Application\Page;
+namespace MrWo\Nexus\Domain\Page;
 
 /**
  * Schnittstelle für den Zugriff auf Inhaltsseiten (Domain Port).

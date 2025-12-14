@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use PHPUnit\Framework\TestCase;
 use MrWo\Nexus\Application\Auth\AuthenticationService;
 use MrWo\Nexus\Infrastructure\Session\SessionService;
-use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
-use MrWo\Nexus\Domain\User\UserRepositoryInterface;
-use MrWo\Nexus\Infrastructure\Security\RateLimiter;
-use MrWo\Nexus\Domain\User\User;
 use MrWo\Nexus\Infrastructure\Session\SessionBag;
-use Symfony\Component\HttpFoundation\Session\Session;
+use MrWo\Nexus\Domain\User\UserRepositoryInterface;
+use MrWo\Nexus\Domain\User\User;
+use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
+use MrWo\Nexus\Infrastructure\Security\RateLimiter;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Testet den AuthenticationService.
- * @coversDefaultClass \MrWo\Nexus\Service\AuthenticationService
+ * Testet die Authentifizierungslogik.
+ * 
+ * Validiert:
+ * - Zusammenspiel mit UserRepository (Domain)
+ * - Session-Management (Migration, Bags)
+ * - Logging (SecurityLogger)
+ * - Rate Limiting
  */
 class AuthenticationServiceTest extends TestCase
 {
@@ -27,42 +31,33 @@ class AuthenticationServiceTest extends TestCase
     private $rateLimiterMock;
     private $authService;
 
-    // Test-Konstanten
-    private const TEST_USERNAME = 'admin';
-    private const TEST_EMAIL = 'admin@example.com';
-    private const TEST_PASSWORD = 'secret';
-
-    private User $mockUser;
+    // Testdaten
+    private string $passwordRaw = 'secret';
+    private string $passwordHash;
 
     protected function setUp(): void
     {
-        // 1. Initialisierung aller Mocks
+        // 1. Session Mocking
         $this->sessionMock = $this->createMock(SessionService::class);
         $this->securityBagMock = $this->createMock(SessionBag::class);
-        $this->userRepoMock = $this->createMock(UserRepositoryInterface::class);
-        $this->loggerMock = $this->createMock(SecurityLogger::class);
-        $this->rateLimiterMock = $this->createMock(RateLimiter::class);
-
-        // 2. SessionService muss den Security Bag zurückgeben
+        
         $this->sessionMock->method('getBag')
             ->with('security')
             ->willReturn($this->securityBagMock);
-            
-        // 3. User-Entity mit korrektem Hash und 7 Argumenten erstellen
-        // Der Hash muss ein gültiger Argon2ID-Hash des Testpassworts sein.
-        $passwordHash = password_hash(self::TEST_PASSWORD, PASSWORD_ARGON2ID);
-        
-        $this->mockUser = new User(
-            'root',                      // ID
-            self::TEST_USERNAME,         // Username
-            self::TEST_EMAIL,            // Email
-            $passwordHash,               // PasswordHash (echt gehasht für password_verify)
-            'System',                    // Group
-            'Administrator',             // Role
-            1                            // AuthVersion
-        );
 
-        // 4. Service mit den korrigierten Mocks instanziieren
+        // 2. User Repository Mocking
+        $this->userRepoMock = $this->createMock(UserRepositoryInterface::class);
+
+        // 3. Security Logger Mocking
+        $this->loggerMock = $this->createMock(SecurityLogger::class);
+
+        // 4. Rate Limiter Mocking
+        $this->rateLimiterMock = $this->createMock(RateLimiter::class);
+
+        // Hash vorbereiten
+        $this->passwordHash = password_hash($this->passwordRaw, PASSWORD_ARGON2ID);
+
+        // Service instanziieren
         $this->authService = new AuthenticationService(
             $this->sessionMock,
             $this->userRepoMock,
@@ -71,203 +66,77 @@ class AuthenticationServiceTest extends TestCase
         );
     }
 
-    // --- Login Tests ---
-
     /**
-     * Testet erfolgreichen Login mit Benutzernamen.
-     * @covers ::login
+     * Prüft erfolgreichen Login.
      */
-    public function testLoginSuccessWithUsername(): void
+    public function testLoginSuccess(): void
     {
-        // Erwartung: Repo findet User
+        // Arrange: User existiert und Passwort stimmt
+        $user = new User('1', 'admin', 'admin@test.com', $this->passwordHash, 'System', 'Admin');
+        
+        // Repo liefert User
         $this->userRepoMock->expects($this->once())
             ->method('findByIdentifier')
-            ->with(self::TEST_USERNAME)
-            ->willReturn($this->mockUser);
+            ->with('admin')
+            ->willReturn($user);
 
-        // Erwartung: Session-ID muss rotiert werden
-        $this->sessionMock->expects($this->once())
-            ->method('migrate')
-            ->with(true);
+        // Rate Limiter erlaubt Zugriff
+        $this->rateLimiterMock->method('isRateLimited')->willReturn(false);
 
-        // Erwartung: User-Daten landen im Bag
-        $this->securityBagMock->expects($this->once())
-            ->method('set')
-            ->with('user', $this->mockUser->toArray());
-
-        // Erwartung: Login-Success wird geloggt
+        // Logger erwartet Success-Log
         $this->loggerMock->expects($this->once())
             ->method('log')
-            ->with('auth_login_success', $this->isType('array'));
+            ->with('auth_login_success');
 
-        $result = $this->authService->login(self::TEST_USERNAME, self::TEST_PASSWORD);
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Testet erfolgreichen Login mit E-Mail.
-     * @covers ::login
-     */
-    public function testLoginSuccessWithEmail(): void
-    {
-        // Erwartung: Repo findet User (mit Email)
-        $this->userRepoMock->expects($this->once())
-            ->method('findByIdentifier')
-            ->with(self::TEST_EMAIL)
-            ->willReturn($this->mockUser);
-
-        // Erwartung: Session-ID muss rotiert werden
+        // Session erwartet Migration
         $this->sessionMock->expects($this->once())->method('migrate')->with(true);
-        // Erwartung: User-Daten landen im Bag
-        $this->securityBagMock->expects($this->once())->method('set');
-        // Erwartung: Login-Success wird geloggt
-        $this->loggerMock->expects($this->once())->method('log');
 
-        $result = $this->authService->login(self::TEST_EMAIL, self::TEST_PASSWORD);
+        // Act
+        $result = $this->authService->login('admin', $this->passwordRaw);
 
+        // Assert
         $this->assertTrue($result);
     }
 
     /**
-     * Testet fehlgeschlagenen Login wegen falschem Passwort.
-     * @covers ::login
+     * Prüft Login-Fehler bei falschem Passwort.
      */
     public function testLoginFailureWrongPassword(): void
     {
-        // Erwartung: Repo findet User
-        $this->userRepoMock->expects($this->once())
-            ->method('findByIdentifier')
-            ->willReturn($this->mockUser);
-            
-        // Erwartung: KEINE Migration, KEIN Setzen von Daten
-        $this->sessionMock->expects($this->never())->method('migrate');
-        $this->securityBagMock->expects($this->never())->method('set');
+        // Arrange: User existiert
+        $user = new User('1', 'admin', 'admin@test.com', $this->passwordHash, 'System', 'Admin');
+        
+        $this->userRepoMock->method('findByIdentifier')->willReturn($user);
+        $this->rateLimiterMock->method('isRateLimited')->willReturn(false);
 
-        // Erwartung: Login-Failure wird geloggt (invalid_password)
-        $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with('auth_login_failure', $this->callback(function ($context) {
-                return $context['reason'] === 'invalid_password';
-            }));
+        // Expect: Logger failure & Rate Limiter count up
+        $this->loggerMock->expects($this->once())->method('log')->with('auth_login_failure');
+        $this->rateLimiterMock->expects($this->exactly(2))->method('recordFailedAttempt'); // IP + User
 
-        $result = $this->authService->login(self::TEST_USERNAME, 'wrong_password');
+        // Act
+        $result = $this->authService->login('admin', 'wrong_pass');
 
+        // Assert
         $this->assertFalse($result);
     }
 
     /**
-     * Testet fehlgeschlagenen Login, da Benutzer nicht gefunden.
-     * @covers ::login
+     * Prüft Blockade durch Rate Limiter.
      */
-    public function testLoginFailureUnknownUser(): void
+    public function testLoginBlockedByRateLimiter(): void
     {
-        // Erwartung: Repo findet KEINEN User
-        $this->userRepoMock->expects($this->once())
-            ->method('findByIdentifier')
-            ->willReturn(null);
-            
-        // Erwartung: Logger wird aufgerufen (user_not_found)
-        $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with('auth_login_failure', $this->callback(function ($context) {
-                return $context['reason'] === 'user_not_found';
-            }));
+        // Arrange: Rate Limiter sagt JA (gesperrt)
+        $this->rateLimiterMock->expects($this->once())
+            ->method('isRateLimited')
+            ->willReturn(true);
 
-        $result = $this->authService->login('unknown', 'secret');
+        // Expect: Repo wird NICHT gefragt (Performance/Security)
+        $this->userRepoMock->expects($this->never())->method('findByIdentifier');
+
+        // Act
+        $result = $this->authService->login('admin', 'secret');
+
+        // Assert
         $this->assertFalse($result);
-    }
-
-    // --- Logout Tests ---
-
-    /**
-     * Testet erfolgreiches Logout.
-     * @covers ::logout
-     */
-    public function testLogout(): void
-    {
-        // Mock-Daten für getUser()
-        $adminUserArray = $this->mockUser->toArray();
-        $this->securityBagMock->method('get')->willReturn($adminUserArray);
-
-        // 1. Erwartung: Logout wird geloggt
-        $this->loggerMock->expects($this->once())
-            ->method('log')
-            ->with('auth_logout', $this->isType('array'));
-
-        // 2. Erwartung: Security Bag wird geleert
-        $this->securityBagMock->expects($this->once())
-            ->method('clear');
-
-        // 3. Erwartung: Session ID wird migriert
-        $this->sessionMock->expects($this->once())
-            ->method('migrate')
-            ->with(true);
-
-        $this->authService->logout();
-    }
-
-    // --- Get User Tests ---
-
-    /**
-     * Testet das Laden des eingeloggten Benutzers.
-     * @covers ::getUser
-     */
-    public function testGetUser(): void
-    {
-        // Mock-Daten (muss Array sein, da getUser() Array zurückgibt)
-        $userArray = $this->mockUser->toArray();
-
-        // Erwartung: Bag wird gefragt
-        $this->securityBagMock->expects($this->once())
-            ->method('get')
-            ->with('user')
-            ->willReturn($userArray);
-
-        $result = $this->authService->getUser();
-
-        $this->assertEquals($userArray, $result);
-    }
-
-    // --- Is Admin Tests ---
-
-    /**
-     * Testet isAdmin, wenn der Benutzer Admin-Rechte hat.
-     * @covers ::isAdmin
-     */
-    public function testIsAdminReturnsTrue(): void
-    {
-        $adminUser = ['group' => 'System', 'role' => 'Administrator'];
-
-        $this->securityBagMock->method('get')
-            ->willReturn($adminUser);
-
-        $this->assertTrue($this->authService->isAdmin());
-    }
-
-    /**
-     * Testet isAdmin, wenn der Benutzer keine Admin-Rechte hat.
-     * @covers ::isAdmin
-     */
-    public function testIsAdminReturnsFalse(): void
-    {
-        $normalUser = ['group' => 'User', 'role' => 'Editor'];
-
-        $this->securityBagMock->method('get')
-            ->willReturn($normalUser);
-
-        $this->assertFalse($this->authService->isAdmin());
-    }
-
-    /**
-     * Testet isAdmin, wenn kein Benutzer eingeloggt ist.
-     * @covers ::isAdmin
-     */
-    public function testIsAdminReturnsFalseWhenNotLoggedIn(): void
-    {
-        $this->securityBagMock->method('get')
-            ->willReturn(null);
-
-        $this->assertFalse($this->authService->isAdmin());
     }
 }

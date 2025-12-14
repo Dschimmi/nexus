@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller\Api\V1;
 
+use MrWo\Nexus\Attribute\IsPublic;
 use MrWo\Nexus\Controller\Api\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -20,6 +21,8 @@ class StatusController extends ApiController
      * 
      * @return JsonResponse JSON-Objekt mit Status und Version.
      */
+
+    #[IsPublic]
     public function ping(): JsonResponse
     {
         return $this->json([

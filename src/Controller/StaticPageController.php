@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller;
 
+use MrWo\Nexus\Attribute\IsPublic;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
  * Controller für statische Standardseiten wie Impressum und Datenschutz.
  */
+
+#[isPublic]
 class StaticPageController
 {
     private Environment $twig;

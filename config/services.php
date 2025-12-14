@@ -109,6 +109,10 @@ return function(ContainerBuilder $container) {
         ->addArgument(new Reference(ApiTokenRepositoryInterface::class))
         ->setPublic(true);
 
+    // Queue Interface (Sync Implementation as Default)
+    $container->register(MrWo\Nexus\Domain\Queue\QueueInterface::class, MrWo\Nexus\Infrastructure\Queue\SyncQueue::class)
+        ->setPublic(true);
+
     // =========================================================================
     // APPLICATION SERVICES
     // =========================================================================

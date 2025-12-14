@@ -61,6 +61,12 @@ class AuthenticationService
 
         // 3. Passwort prüfen
         if (password_verify($password, $user->getPasswordHash())) {
+
+            // SECURITY: Rehash prüfen (Ticket 35)
+            if (password_needs_rehash($user->getPasswordHash(), PASSWORD_ARGON2ID)) {
+                $newHash = password_hash($password, PASSWORD_ARGON2ID);
+                $this->userRepository->upgradePassword($user, $newHash);
+            }
             
             // SECURITY: Session-ID rotieren
             $this->session->migrate(true);

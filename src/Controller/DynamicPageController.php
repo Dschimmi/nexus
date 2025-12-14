@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller;
 
+use MrWo\Nexus\Attribute\IsPublic;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Twig\Environment;
@@ -34,6 +35,8 @@ class DynamicPageController
      * @return Response
      * @throws ResourceNotFoundException Wenn die Datei nicht existiert (löst 404 aus).
      */
+
+    #[isPublic]
     public function show(string $slug): Response
     {
         // Sicherheit: Slug bereinigen (nur a-z, 0-9, -)

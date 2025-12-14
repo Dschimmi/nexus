@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MrWo\Nexus\Controller;
 
 use MrWo\Nexus\Application\Auth\AuthenticationService;
-use MrWo\Nexus\Infrastructure\Config\ConfigService;
 use MrWo\Nexus\Application\Page\PageManager;
+use MrWo\Nexus\Attribute\IsPublic;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
 use MrWo\Nexus\Infrastructure\Session\SessionService;
 use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -47,6 +48,8 @@ class AdminController
      *
      * @return Response Das gerenderte HTML.
      */
+
+    #[IsPublic] // <--- Muss öffentlich sein, um das Login-Formular zu zeigen!
     public function index(): Response
     {
         // Zugriffsschutz: Prüfen, ob der User Admin-Rechte hat.
@@ -71,6 +74,8 @@ class AdminController
      * @param Request $request Der HTTP-Request mit den Formulardaten.
      * @return Response Ein Redirect bei Erfolg oder das Formular mit Fehler bei Misserfolg.
      */
+
+    #[IsPublic] // <--- Muss öffentlich sein, um das Login-Formular zu zeigen!
     public function login(Request $request): Response
     {
         // 1. CSRF Prüfung

@@ -23,4 +23,13 @@ interface UserRepositoryInterface
      * @return User|null Das User-Objekt bei Erfolg, null wenn nicht gefunden.
      */
     public function findByIdentifier(string $identifier): ?User;
+
+    /**
+     * Aktualisiert den Passwort-Hash eines Benutzers, wenn die Algorithmus-Parameter veraltet sind.
+     * 
+     * @param User $user Der betroffene Benutzer.
+     * @param string $newHash Der neue, sichere Hash.
+     * @return void
+     */
+    public function upgradePassword(User $user, string $newHash): void;
 }

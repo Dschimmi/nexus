@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller;
 
+use MrWo\Nexus\Attribute\IsPublic;
 use MrWo\Nexus\Infrastructure\Session\SessionService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,8 @@ class LanguageController
      * @param Request $request Der HTTP-Request.
      * @return RedirectResponse Leitet zurück zur Ursprungsseite (Referer).
      */
+
+    #[isPublic]
     public function switch(Request $request): RedirectResponse
     {
         // 1. Gewünschte Sprache aus dem POST-Body holen

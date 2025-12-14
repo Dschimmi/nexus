@@ -108,3 +108,11 @@ jobs:
           echo "Deployment der Version v0.8.14 zur Staging/Production Umgebung gestartet."
           echo "Dieser Schritt ist ein Placeholder für den eigentlichen CD-Prozess (z.B. SSH/SCP)."
           echo "Deployment Placeholder Complete."
+      
+      # 3. Abhängigkeiten installieren
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # NEU: Security Audit (Ticket 0000037)
+      - name: Security Audit
+        run: composer audit

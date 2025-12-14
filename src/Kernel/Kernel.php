@@ -164,6 +164,39 @@ class Kernel
             // Finde den zuständigen Controller über den container-fähigen Resolver.
             $controllerResolver = new ContainerControllerResolver($this->container);
             $controller = $controllerResolver->getController($request);
+
+            // --- FIREWALL START (Ticket 36) ---
+            
+            // Reflection um Attribute zu lesen
+            if (is_array($controller)) {
+                $reflectionMethod = new \ReflectionMethod($controller[0], $controller[1]);
+                $reflectionClass = new \ReflectionClass($controller[0]);
+            } else {
+                // Invokable Controller (__invoke)
+                $reflectionClass = new \ReflectionClass($controller);
+                $reflectionMethod = $reflectionClass->getMethod('__invoke');
+            }
+
+            // Prüfen, ob #[IsPublic] an Methode oder Klasse existiert
+            $isPublic = !empty($reflectionMethod->getAttributes(\MrWo\Nexus\Attribute\IsPublic::class)) 
+                     || !empty($reflectionClass->getAttributes(\MrWo\Nexus\Attribute\IsPublic::class));
+
+            // Authentifizierungs-Status prüfen
+            /** @var \MrWo\Nexus\Application\Auth\AuthenticationService $auth */
+            $auth = $this->container->get(\MrWo\Nexus\Application\Auth\AuthenticationService::class);
+            $isLoggedIn = (bool) $auth->getUser();
+
+            // Deny by Default: Wenn nicht öffentlich und nicht eingeloggt -> Zugriff verweigert
+            if (!$isPublic && !$isLoggedIn) {
+                // Für API-Requests: 401 Unauthorized
+                if (str_starts_with($request->getPathInfo(), '/api/')) {
+                    return new Response('{"error": "Unauthorized"}', 401, ['Content-Type' => 'application/json']);
+                }
+                
+                // Für Web-Requests: Redirect zum Login
+                return new \Symfony\Component\HttpFoundation\RedirectResponse('/admin');
+            }
+            // --- FIREWALL END ---
             
             // Ermittle die benötigten Argumente für die Controller-Methode.
             $argumentResolver = new ArgumentResolver();

@@ -39,4 +39,14 @@ class ChainUserRepository implements UserRepositoryInterface
         }
         return null;
     }
+
+    public function upgradePassword(User $user, string $newHash): void
+    {
+        foreach ($this->providers as $provider) {
+            // Wir versuchen das Update auf allen Providern.
+            // Der zuständige Provider (z.B. DB) wird das Update durchführen.
+            // Provider, die den User nicht kennen oder Read-Only sind, ignorieren es.
+            $provider->upgradePassword($user, $newHash);
+        }
+    }
 }

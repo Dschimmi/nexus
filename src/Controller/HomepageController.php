@@ -2,6 +2,8 @@
 
 namespace MrWo\Nexus\Controller;
 
+use MrWo\Nexus\Attribute\IsPublic;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -31,6 +33,8 @@ class HomepageController
      *
      * @return Response Die HTTP-Antwort mit dem gerenderten HTML-Inhalt.
      */
+
+    #[IsPublic]
     public function __invoke(): Response
     {
         // Test - wird der Fehler korrekt an Tracy weitergeleitet?

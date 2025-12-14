@@ -46,4 +46,11 @@ class EnvUserRepository implements UserRepositoryInterface
 
         return null;
     }
+
+    public function upgradePassword(User $user, string $newHash): void
+    {
+        // EnvUserRepository ist read-only.
+        // Wir können das Passwort in der .env nicht zur Laufzeit ändern.
+        // Silent ignore, da dies das erwartete Verhalten für diesen Provider ist.
+    }
 }

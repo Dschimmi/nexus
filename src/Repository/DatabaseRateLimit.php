@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Repository;
 
-use MrWo\Nexus\Service\DatabaseService;
+use MrWo\Nexus\Infrastructure\Database\DatabaseService;
 
 /**
  * Datenbank-Implementierung des RateLimitInterface.

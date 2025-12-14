@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\SessionBag;
-use MrWo\Nexus\Service\ConfigService;
-use MrWo\Nexus\Service\SecurityLogger;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Infrastructure\Session\SessionBag;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
+use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
 use PHPUnit\Framework\TestCase;
 use SessionHandlerInterface;
 use RuntimeException;

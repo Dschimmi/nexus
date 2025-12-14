@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use MrWo\Nexus\Service\TranslatorService;
-use MrWo\Nexus\Service\Provider\PhpFileTranslationProvider; // Neu
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\SessionBag;
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
+use MrWo\Nexus\Infrastructure\Translation\Provider\PhpFileTranslationProvider;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Infrastructure\Session\SessionBag;
 use PHPUnit\Framework\TestCase;
 
 class TranslatorServiceTest extends TestCase

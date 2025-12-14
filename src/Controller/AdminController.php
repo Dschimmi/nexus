@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller;
 
-use MrWo\Nexus\Service\AuthenticationService;
-use MrWo\Nexus\Service\ConfigService;
-use MrWo\Nexus\Service\PageManagerService;
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\TranslatorService;
+use MrWo\Nexus\Application\Auth\AuthenticationService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
+use MrWo\Nexus\Application\Page\PageManager;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +30,7 @@ class AdminController
      * @param AuthenticationService $authService   Service zur Prüfung der Admin-Zugangsdaten.
      * @param ConfigService         $configService Service zum Lesen und Schreiben der module.json.
      * @param TranslatorService     $translator    Service für Internationalisierung (Fehlermeldungen etc.).
-     * @param PageManagerService    $pageManager   Service zur Verwaltung der physischen Dummy-Dateien.
+     * @param PageManager           $pageManager   Service zur Verwaltung der physischen Dummy-Dateien.
      * @param SessionService        $session       Service für Session-Handling und Flash-Messages.
      */
     public function __construct(
@@ -38,7 +38,7 @@ class AdminController
         private AuthenticationService $authService,
         private ConfigService $configService,
         private TranslatorService $translator,
-        private PageManagerService $pageManager,
+        private PageManager $pageManager,
         private SessionService $session
     ) {}
 

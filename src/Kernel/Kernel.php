@@ -2,7 +2,9 @@
 
 namespace MrWo\Nexus\Kernel;
 
-use MrWo\Nexus\Service\TranslatorService;
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService; // Wichtig für setSecurityHeaders
+use MrWo\Nexus\Application\Auth\AuthenticationService; // Wichtig für Security Check
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,9 +70,9 @@ class Kernel
      */
     private function setSecurityHeaders(Response $response): void
     {
-        /** @var \MrWo\Nexus\Service\ConfigService $configService */
+        /** @var \MrWo\Nexus\Infrastructure\Config\ConfigService $configService */
         // ConfigService aus dem kompilierten Container abrufen.
-        $configService = $this->container->get(\MrWo\Nexus\Service\ConfigService::class);
+        $configService = $this->container->get(\MrWo\Nexus\Infrastructure\Config\ConfigService::class);
         
         // 1. Content Security Policy (CSP)
         // HOLEN: Holen Sie die CSP-Policy aus dem ConfigService anstelle des Hardcodes.
@@ -128,8 +130,8 @@ class Kernel
         }
         
         // --- NEU: Globaler Security Check (Anti-Replay) ---
-        /** @var \MrWo\Nexus\Service\AuthenticationService $authService */
-        $authService = $this->container->get(\MrWo\Nexus\Service\AuthenticationService::class);
+        /** @var \MrWo\Nexus\Application\Auth\AuthenticationService $authService */
+        $authService = $this->container->get(\MrWo\Nexus\Application\Auth\AuthenticationService::class);
         
         // Wenn ein User eingeloggt ist, prüfen wir die Integrität (nur wenn Session läuft)
         if (!$isCli && !$isApiRequest && $authService->getUser()) {

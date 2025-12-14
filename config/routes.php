@@ -113,6 +113,37 @@ $routes->add('api_v1_status', new Route(
     methods: ['GET']
 ));
 
+// ============================================================================
+// MODULE ROUTING LOADER (Ticket 42)
+// ============================================================================
+
+$modulesDir = dirname(__DIR__) . '/modules';
+if (is_dir($modulesDir)) {
+    $modules = scandir($modulesDir);
+    foreach ($modules as $module) {
+        if ($module === '.' || $module === '..') continue;
+        
+        // Konvention: Jedes Modul hat eine config/routes.php
+        $moduleRoutesFile = $modulesDir . '/' . $module . '/config/routes.php';
+        
+        if (file_exists($moduleRoutesFile)) {
+            // Importiere die Routen-Collection des Moduls
+            // Wir nutzen hier include, da die Modul-Datei ein RouteCollection-Objekt zurückgeben sollte
+            // oder den Router direkt konfiguriert.
+            
+            // Annahme: Die Modul-Datei sieht aus wie:
+            // return function (RouteCollection $routes) { $routes->add(...); };
+            // ODER sie gibt eine Collection zurück.
+            
+            // Einfachster Weg für PHP-Config:
+            $moduleRoutes = require $moduleRoutesFile;
+            if ($moduleRoutes instanceof RouteCollection) {
+                $routes->addCollection($moduleRoutes);
+            }
+        }
+    }
+}
+
 /**
  * ============================================================================
  *  DYNAMISCHE SEITEN (Dummy-Pages)

@@ -2,7 +2,7 @@
 
 namespace MrWo\Nexus\Controller;
 
-use MrWo\Nexus\Service\ConsentService;
+use MrWo\Nexus\Infrastructure\Consent\ConsentService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

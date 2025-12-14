@@ -2,11 +2,11 @@
 
 namespace MrWo\Nexus\Twig;
 
-use MrWo\Nexus\Service\TranslatorService;
-use MrWo\Nexus\Service\AssetService;
-use MrWo\Nexus\Service\ConfigService;
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\PageManagerService; // Neu
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
+use MrWo\Nexus\Infrastructure\Asset\AssetService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Application\Page\PageManager;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -21,21 +21,21 @@ class AppExtension extends AbstractExtension
     private AssetService $assetService;
     private ConfigService $configService;
     private SessionService $session;
-    private PageManagerService $pageManager; // Neu
+    private PageManager $pageManager; // Neu
 
     /**
      * @param TranslatorService  $translator    Der zu injizierende Translator-Service.
      * @param AssetService       $assetService  Der zu injizierende Asset-Service.
      * @param ConfigService      $configService Der zu injizierende Config-Service.
      * @param SessionService     $session       Der zu injizierende Session-Service.
-     * @param PageManagerService $pageManager   Der zu injizierende PageManager-Service.
+     * @param PageManager        $pageManager   Der zu injizierende PageManager-Service.
      */
     public function __construct(
         TranslatorService $translator,
         AssetService $assetService,
         ConfigService $configService,
         SessionService $session,
-        PageManagerService $pageManager // Neu
+        PageManager $pageManager
     ) {
         $this->translator = $translator;
         $this->assetService = $assetService;

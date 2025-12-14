@@ -1,5 +1,7 @@
 parameters:
     level: 5  # Level 0-9. 5 ist ein guter Start für bestehende Projekte.
+    stubFiles:
+        - stubs/opcache.php
     paths:
         - src
         - tests

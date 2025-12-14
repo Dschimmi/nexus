@@ -5,222 +5,234 @@ use MrWo\Nexus\Controller\HomepageController;
 use MrWo\Nexus\Controller\StaticPageController;
 use MrWo\Nexus\Controller\DynamicPageController;
 use MrWo\Nexus\Controller\AdminController;
-use MrWo\Nexus\Service\AssetService;
-use MrWo\Nexus\Service\ConfigService;
-use MrWo\Nexus\Service\ConsentService;
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\TranslatorService;
-use MrWo\Nexus\Service\AuthenticationService;
-use MrWo\Nexus\Service\PageManagerService;
+use MrWo\Nexus\Controller\LanguageController;
+use MrWo\Nexus\Controller\Api\V1\StatusController;
+
+// Infrastructure Services (Verschoben)
+use MrWo\Nexus\Infrastructure\Asset\AssetService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
+use MrWo\Nexus\Infrastructure\Consent\ConsentService;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Infrastructure\Session\SessionFactory;
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
+use MrWo\Nexus\Infrastructure\Translation\Provider\PhpFileTranslationProvider;
+use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
+use MrWo\Nexus\Infrastructure\Security\RateLimiter;
+use MrWo\Nexus\Infrastructure\Security\ApiTokenAuthenticator; // Wurde verschoben? Checken wir gleich.
+use MrWo\Nexus\Infrastructure\Database\DatabaseService;
+use MrWo\Nexus\Infrastructure\Persistence\EnvUserRepository;
+use MrWo\Nexus\Infrastructure\Persistence\FilePageRepository;
+
+
+// Application Services (Verschoben)
+use MrWo\Nexus\Application\Auth\AuthenticationService;
+use MrWo\Nexus\Application\Page\PageManager;
+use MrWo\Nexus\Application\Page\PageRepositoryInterface;
+
+// Domain Interfaces
+use MrWo\Nexus\Domain\User\UserRepositoryInterface;
+
+
+// Alte Repository Location (Nicht verschoben)
+use MrWo\Nexus\Repository\ConfigRepositoryInterface; 
+use MrWo\Nexus\Repository\ChainUserRepository;
+use MrWo\Nexus\Repository\ApiTokenRepositoryInterface;
+use MrWo\Nexus\Repository\EnvApiTokenRepository;
+use MrWo\Nexus\Repository\InMemoryRateLimit;
+use MrWo\Nexus\Repository\DatabaseRateLimit;
+use MrWo\Nexus\Repository\RateLimitFactory;
+use MrWo\Nexus\Repository\RateLimitInterface;
+
 use MrWo\Nexus\Twig\AppExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-/**
- * Konfiguriert den Dependency Injection Container.
- *
- * @param ContainerBuilder $container Der zu konfigurierende Container.
- * @return void
- */
 return function(ContainerBuilder $container) {
     
-    // Basis-Pfad des Projekts ermitteln (eine Ebene über /config)
     $projectDir = dirname(__DIR__);
 
     // =========================================================================
-    // SERVICES
+    // INFRASTRUCTURE SERVICES
     // =========================================================================
 
-    // Der zentrale Konfigurations-Service
     $container->register('config_service', ConfigService::class)
-        ->addArgument(new Reference(MrWo\Nexus\Repository\ConfigRepositoryInterface::class)) // Injiziertes Repo
+        ->addArgument(new Reference(ConfigRepositoryInterface::class))
         ->setPublic(true);
 
-    // Factory für Session-Handler
-    $container->register('session_factory', MrWo\Nexus\Service\SessionFactory::class)
+    $container->setAlias(ConfigService::class, 'config_service')->setPublic(true);
+
+    $container->register('session_factory', SessionFactory::class)
         ->addArgument(new Reference('config_service'));
 
-    // Der Handler selbst (erzeugt durch Factory)
     $container->register('session_handler_instance', \SessionHandlerInterface::class)
         ->setFactory([new Reference('session_factory'), 'createHandler']);
 
-    // Der zentrale Session-Service
     $container->register('session_service', SessionService::class)
-        ->addArgument(new Reference('config_service')) // Injiziere ConfigService für Lifetime & Salt
-        ->addArgument(new Reference('session_handler_instance')) // Injizierter Handler
-        ->addArgument(new Reference('security_logger')) // <--- Security-Logger
+        ->addArgument(new Reference('config_service'))
+        ->addArgument(new Reference('session_handler_instance'))
+        ->addArgument(new Reference('security_logger'))
         ->setPublic(true);
 
-    // Der Service zur Verwaltung der Benutzerzustimmung
     $container->register('consent_service', ConsentService::class)
-        ->addArgument(new Reference('session_service')) // Benötigt den Session-Service
+        ->addArgument(new Reference('session_service'))
         ->setPublic(true);
         
-    // 1. Der File-Provider
-    $container->register(MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class, MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class)
+    $container->register(PhpFileTranslationProvider::class, PhpFileTranslationProvider::class)
         ->addArgument($projectDir);
 
-    // 2. Der Translator Service (neu verkabelt)
     $container->register('translator_service', TranslatorService::class)
         ->addArgument(new Reference('session_service'))
-        ->addMethodCall('addProvider', [new Reference(MrWo\Nexus\Service\Provider\PhpFileTranslationProvider::class)])
+        ->addMethodCall('addProvider', [new Reference(PhpFileTranslationProvider::class)])
         ->setPublic(true);
 
-    // Der Service für Assets (Manifest, Dev/Prod automatisch)
     $container->register('asset_service', AssetService::class)
         ->setPublic(true);
 
-    // Helper um ENV-Variablen zu laden (Fallback auf Server-Vars)
     $getEnv = fn($key) => $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
 
-    // Der Authentifizierungs-Service (Login-Logik)
+    $container->register('security_logger', SecurityLogger::class)
+        ->setPublic(true);
+
+    $container->register('database_service', DatabaseService::class)
+        ->addArgument(new Reference('config_service'))
+        ->setPublic(true);
+        
+    // API Token Authenticator (Prüfen wo er liegt: Service oder Infra?)
+    // Annahme: Wurde nach Infrastructure verschoben.
+    // Falls nicht: use MrWo\Nexus\Service\ApiTokenAuthenticator; nutzen.
+    $container->register(MrWo\Nexus\Infrastructure\Security\ApiTokenAuthenticator::class, MrWo\Nexus\Infrastructure\Security\ApiTokenAuthenticator::class)
+        ->addArgument(new Reference(ApiTokenRepositoryInterface::class))
+        ->setPublic(true);
+
+    // =========================================================================
+    // APPLICATION SERVICES
+    // =========================================================================
+
     $container->register(AuthenticationService::class, AuthenticationService::class)
         ->addArgument(new Reference('session_service'))
-        ->addArgument(new Reference(MrWo\Nexus\Repository\UserRepositoryInterface::class)) // Injiziertes Repo
-        ->addArgument(new Reference('security_logger')) // Security-Logger
-        ->addArgument(new Reference(\MrWo\Nexus\Service\RateLimiter::class)) // HINZUGEFÜGT: Ticket 34 Rate Limiting
+        ->addArgument(new Reference(UserRepositoryInterface::class))
+        ->addArgument(new Reference('security_logger'))
+        ->addArgument(new Reference(RateLimiter::class))
         ->setPublic(true);
 
-    // Der Service für Dummy-Seiten und Sitemap
-    $container->register(PageManagerService::class, PageManagerService::class)
-        ->addArgument(new Reference(MrWo\Nexus\Repository\PageRepositoryInterface::class)) // Injiziertes Repo
-        ->addArgument($projectDir) // Für Sitemap-Pfad
+    $container->register(PageManager::class, PageManager::class)
+        ->addArgument(new Reference(PageRepositoryInterface::class))
+        ->addArgument($projectDir)
         ->setPublic(true);
 
-    // Der Security Logger
-    $container->register('security_logger', MrWo\Nexus\Service\SecurityLogger::class)
-        ->setPublic(true);
+    // =========================================================================
+    // RATE LIMITING
+    // =========================================================================
 
-    // --- SERVICES ---
+    $container->register('rate_limit.in_memory', InMemoryRateLimit::class)->setPublic(true); 
     
-    // API Token Authenticator
-    $container->register(MrWo\Nexus\Service\ApiTokenAuthenticator::class, MrWo\Nexus\Service\ApiTokenAuthenticator::class)
-        ->addArgument(new Reference(MrWo\Nexus\Repository\ApiTokenRepositoryInterface::class))
+    $container->register('rate_limit.database', DatabaseRateLimit::class)
+        ->addArgument(new Reference('database_service'))
+        ->setPublic(true); 
+        
+    $container->register(RateLimitFactory::class, RateLimitFactory::class)->setPublic(true); 
+    
+    $container->register(RateLimitInterface::class, RateLimitInterface::class)
+        ->setFactory([RateLimitFactory::class, 'createRateLimit'])
+        ->addArgument(new Reference('service_container'))
         ->setPublic(true);
-
-    // Datenbank-Service (PDO Wrapper)
-    $container->register('database_service', MrWo\Nexus\Service\DatabaseService::class)
+    
+    $container->register(RateLimiter::class, RateLimiter::class)
         ->addArgument(new Reference('config_service'))
-        ->setPublic(true);
-
-    // Rate Limiter Service (Ticket 34)
-    $container->register(\MrWo\Nexus\Service\RateLimiter::class, \MrWo\Nexus\Service\RateLimiter::class)
-        ->addArgument(new Reference('config_service'))
-        ->addArgument(new Reference(\MrWo\Nexus\Repository\RateLimitInterface::class)) // Injiziert das Interface (wird von der Weiche aufgelöst)
+        ->addArgument(new Reference(RateLimitInterface::class))
         ->addArgument(new Reference('security_logger'))
         ->setPublic(true);
 
     // =========================================================================
-    // CONTROLLER
+    // CONTROLLERS
     // =========================================================================
 
-    // Der Controller für die Startseite
     $container->register(HomepageController::class, HomepageController::class)
-        ->addArgument(new Reference(Environment::class)) // Benötigt Twig
+        ->addArgument(new Reference(Environment::class))
         ->setPublic(true);
         
-    // Der Controller für die Consent-Aktionen
     $container->register(ConsentController::class, ConsentController::class)
-        ->addArgument(new Reference('consent_service')) // Benötigt den Consent-Service
+        ->addArgument(new Reference('consent_service'))
         ->setPublic(true);
 
-    // Der Controller für die Sprachumschaltung
-    $container->register(MrWo\Nexus\Controller\LanguageController::class, MrWo\Nexus\Controller\LanguageController::class)
-        ->addArgument(new Reference('session_service')) // Benötigt Session Service zum Schreiben des Attribute Bags
+    $container->register(LanguageController::class, LanguageController::class)
+        ->addArgument(new Reference('session_service'))
         ->setPublic(true);
 
-    // Der Controller für statische Seiten (Impressum, Datenschutz)
     $container->register(StaticPageController::class, StaticPageController::class)
-        ->addArgument(new Reference(Environment::class)) // Benötigt Twig
+        ->addArgument(new Reference(Environment::class))
         ->setPublic(true);
 
-    // Der Controller für dynamische Dummy-Seiten
     $container->register(DynamicPageController::class, DynamicPageController::class)
-        ->addArgument(new Reference(Environment::class)) // Twig
-        ->addArgument($projectDir)                       // Pfad zum Projekt-Root
+        ->addArgument(new Reference(Environment::class))
+        ->addArgument($projectDir)
         ->setPublic(true);
     
-    // Der Controller für den Admin-Bereich
     $container->register(AdminController::class, AdminController::class)
-        ->addArgument(new Reference(Environment::class))            // Twig
-        ->addArgument(new Reference(AuthenticationService::class))  // Auth Service
-        ->addArgument(new Reference('config_service'))              // Config Service
-        ->addArgument(new Reference('translator_service'))          // Translator Service
-        ->addArgument(new Reference(PageManagerService::class))     // PageManager Service
-        ->addArgument(new Reference('session_service'))             // Neu: Session Service für Flash-Messages
+        ->addArgument(new Reference(Environment::class))
+        ->addArgument(new Reference(AuthenticationService::class))
+        ->addArgument(new Reference('config_service'))
+        ->addArgument(new Reference('translator_service'))
+        ->addArgument(new Reference(PageManager::class))
+        ->addArgument(new Reference('session_service'))
         ->setPublic(true);
 
-    // API V1 Status Controller
-    $container->register(MrWo\Nexus\Controller\Api\V1\StatusController::class, MrWo\Nexus\Controller\Api\V1\StatusController::class)
+    $container->register(StatusController::class, StatusController::class)
         ->setPublic(true);
 
     // =========================================================================
-    // RATE LIMITING REPOSITORIES (Ticket 34)
-    // =========================================================================
-    
-    // Fallback: In-Memory Implementierung (keine Datenbank erforderlich)
-    $container->register(\MrWo\Nexus\Repository\InMemoryRateLimit::class, \MrWo\Nexus\Repository\InMemoryRateLimit::class);
-
-    // Datenbank-Implementierung (wird nur verwendet, wenn DB_DSN gesetzt ist)
-    $container->register(\MrWo\Nexus\Repository\DatabaseRateLimit::class, \MrWo\Nexus\Repository\DatabaseRateLimit::class)
-        ->addArgument(new Reference('database_service')); // Benötigt DatabaseService
-
-    // =========================================================================
-    // REPOSITORIES
+    // REPOSITORIES (Persistence & Adapters)
     // =========================================================================
 
-    // 1. Der Env-Provider (explizit unter eigenem Namen registriert und getaggt)
-    $container->register(MrWo\Nexus\Repository\EnvUserRepository::class, MrWo\Nexus\Repository\EnvUserRepository::class)
+    // Env User Repo
+    $container->register(EnvUserRepository::class, EnvUserRepository::class)
         ->addArgument($getEnv('ADMIN_USER'))
         ->addArgument($getEnv('ADMIN_EMAIL'))
         ->addArgument($getEnv('ADMIN_PASSWORD_HASH'))
         ->addTag('nexus.user_provider')
         ->setPublic(true);
 
-    // 2. Die Chain (Sammelt alle Provider)
-    // Wir registrieren die Chain ALS die Implementierung für das Interface.
-    $container->register(MrWo\Nexus\Repository\UserRepositoryInterface::class, MrWo\Nexus\Repository\ChainUserRepository::class)
+    // Chain Repo (nutzt Domain Interface als Key)
+    $container->register(UserRepositoryInterface::class, ChainUserRepository::class)
         ->addArgument(new TaggedIteratorArgument('nexus.user_provider'))
         ->setPublic(true);
 
-    // Das File-basierte Page-Repository
-    $container->register(MrWo\Nexus\Repository\PageRepositoryInterface::class, MrWo\Nexus\Repository\FilePageRepository::class)
+    // Page Repo (nutzt Domain Interface als Key)
+    $container->register(PageRepositoryInterface::class, FilePageRepository::class)
         ->addArgument($projectDir);
 
-    // Das File-basierte Config-Repository
-    $container->register(MrWo\Nexus\Repository\ConfigRepositoryInterface::class, MrWo\Nexus\Repository\FileConfigRepository::class)
+    // Config Repo (File-Based implementation)
+    $container->register(ConfigRepositoryInterface::class, MrWo\Nexus\Repository\FileConfigRepository::class)
         ->addArgument($projectDir);
 
-    // API Token Repository (Env Implementation)
-    $container->register(MrWo\Nexus\Repository\ApiTokenRepositoryInterface::class, MrWo\Nexus\Repository\EnvApiTokenRepository::class)
+    // Api Token Repo
+    $container->register(ApiTokenRepositoryInterface::class, EnvApiTokenRepository::class)
         ->addArgument($getEnv('APP_SECRET'))
         ->setPublic(true);
     
     // =========================================================================
-    // TWIG KONFIGURATION
+    // TWIG
     // =========================================================================
 
-    // Definiert, wo Twig nach Template-Dateien suchen soll
     $container->register('twig.loader', FilesystemLoader::class)
         ->addArgument(__DIR__ . '/../templates');
 
-    // Die benutzerdefinierte Twig Extension
     $container->register('twig.app_extension', AppExtension::class)
         ->addArgument(new Reference('translator_service'))
         ->addArgument(new Reference('asset_service'))
         ->addArgument(new Reference('config_service'))
         ->addArgument(new Reference('session_service'))
-        ->addArgument(new Reference(PageManagerService::class)) // Neu: Für 'get_dummy_pages()'
+        ->addArgument(new Reference(PageManager::class))
         ->addTag('twig.extension');
 
-    // Der zentrale Twig Environment Service
-    // Umsetzung ADR 011: Environment-Awareness für Cache & Debugging
     $container->register(Environment::class, Environment::class)
-        ->addArgument(new Reference('twig.loader')) // 1. Argument: Loader
-        ->addArgument([                             // 2. Argument: Optionen
+        ->addArgument(new Reference('twig.loader'))
+        ->addArgument([
             'debug' => $getEnv('APP_ENV') === 'development',
             'cache' => ($getEnv('APP_ENV') === 'development') ? false : $projectDir . '/var/cache/twig',
             'auto_reload' => true,
@@ -228,4 +240,26 @@ return function(ContainerBuilder $container) {
         ])
         ->addMethodCall('addExtension', [new Reference('twig.app_extension')])
         ->setPublic(true);
+
+    // =========================================================================
+    // MODULE LOADER (Ticket 42)
+    // =========================================================================
+    
+    // Scanne den modules/ Ordner
+    $modulesDir = $projectDir . '/modules';
+    if (is_dir($modulesDir)) {
+        $modules = scandir($modulesDir);
+        foreach ($modules as $module) {
+            if ($module === '.' || $module === '..') continue;
+            
+            // Konvention: Jedes Modul hat eine config/services.php
+            $moduleConfig = $modulesDir . '/' . $module . '/config/services.php';
+            if (file_exists($moduleConfig)) {
+                // Importiere die Modul-Config
+                // Nutze die importierten Klassen statt FQCN, das ist sauberer
+                $loader = new PhpFileLoader($container, new FileLocator($modulesDir . '/' . $module . '/config'));
+                $loader->load('services.php');
+            }
+        }
+    }
 };

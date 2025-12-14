@@ -178,9 +178,9 @@
     {% include 'partials/cookie_banner.html.twig' %}
     
     {# WICHTIG: NONCE zu allen Skript-Tags hinzufügen (Ticket 34) #}
-    <script src="{{ asset_url('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
-    <script src="{{ asset_url('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
-    <script src="{{ asset_url('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    <script src="{{ asset('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    <script src="{{ asset('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    <script src="{{ asset('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
 
     <script nonce="{{ app.csp_nonce }}">
         document.addEventListener('DOMContentLoaded', () => {

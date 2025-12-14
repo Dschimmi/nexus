@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use MrWo\Nexus\Service\PageManagerService;
-use MrWo\Nexus\Repository\PageRepositoryInterface;
+use MrWo\Nexus\Application\Page\PageManager;
+use MrWo\Nexus\Application\Page\PageRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,7 +55,7 @@ class PageManagerServiceTest extends TestCase
             ['slug' => 'test-slug']
         ]);
 
-        $service = new PageManagerService($this->repositoryMock, $this->projectDir);
+        $service = new PageManager($this->repositoryMock, $this->projectDir);
         $service->createPage('test-slug', 'Titel', 'Inhalt');
 
         // Prüfen, ob Sitemap erstellt wurde
@@ -71,7 +71,7 @@ class PageManagerServiceTest extends TestCase
         $this->repositoryMock->expects($this->exactly(2))
             ->method('delete');
 
-        $service = new PageManagerService($this->repositoryMock, $this->projectDir);
+        $service = new PageManager($this->repositoryMock, $this->projectDir);
         $service->deletePages(['slug1', 'slug2']);
     }
 
@@ -82,7 +82,7 @@ class PageManagerServiceTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         
-        $service = new PageManagerService($this->repositoryMock, $this->projectDir);
+        $service = new PageManager($this->repositoryMock, $this->projectDir);
         $service->createPage('', 'Titel', 'Content');
     }
 }

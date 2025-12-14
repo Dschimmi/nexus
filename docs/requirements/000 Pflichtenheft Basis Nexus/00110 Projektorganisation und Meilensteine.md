@@ -12,7 +12,7 @@ Dieses Kapitel beschreibt die organisatorische Struktur und den logischen Ablauf
 
 ### 11.2. Entwicklungsmeilensteine (Der Weg zu Version 1.0.0)
 Der alleinige und zentrale Liefergegenstand dieses Projekts ist die Erstellung des Nexus-Base Frameworks und dessen Freigabe in einer stabilen Version 1.0.0. Der Weg zu diesem Ziel wird durch die folgenden, aufeinander aufbauenden Entwicklungsmeilensteine strukturiert. Jeder Meilenstein resultiert in einer neuen 0.x-Version und repräsentiert ein abgeschlossenes, testbares Inkrement des Basisframeworks.
-Die Roadmap ist strategisch in zwei Hauptphasen unterteilt: die Feature-Entwicklungsphase und die anschließende Stabilisierungsphase. Der Sprung in der Versionierung (z.B. von 0.6.x auf 0.9.x) signalisiert den Übergang zwischen diesen Phasen und den Eintritt in den „Feature Freeze“, bei dem keine neuen Funktionen mehr hinzugefügt werden. Bewusst freigelassene Versionsnummern (z.B. 0.7.x, 0.8.x) dienen dabei als strategischer Puffer für eventuell notwendige, unvorhergesehene Zwischenschritte, ohne den geplanten Ablauf zu gefährden.
+Die Roadmap ist strategisch in zwei Hauptphasen unterteilt: die Feature-Entwicklungsphase und die anschließende Stabilisierungsphase. Der Sprung in der Versionierung (z.B. von 0.6.x auf 0.8.x) signalisiert den Übergang zwischen diesen Phasen und den Eintritt in den „Feature Freeze“, bei dem keine neuen Funktionen mehr hinzugefügt werden. Bewusst freigelassene Versionsnummern (z.B. 0.7.x) dienen dabei als strategischer Puffer für eventuell notwendige, unvorhergesehene Zwischenschritte, ohne den geplanten Ablauf zu gefährden.
 
 #### 11.2.1. Roadmap zur Version 1.0.0
 Version 0.1.0: Grundgerüst und Rendering-Pipeline
@@ -46,6 +46,8 @@ Nach Abschluss dieses Meilensteins ist das Framework in der Lage, sein Verhalten
 Version 0.6.0: Standard Layout
 Dieser Meilenstein implementiert ein visuell ansprechendes, nutzbares Standard-Design für das Nexus-Framework. Das Layout baut auf Twig-Infrastruktur auf und stellt sicher, dass die Webseite für die Implemetierung von Erweiterungsmodulen ausreichend funktional ist. Es umfasst alle relevanten UI-Komponenten und ist responsiv, barrierefrei sowie modular gestaltet.
 
+Version 0.7.0: not yet used
+
 Version 0.8.0: Test-Suite, CI-Pipeline und Entwicklerdokumentation
 Dieser Meilenstein überführt das entwickelte Framework in einen qualitätsgesicherten Zustand.
 - Aufbau der Test-Suite: Es wird eine umfassende Suite von automatisierten Unit- und Integrationstests (gemäß PH: 9.2.1) für alle bis einschließlich Version 0.5.0 implementierten Kernkomponenten (Routing, Session, i18n etc.) geschrieben.
@@ -59,6 +61,7 @@ Mit diesem Meilenstein wird das Basisframework als "feature-complete" deklariert
 - Bereitstellung zur Abnahme: Die Version 0.9.0 wird auf der Abnahmeumgebung (Staging-System) bereitgestellt.
 - Formale Abnahmetests: Der Auftraggeber führt die formalen Abnahmetests gemäß der in PH: 10.1 definierten Kriterien durch. Alle gefundenen Fehler werden im Bugtracker (Mantis) erfasst.
 - Bugfixing-Phase: Alle gemeldeten Fehler werden behoben. Jede Fehlerbehebung führt zu einer neuen Patch-Version (z.B. 0.9.1, 0.9.2).
+- Die Endanwenderdokumentation (Benutzerhandbuch) muss vollständig sein.
 
 Dieser Meilenstein ist erst dann abgeschlossen, wenn eine Version existiert, in der alle bekannten Fehler behoben sind und die die formale Freigabe durch den Auftraggeber erhält. Diese finale, fehlerfreie 0.9.x-Version ist die direkte Vorstufe zur Version 1.0.0.
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Tests\Unit\Service;
 
-use MrWo\Nexus\Service\ConfigService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
 use MrWo\Nexus\Repository\ConfigRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 

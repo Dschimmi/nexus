@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Controller;
 
-use MrWo\Nexus\Service\SessionService;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

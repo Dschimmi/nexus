@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace MrWo\Nexus\Tests\Unit\Service;
 
 use PHPUnit\Framework\TestCase;
-use MrWo\Nexus\Service\AuthenticationService;
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Service\SecurityLogger;
-use MrWo\Nexus\Repository\UserRepositoryInterface;
-use MrWo\Nexus\Service\RateLimiter;
-use MrWo\Nexus\Entity\User;
-use MrWo\Nexus\Service\SessionBag;
+use MrWo\Nexus\Application\Auth\AuthenticationService;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Infrastructure\Security\SecurityLogger;
+use MrWo\Nexus\Domain\User\UserRepositoryInterface;
+use MrWo\Nexus\Infrastructure\Security\RateLimiter;
+use MrWo\Nexus\Domain\User\User;
+use MrWo\Nexus\Infrastructure\Session\SessionBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**

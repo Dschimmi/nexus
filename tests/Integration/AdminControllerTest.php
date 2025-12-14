@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 use MrWo\Nexus\Controller\AdminController;
-use MrWo\Nexus\Service\AuthenticationService;
-use MrWo\Nexus\Service\ConfigService;
-use MrWo\Nexus\Service\TranslatorService;
-use MrWo\Nexus\Service\PageManagerService;
-use MrWo\Nexus\Service\SessionService;
-use MrWo\Nexus\Entity\User;
+use MrWo\Nexus\Application\Auth\AuthenticationService;
+use MrWo\Nexus\Infrastructure\Config\ConfigService;
+use MrWo\Nexus\Infrastructure\Translation\TranslatorService;
+use MrWo\Nexus\Application\Page\PageManager;
+use MrWo\Nexus\Infrastructure\Session\SessionService;
+use MrWo\Nexus\Domain\User\User;
 
 /**
  * Testet den AdminController (Index-Methode).
@@ -47,7 +47,7 @@ class AdminControllerTest extends TestCase
             'authService'   => $this->createMock(AuthenticationService::class),
             'configService' => $this->createMock(ConfigService::class),
             'translator'    => $this->createMock(TranslatorService::class),
-            'pageManager'   => $this->createMock(PageManagerService::class),
+            'pageManager'   => $this->createMock(PageManager::class),
             'session'       => $this->createMock(SessionService::class),
         ];
     }

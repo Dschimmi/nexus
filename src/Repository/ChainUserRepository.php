@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MrWo\Nexus\Repository;
 
-use MrWo\Nexus\Entity\User;
+use MrWo\Nexus\Domain\User\User;
+use MrWo\Nexus\Domain\User\UserRepositoryInterface;
 
 /**
  * Delegiert die Benutzersuche an eine Liste von Providern (Chain of Responsibility).

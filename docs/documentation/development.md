@@ -5,16 +5,17 @@ Dieses Dokument dient als zentrale Referenz für die Architektur, Installation u
 
 ---
 
-## 1. Installation und Inbetriebnahme
+### 1. Installation und Inbetriebnahme
 
 ### 1.1 Systemvoraussetzungen
 Um Nexus lokal zu entwickeln oder zu betreiben, muss die Umgebung folgende Voraussetzungen erfüllen:
 
 *   **PHP:** Version **8.2** oder höher.
-*   **Erweiterungen:** `mbstring`, `intl`, `pdo`, `json`.
+*   **Erweiterungen:** `mbstring`, `intl`, `pdo`, `json`, `opcache`.
 *   **Composer:** Version **2.x**.
+*   **Node.js & NPM:** Aktuelle LTS-Version (für den Frontend-Build mit Vite).
 *   **Webserver:** Apache 2.4+ (mit `mod_rewrite`) oder Nginx.
-*   **Datenbank:** Aktuell nicht erforderlich (Dateibasiertes System in Version 0.x).
+*   **Datenbank:** Optional für den Core, aber empfohlen (MySQL/PostgreSQL) für Module wie Userverwaltung.
 
 ### 1.2 Schritt-für-Schritt Installation
 
@@ -23,29 +24,28 @@ git clone https://github.com/Dschimmi/nexus.git
 cd nexus
 
 **2. Abhängigkeiten installieren**
-Wir nutzen Composer für das Backend-Dependency-Management.
+Wir nutzen Composer für das Backend und NPM für das Frontend.
 composer install
+npm install
 
-**3. Umgebungskonfiguration (.env)**
-Erstelle eine `.env` Datei im Wurzelverzeichnis. Da wir keine sensiblen Daten im Repository speichern, musst du diese Datei lokal anlegen.
+**3. Frontend bauen**
+Erstellt die CSS/JS-Bundles für die Produktion.
+npm run build
 
-Beispielinhalt für `.env`:
+**4. Umgebungskonfiguration (.env)**
+Kopiere die Vorlage `.env.example` nach `.env` und passe sie an.
 
-APP_ENV=development
+Wichtige Einstellungen:
+*   `APP_ENV=development`
+*   `APP_SECRET`: Ein zufälliger String für Session-Sicherheit.
+*   `ADMIN_PASSWORD_HASH`: Generiert mit `php -r "echo password_hash('Passwort', PASSWORD_ARGON2ID);"`
 
-# Admin-Zugang (Datei-basiertes Backend)
-ADMIN_USER=admin
-ADMIN_EMAIL=admin@localhost
-# Passwort-Hash generieren mit: php -r "echo password_hash('DeinPasswort', PASSWORD_ARGON2ID);"
-# WICHTIG: Den Hash in einfache Anführungszeichen setzen!
-ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=4,p=1$...' 
-
-
-**4. Dateisystem-Berechtigungen**
+**5. Dateisystem-Berechtigungen**
 Stelle sicher, dass der Webserver Schreibrechte auf folgende Verzeichnisse hat:
+*   `var/` (Logs und Cache)
 *   `public/pages/` (Für generierte Dummy-Seiten)
-*   `config/` (Zum Speichern der `modules.json`)
-*   `public/sitemap.xml` (Für SEO)
+*   `config/modules.json` (Für Feature-Toggles)
+*   `public/sitemap.xml`
 
 ### 1.3 Webserver Konfiguration
 
@@ -80,22 +80,24 @@ server {
 
 Das Framework folgt den Prinzipien der **Hexagonalen Architektur** (auch bekannt als Ports & Adapters). Ziel ist die strikte Trennung von Geschäftslogik (Core) und technischer Infrastruktur (Web, Datenbank, Dateisystem). Dies ermöglicht eine hohe Wartbarkeit und Testbarkeit.
 
-### 2.1 Schichten-Modell (Layers)
+### 2.1 Die Schichten (Layers)
 
-Der Quellcode in `src/` ist logisch in Schichten unterteilt:
+1.  **Domain (Der Kern):**
+    *   Enthält die Geschäftslogik, Entitäten (`User`) und Interfaces (`UserRepositoryInterface`).
+    *   **Regel:** Darf keine Abhängigkeiten nach außen haben (kein `Symfony\`, kein `PDO`).
 
-**1. Kernel Layer (`src/Kernel/`)**
-Der Einstiegspunkt der Anwendung. Der Kernel initialisiert den Dependency Injection Container, lädt die Konfiguration und wandelt einen eingehenden `Request` in eine `Response` um.
+2.  **Application (Die Anwendungsfälle):**
+    *   Enthält Services (`AuthenticationService`, `PageManager`), die den Ablauf steuern.
+    *   Nutzt Domain-Objekte und Interfaces.
 
-**2. Presentation Layer (`src/Controller/` & `templates/`)**
-Die Schnittstelle nach "außen" zum Benutzer (HTTP).
-*   **Controller:** Nehmen Anfragen entgegen, validieren Input und rufen Services auf. Sie enthalten *keine* komplexe Geschäftslogik.
-*   **Templates:** Twig-Dateien für die HTML-Ausgabe.
+3.  **Infrastructure (Die Adapter):**
+    *   Implementiert die Interfaces der Domain (`EnvUserRepository`, `FilePageRepository`).
+    *   Stellt technische Dienste bereit (`SessionService`, `ConfigService`, `DatabaseService`).
+    *   Hier finden Datenbankzugriffe, Dateisystemoperationen und API-Calls statt.
 
-**3. Application & Domain Layer (`src/Service/`)**
-Das Herzstück der Anwendung. Hier liegt die Geschäftslogik.
-*   Services sind zustandslos (stateless) und wiederverwendbar.
-*   Beispiele: `AuthenticationService` (Prüfung von Credentials), `PageManagerService` (Verwaltung von Inhalten), `ConfigService` (Feature Toggles).
+4.  **Presentation (Der Eingang):**
+    *   Nimmt Anfragen entgegen und gibt Antworten zurück.
+    *   Enthält `Controller` (Web & API) und `Command` (CLI).
 
 **4. Infrastructure Layer**
 Die technische Basis. In der aktuellen Version (v0.x) besteht diese primär aus:
@@ -114,11 +116,12 @@ Wir nutzen den **Symfony DependencyInjection** Component als Container.
 
 *Beispiel-Konfiguration (Auszug aus services.php):*
 
-// Registrierung des AdminControllers mit seinen Abhängigkeiten
-$container->register(AdminController::class, AdminController::class)
-    ->addArgument(new Reference(Environment::class))            // Twig Template Engine
-    ->addArgument(new Reference(AuthenticationService::class))  // Auth Logik
-    ->addArgument(new Reference('config_service'))              // Config Service
+```php
+// Registrierung des AuthenticationService mit Interface-Injection
+$container->register(AuthenticationService::class, AuthenticationService::class)
+    ->addArgument(new Reference('session_service'))
+    ->addArgument(new Reference(UserRepositoryInterface::class)) // Interface statt Klasse!
+    ->addArgument(new Reference('security_logger'))
     ->setPublic(true);
 
 
@@ -133,26 +136,40 @@ $container->register(AdminController::class, AdminController::class)
     Die `index.php` instanziiert die Klasse `Kernel`. Dabei wird die Umgebung (`APP_ENV`) aus der `.env` Datei geladen.
 
 3.  **Container Build:**
-    Der Kernel lädt `config/services.php` und baut den DI-Container auf.
+    Der Kernel lädt `config/services.php`, scannt Module (`modules/`) und baut den DI-Container auf.
 
 4.  **Routing:**
     Der Kernel lädt `config/routes.php`. Der `UrlMatcher` vergleicht die URL mit den definierten Routen.
-    *   *Wichtig:* Die Reihenfolge der Routen ist entscheidend! Spezifische Routen (z.B. `/admin`) müssen vor generischen Routen (z.B. `/{slug}`) definiert werden.
 
-5.  **Controller Execution:**
+5.  **Firewall & Security (Kernel-Level):**
+    Bevor der Controller aufgerufen wird, führt der Kernel Sicherheitsprüfungen durch:
+    *   **Context:** Startet die Session (nur Web, kein CLI/API).
+    *   **Access Control:** Prüft `#[IsPublic]` Attribute. Wenn nicht vorhanden und User ausgeloggt -> Zugriff verweigert.
+    *   **Anti-Replay:** Validiert die Integrität der Session.
+
+6.  **Controller Execution:**
     Der Resolver bestimmt den zuständigen Controller und führt die Methode aus.
 
-6.  **Response:**
-    Der Controller gibt ein `Response`-Objekt zurück (meist gerendertes HTML), das vom Kernel an den Browser gesendet wird.
+7.  **Response & Terminierung:**
+    *   Der Controller gibt ein `Response`-Objekt zurück.
+    *   Der Kernel setzt Sicherheits-Header (CSP, HSTS).
+    *   Der Kernel speichert die Session (`save()`).
+    *   Die Antwort wird an den Browser gesendet.
 
 ---
 
 ## 3. Konfiguration
 
 Die Konfiguration von Nexus erfolgt auf drei Ebenen, je nach Art der Einstellung:
-1.  **Environment (.env):** Sensible Daten und Server-Einstellungen.
-2.  **Dependency Injection (config/services.php):** Verdrahtung der Architektur.
-3.  **Feature Toggles (config/modules.json):** Anwendungssteuerung zur Laufzeit.
+
+1.  **Environment (.env):**
+    Sensible Daten (Secrets, Passwörter) und Infrastruktur-Parameter (Datenbank-DSN, Redis-Host). Diese Datei darf nicht versioniert werden.
+
+2.  **Dependency Injection (config/services.php):**
+    Verdrahtung der Architektur. Hier wird definiert, welche Implementierung (z.B. `DatabaseUserRepository`) für welches Interface (`UserRepositoryInterface`) genutzt wird.
+
+3.  **Feature Toggles (config/modules.json):**
+    Anwendungssteuerung zur Laufzeit (z.B. "Modul XY aktivieren"). Diese Datei wird vom `ConfigService` verwaltet und kann über das Admin-Panel bearbeitet werden.
 
 ### 3.1 Umgebungsvariablen (.env)
 
@@ -167,12 +184,19 @@ Die Datei `.env` im Wurzelverzeichnis steuert das Verhalten der Infrastruktur. S
     *   Definiert den Benutzernamen und die E-Mail für den initialen Admin-Zugang (Root-User).
 *   **ADMIN_PASSWORD_HASH:**
     *   Der Argon2id-Hash des Admin-Passworts. Muss in einfachen Anführungszeichen `'...'` stehen, um Parsing-Fehler durch `$`-Zeichen zu vermeiden.
+*   **APP_SECRET:**
+    *   Ein zufälliger String (min. 32 Zeichen), der zum Salten von Session-Fingerprints und CSRF-Tokens verwendet wird.
+*   **DB_DSN:**
+    *   Die Datenbankverbindung (z.B. `mysql:host=127.0.0.1;dbname=nexus`). Wird vom `DatabaseService` genutzt.
+*   **SESSION_HANDLER:**
+    *   `native` (File), `redis` oder `database`. Steuert, wo Sessions gespeichert werden.
 
 ### 3.2 Service-Konfiguration (config/services.php)
 
 Hier wird der **Dependency Injection Container** konfiguriert. Wenn du einen neuen Controller oder Service erstellst, **musst** du ihn hier registrieren.
 
-*   **Prinzip:** Wir nutzen explizite Definitionen. Es gibt kein "Auto-Discovery".
+*   **Prinzip:** Wir nutzen explizite Service-Definitionen. Es gibt kein "Auto-Wiring" oder Scannen von Klassen. Jeder Service muss definiert werden.
+*   **Modularität:** Um Module zu unterstützen, lädt der Container jedoch automatisch die `config/services.php`-Dateien aus dem `modules/`-Verzeichnis. Die Services *innerhalb* dieser Dateien sind wiederum explizit definiert.
 *   **Parameter:** Globale Pfade (z.B. Projekt-Root) werden hier als Argumente an Services übergeben, um harte Pfadabhängigkeiten im Code zu vermeiden.
 
 ### 3.3 Routing (config/routes.php)
@@ -185,6 +209,8 @@ Definiert die Zuordnung von URLs zu Controllern.
     3.  Dynamische Dummy-Seiten (`/{slug}`)
     4.  Fallback (`/` bzw. 404)
 *   **Konflikte:** Neue Routen sollten immer *vor* der Route für dynamische Seiten eingefügt werden, damit sie nicht als Slug interpretiert werden.
+*   **Module:** Routen aus `modules/*/config/routes.php` werden automatisch geladen und VOR den dynamischen Seiten eingefügt, damit Module Vorrang haben.
+*   **API:** API-Routen (`/api/v1/...`) folgen denselben Regeln und nutzen den `ApiTokenAuthenticator`.
 
 ### 3.4 Feature Toggles (config/modules.json)
 
@@ -204,21 +230,34 @@ Nexus verfügt über ein integriertes System für Feature-Toggles, um Funktionen
 
 ---
 
-## 4. Testing & Qualitätssicherung
+## 4. Frontend-Entwicklung
 
-Qualitätssicherung ist kein nachgelagerter Schritt, sondern integraler Bestandteil der Entwicklung bei Nexus. Wir setzen auf automatisierte Unit-Tests, um die Stabilität der Geschäftslogik zu gewährleisten.
+Nexus nutzt **Vite** für das Asset-Management.
 
-### 4.1 Test-Framework & Struktur
+*   **Source:** `public/css/` und `public/js/`.
+*   **Build:** `npm run build` erzeugt optimierte Dateien in `public/build/`.
+*   **Architektur:**
+    *   **CSS:** Native CSS mit BEM-Methodik und CSS Variables (kein SASS).
+    *   **JS:** ES6 Module.
+*   **Workflow:** Änderungen an CSS/JS sind erst nach einem Build im Browser sichtbar (oder via Vite Dev Server, falls konfiguriert).
 
-Wir verwenden **PHPUnit** als Testing-Framework.
+---
 
-*   **Verzeichnis:** Alle Tests liegen im Ordner `tests/`.
+## 5. Testing & Qualitätssicherung
+
+Qualitätssicherung ist integraler Bestandteil der Entwicklung. Die CI-Pipeline bricht ab, wenn Tests fehlschlagen oder die Coverage unter 90% fällt.
+
+### 5.1 Test-Framework & Struktur
+
+Wir verwenden **PHPUnit** für Tests und **PHPStan** für statische Analyse.
+
+*   **Verzeichnis:** `tests/`.
 *   **Struktur:**
-    *   `tests/Unit/`: Testet einzelne Klassen isoliert (Services, Helper).
-    *   *(Geplant: `tests/Integration/`: Testet das Zusammenspiel mehrerer Komponenten).*
-*   **Namenskonvention:** Testklassen müssen auf `Test.php` enden (z.B. `AuthenticationServiceTest.php`).
+    *   `tests/Unit/`: Testet einzelne Klassen isoliert (Services, Domain-Logik). Hier wird intensiv gemockt.
+    *   `tests/Integration/`: Testet das Zusammenspiel (Controller, Kernel, Routing).
+*   **Abdeckung:** Ziel ist > 90% Code Coverage für die Domain-Schicht.
 
-### 4.2 Tests ausführen
+### 5.2 Tests ausführen
 
 Stelle sicher, dass die Abhängigkeiten installiert sind (`composer install`).
 
@@ -230,25 +269,18 @@ vendor/bin/phpunit
 Zeigt die Namen der getesteten Szenarien (Testdox-Format).
 vendor/bin/phpunit --testdox
 
-### 4.3 Mocking & Dateisystem-Tests (vfsStream)
+**Coverage Report:**
+Erzeugt einen HTML-Bericht im Ordner `coverage/`, um ungetesteten Code zu finden.
+vendor/bin/phpunit --coverage-html coverage
 
-Da viele Services von Nexus auf das Dateisystem zugreifen (z.B. `PageManagerService` schreibt HTML, `ConfigService` schreibt JSON), müssen diese Zugriffe in Unit-Tests isoliert werden. Wir wollen **keine** echten Dateien auf der Festplatte während der Tests erstellen.
+### 5.3 Isolation von Seiteneffekten
 
-**Lösung: vfsStream**
-Wir nutzen die Bibliothek `mikey179/vfsStream`, um ein virtuelles Dateisystem im Arbeitsspeicher zu simulieren.
+Unit-Tests dürfen keine bleibenden Spuren im System hinterlassen (keine Dateien im Projektordner, keine DB-Einträge).
 
-**Beispiel:**
-Wenn ein Service eine Datei speichern soll, injizieren wir ihm im Test nicht den echten Pfad zum Projekt, sondern eine URL zu `vfs://root`.
+*   **Dateisystem:** Wir nutzen temporäre Verzeichnisse (`sys_get_temp_dir`) oder Mocking der Repositories (`FilePageRepository` wird gemockt, statt das Dateisystem zu testen).
+*   **Best Practice:** Pfade müssen injizierbar sein. Hardcodierte Pfade (`__DIR__ . '/../config'`) verhindern Testbarkeit.
 
-*   **Vorteile:**
-    1.  **Geschwindigkeit:** RAM ist schneller als SSD.
-    2.  **Isolation:** Tests beeinflussen sich nicht gegenseitig.
-    3.  **Sauberkeit:** Keine temporären Dateien, die manuell gelöscht werden müssen.
-
-**Wichtig für Entwickler:**
-Wenn du einen Service schreibst, der Datei-Pfade nutzt, darfst du `dirname(__DIR__)` oder `__DIR__` **nicht** hardcodieren. Der Basispfad muss immer über den Konstruktor injiziert werden, damit er im Test durch `vfsStream::url('root')` ersetzt werden kann.
-
-### 4.4 Continuous Integration (CI)
+### 5.4 Continuous Integration (CI)
 
 Das Projekt verfügt über eine automatisierte CI-Pipeline via **GitHub Actions**.
 
@@ -258,6 +290,9 @@ Das Projekt verfügt über eine automatisierte CI-Pipeline via **GitHub Actions*
     1.  Bereitstellen einer Ubuntu-Umgebung.
     2.  Installation von PHP (Matrix: 8.2, 8.3) und Extensions.
     3.  Erstellen einer temporären `.env` für die Pipeline.
-    4.  Ausführung aller Tests.
+    4.  **Static Analysis:** Prüfung mit `php-cs-fixer` (Style) und `phpstan` (Typen).
+    5.  **Security Audit:** Prüfung auf verwundbare Abhängigkeiten (`composer audit`).
+    6.  **Tests:** Ausführung aller Tests mit Coverage-Report.
+    7.  **Versioning:** Automatisches Tagging bei erfolgreichem Master-Build.
 
 **Regel:** Ein roter CI-Build gilt als "broken" und darf nicht deployed werden.

@@ -32,8 +32,17 @@ class PageManager
             throw new RuntimeException('Slug darf nicht leer sein.');
         }
 
-        // Sanitization (Business Rule)
-        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower($slug));
+        // Slugifying
+        // 1. Kleinbuchstaben
+        $slug = strtolower($slug);
+        // 2. Leerzeichen zu Bindestrichen
+        $slug = str_replace(' ', '-', $slug);
+        // 3. Alles andere (Sonderzeichen) entfernen
+        $slug = preg_replace('/[^a-z0-9-]/', '', $slug);
+        // 4. Doppelte Bindestriche entfernen (optional, aber sauber)
+        $slug = preg_replace('/-+/', '-', $slug);
+        // 5 Ränder säubern
+        $slug = trim($slug, '-');
 
         $this->repository->save($slug, $title, $content);
         $this->updateSitemap();

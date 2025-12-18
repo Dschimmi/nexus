@@ -33,7 +33,7 @@ class Kernel
     private string $cspNonce;
     
     /** @var string Standard CSP-Regel. Wird in der Regel von der Config überschrieben. */
-    private const DEFAULT_CSP = "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'";
+    public const DEFAULT_CSP = "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'";
 
     /**
      * @var ContainerBuilder Der zentrale DI-Container für alle Services.
@@ -46,7 +46,7 @@ class Kernel
     public function __construct(string $appEnv)
     {
         $this->appEnv = $appEnv;
-        $this->container = new ContainerBuilder();
+        $this->container = new ContainerBuilder(); // Container wird jetzt pro Request erstellt
         $this->cspNonce = $this->generateCspNonce(); // CSP Nonce generieren
     }
 
@@ -111,8 +111,11 @@ class Kernel
      */
     public function handleRequest(Request $request): Response
     {
+        // Container neu initialisieren für jeden Request (Stateless)
+        $this->container = new ContainerBuilder();
+
         // Lade die Service-Konfigurations-Funktion und führe sie aus, um den Container zu füllen.
-        $configureContainer = require_once __DIR__ . '/../../config/services.php';
+        $configureContainer = require __DIR__ . '/../../config/services.php';
         $configureContainer($this->container);
    
         $this->container->compile();
@@ -165,6 +168,16 @@ class Kernel
             $controllerResolver = new ContainerControllerResolver($this->container);
             $controller = $controllerResolver->getController($request);
 
+            /** @phpstan-assert callable $controller */
+            if (!is_callable($controller)) {
+                throw new ResourceNotFoundException(
+                    sprintf(
+                        'No valid controller resolved for route "%s".',
+                        (string) $request->attributes->get('_route', 'unknown')
+                    )
+                );
+            }
+
             // --- FIREWALL START (Ticket 36) ---
             
             // Reflection um Attribute zu lesen
@@ -208,7 +221,9 @@ class Kernel
         } catch (ResourceNotFoundException $e) {
 
             // Logge den 404-Fehler mit geringerer Priorität.
-            Debugger::log($e, Debugger::WARNING);
+            if (Debugger::$logDirectory !== null) {
+                Debugger::log($e, Debugger::WARNING);
+            }
 
             // Im DEV-Modus soll Tracy den Fehler anzeigen.
             if ($this->appEnv === 'development') {
@@ -228,7 +243,14 @@ class Kernel
         } catch (Throwable $e) {
 
             // Logge den 500-Fehler mit höchster Priorität.
-            Debugger::log($e, Debugger::ERROR);
+            if (Debugger::$logDirectory !== null) {
+                Debugger::log($e, Debugger::ERROR);
+            }
+
+            // DEBUG: Zeig mir den Fehler im Test!
+            if ($this->appEnv === 'test') {
+                echo "\n[KERNEL EXCEPTION] " . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+            }
 
             // Im DEV-Modus soll Tracy den Fehler anzeigen.
             if ($this->appEnv === 'development') {
@@ -239,7 +261,7 @@ class Kernel
         } finally {
             // WICHTIG: Session-Daten zurückschreiben, egal ob Erfolg oder Fehler.
             // Aber nur, wenn wir überhaupt eine Session haben (kein CLI/API).
-            if (!$isCli && !$isApiRequest) {
+            if ((!$isCli || $this->appEnv === 'test') && !$isApiRequest) {
                 $sessionService->save();
             }
         }
@@ -258,7 +280,7 @@ class Kernel
      */
     private function resolveRoute(Request $request): array
     {
-        $routes = require_once __DIR__ . '/../../config/routes.php';
+        $routes = require __DIR__ . '/../../config/routes.php';
         $context = new RequestContext();
         $context->fromRequest($request);
         

@@ -11,6 +11,12 @@
 /var/cache/
 /var/log/
 .php-cs-fixer.cache
+.phpunit.cache
 
 # Node.js Abhängigkeiten
 /node_modules/
+.phpunit.cache/test-results
+
+#Testdateien
+coverage.xml
+/coverage/

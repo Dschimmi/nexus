@@ -50,7 +50,7 @@ Version 0.7.0: not yet used
 
 Version 0.8.0: Test-Suite, CI-Pipeline und Entwicklerdokumentation
 Dieser Meilenstein überführt das entwickelte Framework in einen qualitätsgesicherten Zustand.
-- Aufbau der Test-Suite: Es wird eine umfassende Suite von automatisierten Unit- und Integrationstests (gemäß PH: 9.2.1) für alle bis einschließlich Version 0.5.0 implementierten Kernkomponenten (Routing, Session, i18n etc.) geschrieben.
+- Aufbau der Test-Suite: Es wird eine umfassende Suite von automatisierten Unit- und Integrationstests (gemäß PH: 9.2.1) für alle implementierten Kernkomponenten (Routing, Session, i18n etc.) geschrieben.
 - Einrichtung der CI-Pipeline: Die in PH: 9.2.2 definierte Continuous-Integration-Pipeline wird aufgesetzt. Ab diesem Zeitpunkt wird jeder Commit in das Repository automatisch auf die Einhaltung der Coding Guidelines und das erfolgreiche Durchlaufen aller Tests überprüft.
 - Erstellung der Basis-Dokumentation: Eine erste Version der technischen Entwicklerdokumentation wird verfasst. Sie muss mindestens die Installation, die Konfiguration des Frameworks (inkl. der .env-Datei) und die grundlegende Verwendung der Kern-Services beschreiben.
 

@@ -6,6 +6,7 @@ namespace MrWo\Nexus\Application\Page;
 
 // Vorgriff auf Domain-Schicht (wird in Schritt 1.x noch verschoben)
 use MrWo\Nexus\Domain\Page\PageRepositoryInterface;
+use MrWo\Nexus\Infrastructure\Util\SlugService;
 use RuntimeException;
 
 /**
@@ -18,7 +19,8 @@ class PageManager
 
     public function __construct(
         private PageRepositoryInterface $repository,
-        string $projectDir
+        string $projectDir,
+        private SlugService $slugService
     ) {
         $this->sitemapPath = $projectDir . '/public/sitemap.xml';
     }
@@ -33,16 +35,12 @@ class PageManager
         }
 
         // Slugifying
-        // 1. Kleinbuchstaben
-        $slug = strtolower($slug);
-        // 2. Leerzeichen zu Bindestrichen
-        $slug = str_replace(' ', '-', $slug);
-        // 3. Alles andere (Sonderzeichen) entfernen
-        $slug = preg_replace('/[^a-z0-9-]/', '', $slug);
-        // 4. Doppelte Bindestriche entfernen (optional, aber sauber)
-        $slug = preg_replace('/-+/', '-', $slug);
-        // 5 Ränder säubern
-        $slug = trim($slug, '-');
+        $slug = $this->slugService->slugify($slug);
+
+        if (empty($slug)) {
+             throw new RuntimeException('Slug ist nach Bereinigung leer.');
+        }
+
 
         $this->repository->save($slug, $title, $content);
         $this->updateSitemap();

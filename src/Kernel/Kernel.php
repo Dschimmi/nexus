@@ -30,7 +30,7 @@ class Kernel
 
     // CSP Nonce und Regel
     /** @var string Der Zufallswert für die CSP Nonce (Number used once). */
-    private string $cspNonce;
+    private ?string $cspNonce = null;
     
     /** @var string Standard CSP-Regel. Wird in der Regel von der Config überschrieben. */
     public const DEFAULT_CSP = "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'";
@@ -47,7 +47,6 @@ class Kernel
     {
         $this->appEnv = $appEnv;
         $this->container = new ContainerBuilder(); // Container wird jetzt pro Request erstellt
-        $this->cspNonce = $this->generateCspNonce(); // CSP Nonce generieren
     }
 
     // HINZUFÜGEN START: CSP-Hilfsmethoden
@@ -111,6 +110,9 @@ class Kernel
      */
     public function handleRequest(Request $request): Response
     {
+        // CSP Nonce für diesen Request generieren (Ticket 84)
+        $this->cspNonce = $this->generateCspNonce();
+
         // Container neu initialisieren für jeden Request (Stateless)
         $this->container = new ContainerBuilder();
 

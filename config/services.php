@@ -113,6 +113,10 @@ return function(ContainerBuilder $container) {
     $container->register(MrWo\Nexus\Domain\Queue\QueueInterface::class, MrWo\Nexus\Infrastructure\Queue\SyncQueue::class)
         ->setPublic(true);
 
+    // Slug Generator
+    $container->register(MrWo\Nexus\Infrastructure\Util\SlugService::class, MrWo\Nexus\Infrastructure\Util\SlugService::class)
+        ->setPublic(true);
+
     // =========================================================================
     // APPLICATION SERVICES
     // =========================================================================

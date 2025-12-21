@@ -6,6 +6,16 @@
    ========================================================================== */
 
 /* --- Block: Footer --- */
+/* Erlaubt Buttons als Footer-Link */
+button.footer__link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
 .footer {
     /* Hintergrund passend zu Cards/Subheader */
     background-color: var(--c-bg-footer);

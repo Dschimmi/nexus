@@ -14,7 +14,7 @@
     - Default: 'card u-text-center' (Weißer Hintergrund)
     - Bei 404: 'card u-text-center card--error' (Roter Hintergrund via CSS-Modifier)
 #}
-<section class="card u-text-center {% if code == '404' or code == 404 %}card--error{% endif %}">
+<section class="card u-text-center {% if code == '404' or code == 404 %}card--error{% endif %}" role="alert" aria-live="assertive">
 
     {# FALL 1: Development Modus #}
     {% if app_env|default('production') == 'development' and exception is defined %}

@@ -13,7 +13,7 @@
     
     <div>
         {# Angaben gemäß § 5 TMG #}
-        <p><h2>{{ 'imprint.section_tmg'|trans }}</h2></p>
+        <h2>{{ 'imprint.section_tmg'|trans }}</h2>
         <p>
             {# Nutzung von nl2br für Zeilenumbrüche aus der Übersetzung #}
             {{ 'imprint.address_block'|trans|nl2br }}
@@ -23,6 +23,7 @@
         <p><strong>{{ 'imprint.section_contact'|trans }}</strong></p>
         {# u-mb-0 entfernt den unteren Abstand beim letzten Element #}
         <p class="u-mb-0">
+            {# TODO: Links für Tel und Mail: <a href="tel:+49…">…</a> <a href="mailto:…">…</a> #}
             {{ 'imprint.phone'|trans }}<br>
             {{ 'imprint.email'|trans }}
         </p>

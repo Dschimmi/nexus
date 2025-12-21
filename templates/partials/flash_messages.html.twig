@@ -11,14 +11,12 @@
         <div class="alert alert--{{ type == 'error' ? 'error' : 'success' }} u-mb-4 u-flex u-justify-between u-items-center" role="alert">
             <span>{{ message|trans }}</span>
             
-            {# Schließen-Button: Nativ umgesetzt (entfernt das Element via JS) #}
+            {# Button nutzt jetzt BEM-Klasse statt Inline-Style & Event #}
             <button type="button" 
-                    class="btn" 
-                    style="background: transparent; border: none; font-size: 1.5rem; line-height: 1; padding: 0 0.5rem; color: inherit; opacity: 0.6; cursor: pointer;"
-                    onclick="this.closest('.alert').remove()" 
-                    aria-label="{{ 'action.close'|trans|default('Schließen') }}">
+                    class="alert__close" 
+                    aria-label="{{ 'action.close'|trans|default('Close') }}">
                 &times;
-            </button>
+            </button>            
         </div>
     {% endfor %}
 {% endfor %}

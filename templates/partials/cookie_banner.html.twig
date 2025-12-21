@@ -7,12 +7,12 @@
     {# 2. Buttons (Im DOM hier für Fokus-Reihenfolge, visuell via CSS unten) #}
     <div class="cookie-banner__actions">
         {# JS-Funktion handleCookie() wird erwartet #}
-        <button class="btn btn--primary" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
+        <button class="btn btn--outline" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
         <button class="btn btn--outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
     </div>
 
     {# 3. Text (Visuell in der Mitte) #}
-    <div class="cookie-banner__text">
+    <div class="cookie-banner__text" id="cookie-text">
         <p class="u-mb-0">{{ 'cookie.text'|trans|raw }}</p>
     </div>
 </div>

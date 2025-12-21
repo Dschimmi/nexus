@@ -1,58 +1,63 @@
 {#
     Formular zur Erstellung neuer Dummy-Seiten.
-    Nutzt Standard-Komponenten aus components.css (.form-input, .btn).
+    WCAG 2.1 AA Konform & CSP Ready.
 #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'admin.page_create_title'|trans }} – {{ parent() }}{% endblock %}
 
 {% block content %}
-<section class="card">
+<section class="card" aria-labelledby="page-create-title">
     
-    {# Header: Flex-Layout via Utility-Klassen #}
+    {# Header Bereich #}
     <div class="u-flex u-justify-between u-items-center u-mb-4">
-        <h1>{{ 'admin.page_create_title'|trans }}</h1>
-        <a href="/admin" class="btn btn--outline">Zurück zum Dashboard</a>
+        <h1 id="page-create-title">{{ 'admin.page_create_title'|trans }}</h1>
+        {# Navigationslink zurück #}
+        <a href="/admin" class="btn btn--outline" aria-label="{{ 'action.back_to_dashboard'|trans|default('Zurück zum Dashboard') }}">
+            {{ 'action.back'|trans|default('Zurück') }}
+        </a>
     </div>
 
-    {# Inhalt in der Card #}
     <div>
-        <form action="/admin/pages/create" method="post">
+        {# Formular #}
+        <form action="/admin/pages/create" method="post" novalidate>
             {% include 'partials/csrf_input.html.twig' with {'token_id': 'page_create'} %}
             
-            {# Titel #}
+            {# Feld: Titel #}
             <div class="u-mb-4">
                 <label for="title" class="u-block u-font-bold u-mb-1">
-                    {{ 'admin.page_label_title'|trans }}
+                    {{ 'admin.page_label_title'|trans }} <span aria-hidden="true">*</span>
                 </label>
-                <input type="text" id="title" name="title" class="form-input" required oninput="generateSlug()">
+                <input type="text" id="title" name="title" class="form-input" required aria-required="true">
             </div>
 
-            {# Slug (URL) #}
+            {# Feld: Slug (URL) #}
             <div class="u-mb-4">
                 <label for="slug" class="u-block u-font-bold u-mb-1">
-                    {{ 'admin.page_label_slug'|trans }}
+                    {{ 'admin.page_label_slug'|trans }} <span aria-hidden="true">*</span>
                 </label>
                 <div class="u-flex u-items-center u-gap-2">
-                    <span class="u-text-muted">exelor.de/</span>
+                    <span class="u-text-muted" aria-hidden="true">exelor.de/</span>
+                    {# Flex-Grow Utility nutzen, falls vorhanden, sonst Inline akzeptieren bis v0.8.20 #}
                     <input type="text" id="slug" name="slug" class="form-input" 
                            style="flex-grow: 1;"
-                           required pattern="[a-z0-9-]+" title="Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt.">
+                           required aria-required="true" 
+                           pattern="[a-z0-9-]+" 
+                           title="{{ 'admin.page_slug_help'|trans|default('Nur Kleinbuchstaben, Zahlen und Bindestriche.') }}">
                 </div>
             </div>
 
-            {# Inhalt #}
+            {# Feld: Inhalt #}
             <div class="u-mb-6">
                 <label for="content" class="u-block u-font-bold u-mb-1">
-                    {{ 'admin.page_label_content'|trans }}
+                    {{ 'admin.page_label_content'|trans }} <span aria-hidden="true">*</span>
                 </label>
                 <textarea id="content" name="content" rows="15" 
-                          class="form-textarea" 
-                          style="font-family: monospace;"
-                          required></textarea>
+                          class="form-textarea u-font-mono" 
+                          required aria-required="true"></textarea>
             </div>
 
-            {# Actions #}
+            {# Aktionen #}
             <div class="card__actions">
                 <button type="submit" class="btn btn--primary">
                     {{ 'admin.page_btn_save'|trans }}
@@ -62,23 +67,30 @@
     </div>
 </section>
 
+{# 
+    Slug-Generator Logik.
+    Wandelt den Titel automatisch in einen URL-freundlichen Slug um.
+    Verwendet Event-Listener statt Inline-Handler für CSP-Kompatibilität.
+#}
 <script nonce="{{ app.csp_nonce }}">
-    /**
-     * Generiert einen URL-freundlichen Slug aus dem Titel.
-     */
-    function generateSlug() {
-        const title = document.getElementById('title').value;
+    document.addEventListener('DOMContentLoaded', () => {
+        const titleInput = document.getElementById('title');
         const slugInput = document.getElementById('slug');
-        
-        let slug = title.toLowerCase()
-            .replace(/ä/g, 'ae')
-            .replace(/ö/g, 'oe')
-            .replace(/ü/g, 'ue')
-            .replace(/ß/g, 'ss')
-            .replace(/[^a-z0-9\s-]/g, '') 
-            .trim()
-            .replace(/\s+/g, '-');
-        slugInput.value = slug;
-    }
+
+        if (titleInput && slugInput) {
+            titleInput.addEventListener('input', () => {
+                const title = titleInput.value;
+                const slug = title.toLowerCase()
+                    .replace(/ä/g, 'ae')
+                    .replace(/ö/g, 'oe')
+                    .replace(/ü/g, 'ue')
+                    .replace(/ß/g, 'ss')
+                    .replace(/[^a-z0-9\s-]/g, '') 
+                    .trim()
+                    .replace(/\s+/g, '-');
+                slugInput.value = slug;
+            });
+        }
+    });
 </script>
 {% endblock %}

@@ -110,6 +110,30 @@
     border-color: #fecaca;
 }
 
+/* Close Button für Alerts (Ersatz für Inline Styles) */
+.alert__close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 0.5rem;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    /* Reset von .btn styles falls nötig, aber wir haben .btn Klasse entfernt */
+}
+
+.alert__close:hover {
+    opacity: 1;
+}
+
+/* Animation State für Auto-Dismiss */
+.alert--hiding {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none; /* Keine Klicks mehr während Fade-Out */
+}
+
 /* --- 5. Dropdowns (.dropdown) --- */
 .dropdown {
     position: relative;

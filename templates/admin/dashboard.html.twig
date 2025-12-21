@@ -1,67 +1,64 @@
 {#
     Admin Dashboard Template.
-    Ermöglicht die Konfiguration der Module und verlinkt zur Seitenverwaltung.
+    WCAG 2.1 AA Konform.
 #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'admin.dashboard_title'|trans }} – {{ parent() }}{% endblock %}
 
 {% block content %}
-{# Admin-spezifisches CSS laden #}
 <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
 <div>
-    {# Titel Bereich #}
     <div class="u-mb-4">
         <h1>{{ 'admin.dashboard_title'|trans }}</h1>
     </div>
 
-    {# 
-       Layout: 3-Spalten Grid (Original-Layout 1:1).
-       Spalte 1: Modul-Konfiguration.
-       Spalte 2: Seiten-Verwaltung.
-       Spalte 3: Bleibt leer.
-    #}
     <div class="grid grid--cols-3">
         
-        {# SPALTE 1: Module #}
-        <div class="card">
-            <h2>{{ 'admin.modules_title'|trans }}</h2>
+        {# SPALTE 1: Module Konfiguration #}
+        <section class="card" aria-labelledby="heading-modules">
+            <h2 id="heading-modules">{{ 'admin.modules_title'|trans }}</h2>
             
             <form action="/admin/config" method="post">
                 {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_config'} %}
-                {# Checkboxen behalten ihre Klassen für admin.css #}
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="module_user_management" value="1" 
-                               {% if modules.module_user_management %}checked{% endif %}>
-                        <span class="checkbox-text">{{ 'admin.module_user'|trans }}</span>
-                    </label>
-                </div>
+                
+                {# Fieldset ist wichtig für Formulargruppen #}
+                <fieldset class="u-border-0 u-p-0 u-m-0">
+                    <legend class="u-visually-hidden">{{ 'admin.modules_title'|trans }}</legend>
 
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="module_site_search" value="1" 
-                               {% if modules.module_site_search %}checked{% endif %}>
-                        <span class="checkbox-text">{{ 'admin.module_search'|trans }}</span>
-                    </label>
-                </div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="module_user_management" value="1" 
+                                   {% if modules.module_user_management %}checked{% endif %}>
+                            <span class="checkbox-text">{{ 'admin.module_user'|trans }}</span>
+                        </label>
+                    </div>
 
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="module_cookie_banner" value="1" 
-                               {% if modules.module_cookie_banner %}checked{% endif %}>
-                        <span class="checkbox-text">{{ 'admin.module_cookie'|trans }}</span>
-                    </label>
-                </div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="module_site_search" value="1" 
+                                   {% if modules.module_site_search %}checked{% endif %}>
+                            <span class="checkbox-text">{{ 'admin.module_search'|trans }}</span>
+                        </label>
+                    </div>
 
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="module_language_selection" value="1" 
-                               {% if modules.module_language_selection %}checked{% endif %}>
-                        <span class="checkbox-text">{{ 'admin.module_lang'|trans }}</span>
-                    </label>
-                </div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="module_cookie_banner" value="1" 
+                                   {% if modules.module_cookie_banner %}checked{% endif %}>
+                            <span class="checkbox-text">{{ 'admin.module_cookie'|trans }}</span>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="module_language_selection" value="1" 
+                                   {% if modules.module_language_selection %}checked{% endif %}>
+                            <span class="checkbox-text">{{ 'admin.module_lang'|trans }}</span>
+                        </label>
+                    </div>
+                </fieldset>
 
                 <div class="form-actions u-mt-4">
                     <button type="submit" class="btn btn--primary">
@@ -69,14 +66,13 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </section>
 
         {# SPALTE 2: Seiten-Verwaltung #}
-        <div class="card">
-            <h2>{{ 'admin.pages_title'|trans }}</h2>
+        <section class="card" aria-labelledby="heading-pages">
+            <h2 id="heading-pages">{{ 'admin.pages_title'|trans }}</h2>
             
-            {# Buttons untereinander gestapelt via Flex-Utilities #}
-            <div class="u-flex u-flex-col u-gap-4">
+            <nav class="u-flex u-flex-col u-gap-4" aria-labelledby="heading-pages">
                 <a href="/admin/pages" class="btn btn--primary u-text-center">
                     {{ 'admin.pages_btn_manage'|trans }}
                 </a>
@@ -84,11 +80,9 @@
                 <a href="/admin/pages/create" class="btn btn--outline u-text-center">
                     {{ 'admin.pages_create_link'|trans }}
                 </a>
-            </div>
-        </div>
+            </nav>
+        </section>
         
-        {# SPALTE 3: Leer (durch grid--cols-3 definiert) #}
-
     </div>
 </div>
 {% endblock %}

@@ -118,6 +118,7 @@ return [
     'admin.pages_btn_create'   => 'Neue Seite erstellen',      // Button to go to create form
     'admin.pages_btn_delete'   => 'Markierte löschen',         // Delete action button
     'admin.pages_empty'        => 'Keine Seiten vorhanden.',   // Text when list is empty
+    'admin.pages_confirm_delete'=> 'Wirklich löschen?',        // Question for Confirmation for Page deletion
     'admin.pages_delete_ok'    => 'Seite(n) erfolgreich gelöscht.', // Success flash message
     'admin.pages_delete_err'   => 'Fehler beim Löschen.',      // Error flash message
 
@@ -156,10 +157,14 @@ return [
     'error.404.text'       => 'Seite nicht gefunden. Sie werden weitergeleitet...', // Message shown before redirecting from a 404 page
 
     // --- KONTAKTSEITE ---
-        'contact.title'    => 'Kontakt',                    // H1 Title
-        'contact.intro'    => 'Haben Sie Fragen oder Anregungen? Wir freuen uns auf Ihre Nachricht.', // Intro text
-        'contact.email'    => 'E-Mail',                     // Label for Email
-        'contact.phone'    => 'Telefon',                    // Label for Phone
-        'contact.address'  => 'Anschrift',                  // Label for Address
-        'contact.cta'      => 'Schreiben Sie uns',          // Button or call to action text    
+    'contact.title'    => 'Kontakt',                    // H1 Title
+    'contact.intro'    => 'Haben Sie Fragen oder Anregungen? Wir freuen uns auf Ihre Nachricht.', // Intro text
+    'contact.email'    => 'E-Mail',                     // Label for Email
+    'contact.phone'    => 'Telefon',                    // Label for Phone
+    'contact.address'  => 'Anschrift',                  // Label for Address
+    'contact.cta'      => 'Schreiben Sie uns',          // Button or call to action text  
+    
+    // --- Aria Labels ---
+    'aria.language_switch'  => 'Sprache wählen',        // "Choose Language"
+    'aria.user_menu'        => 'Benutzermenü',          // "Usermenu"
 ];

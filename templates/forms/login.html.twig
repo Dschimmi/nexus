@@ -18,7 +18,7 @@
 
     {# Fehlermeldung anzeigen #}
     {% if error is defined and error %}
-        <div class="alert alert--error u-mb-4">
+        <div class="alert alert--error u-mb-4" role="alert">
             {{ error }}
         </div>
     {% endif %}
@@ -38,7 +38,8 @@
                 autocomplete="off" 
                 autocorrect="off" 
                 autocapitalize="off" 
-                spellcheck="false">
+                spellcheck="false"
+                aria-required="true">
         </div>
 
         <div class="u-mb-4">
@@ -48,7 +49,8 @@
                 name="password" 
                 class="form-input" 
                 required
-                autocomplete="off">
+                autocomplete="off"
+                aria-required="true">
         </div>
 
         <button type="submit" class="btn btn--primary btn--full-width">

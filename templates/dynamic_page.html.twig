@@ -8,9 +8,9 @@
 {% block description %}{{ page_title }} – {{ 'brand.name'|trans }}{% endblock %}
 
 {% block content %}
-<section class="card">
+<section class="card" aria-labelledby="page-title">
     {# Der Titel aus den Metadaten der Datei #}
-    <h1>{{ page_title }}</h1>
+    <h1 id="page-title">{{ page_title }}</h1>
 
     {# 
        Der Inhalt kommt aus einer vertrauenswürdigen Quelle (Admin-Backend).

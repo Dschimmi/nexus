@@ -103,7 +103,9 @@ function closeAllDropdowns() {
 function initAlerts() {
     // A. Click Dismiss
     document.addEventListener('click', (e) => {
-        const closeBtn = e.target.closest('.alert button, [data-dismiss="alert"]');
+        // Neuer Selektor: .alert__close
+        const closeBtn = e.target.closest('.alert__close, [data-dismiss="alert"]');
+        
         if (closeBtn) {
             const alert = closeBtn.closest('.alert');
             if (alert) alert.remove();
@@ -115,14 +117,16 @@ function initAlerts() {
     if (autoDismissAlerts.length > 0) {
         setTimeout(() => {
             autoDismissAlerts.forEach(alert => {
-                // Fade-Out Effekt via CSS Transition vorbereiten
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
+                // Klasse setzen statt Style
+                alert.classList.add('alert--hiding');
                 
-                // Nach Transition entfernen
-                setTimeout(() => alert.remove(), 500);
+                // Nach Transition entfernen (Zeit muss mit CSS übereinstimmen!)
+                alert.addEventListener('transitionend', () => alert.remove(), { once: true });
+                
+                // Fallback: Falls Transition nicht feuert (z.B. versteckter Tab)
+                setTimeout(() => alert.remove(), 600); 
             });
-        }, 5000); // 5 Sekunden Wartezeit
+        }, 5000);
     }
 }
 

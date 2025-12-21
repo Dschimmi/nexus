@@ -54,18 +54,18 @@
                 <div class="header__actions">
                     {% if config('module_site_search') %}
                     <div class="header__search">
-                        <input type="text" class="header__search-input" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="Suche">
+                        <input type="text" class="header__search-input" placeholder="{{ 'header.search_placeholder'|trans }}" aria-label="{{ 'aria.search'|trans|default('Search') }}">
                         <span class="header__search-badge">{{ 'header.search_shortcut'|trans }}</span>
                     </div>
                     {% endif %}
 
                     {% if config('module_language_selection') %}
                     <div class="dropdown">
-                        <button class="dropdown__trigger" aria-label="Sprache wählen">
+                        <button class="dropdown__trigger" aria-label="{{ 'aria.language_switch'|trans|default('Choose language') }}" aria-haspopup="true" aria-expanded="false">
                             {# Icon: Weltkugel #}
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
                             {# Icon: Pfeil klein #}
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </button>
                         <div class="dropdown__menu">
                             {# PRG-Pattern: Formular statt GET-Link #}
@@ -82,17 +82,17 @@
                     {% endif %}
 
                     <button id="theme-toggle" class="header__theme-toggle" aria-label="Design wechseln">
-                        <svg class="header__icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <svg aria-hidden="true" class="header__icon--sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                         
-                        <svg class="header__icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <svg aria-hidden="true" class="header__icon--moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </button>
 
                     {% if user is defined %}
                         {# Eingeloggter Zustand: User Dropdown #}
                         <div class="dropdown">
-                             <button class="dropdown__trigger">
+                             <button class="dropdown__trigger" aria-label="{{ 'aria.user_menu'|trans }}" aria-haspopup="true" aria-expanded="false">
                                 {{ 'header.greeting'|trans({'%name%': user.username}) }}
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg aria-hidden="true" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
                             <div class="dropdown__menu">
                                 <a href="/admin" class="dropdown__item">Admin Dashboard</a>
@@ -113,24 +113,20 @@
         <nav class="subheader" aria-label="Navigationslinks">
             <div class="subheader__inner">
                 <button id="nav-scroll-left" class="subheader__arrow subheader__arrow--hidden">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <svg aria-hidden="true" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
 
                 <div class="subheader__scroll-wrapper" id="nav-scroll-wrapper">
                     <ul class="subheader__tabs">
                         {# Statischer Startseiten-Link #}
                         <li>
-                            <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}">
-                                {{ 'nav.home'|trans|default('Startseite') }}
-                            </a>
+                            <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}" {% if app.request.pathInfo == '/' %}aria-current="page"{% endif %}>
                         </li>
 
                         {# Dynamische Dummy-Seiten #}
                         {% for page in get_dummy_pages() %}
                             <li>
-                                <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}">
-                                    {{ page.title }}
-                                </a>
+                                <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}" {% if app.request.pathInfo == '/' ~ page.slug %}aria-current="page"{% endif %}>
                             </li>
                         {% endfor %}
                     </ul>
@@ -138,7 +134,7 @@
             
 
                 <button id="nav-scroll-right" class="subheader__arrow subheader__arrow--hidden">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
         </nav>
@@ -165,7 +161,12 @@
                     <a href="/impressum" class="footer__link">{{ 'footer.imprint'|trans }}</a>
                     <a href="/datenschutz" class="footer__link">{{ 'footer.privacy'|trans }}</a>
                     {% if config('module_cookie_banner') %}
-                        <a href="#" onclick="showCookieBanner(event)" class="footer__link">{{ 'footer.cookie_settings'|trans }}</a>
+                        <button type="button" 
+                            id="cookie-settings-trigger" 
+                            class="footer__link" 
+                            aria-controls="cookie-banner">
+                            {{ 'footer.cookie_settings'|trans }}
+                        </button>
                     {% endif %}
                 </div>
 
@@ -219,6 +220,7 @@
         <script src="{{ asset('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
         <script src="{{ asset('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
         <script src="{{ asset('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
+        <script src="{{ asset('js/admin.js') }}" nonce="{{ app.csp_nonce }}"></script>
         <!-- main_entry.js brauchen wir hier nicht, da wir die JS einzeln laden -->
     {% endif %}
 

@@ -11,6 +11,8 @@
 .u-text-right  { text-align: right !important; }
 
 .u-font-bold   { font-weight: var(--font-weight-bold) !important; }
+.u-font-mono { font-family: var(--font-family-mono) !important; }
+
 .u-text-muted  { color: var(--c-text-muted) !important; }
 .u-text-main   { color: var(--c-text-main) !important; }
 .u-text-accent { color: var(--c-brand-primary) !important; }
@@ -46,6 +48,7 @@
 /* Flexbox Helfer */
 .u-flex         { display: flex !important; }
 .u-flex-col     { flex-direction: column !important; }
+.u-flex-grow-1 { flex-grow: 1 !important; }
 .u-items-center { align-items: center !important; }
 .u-justify-center { justify-content: center !important; }
 .u-justify-between { justify-content: space-between !important; }

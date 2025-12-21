@@ -118,6 +118,7 @@ return [
     'admin.pages_btn_create'   => 'Create New Page',           // Button to go to create form
     'admin.pages_btn_delete'   => 'Delete Selected',           // Delete action button
     'admin.pages_empty'        => 'No pages available.',       // Text when list is empty
+    'admin.pages_confirm_delete'=> 'Delete surely?',           // Question for Confirmation for Page deletion
     'admin.pages_delete_ok'    => 'Page(s) deleted successfully.', // Success flash message
     'admin.pages_delete_err'   => 'Error deleting pages.',     // Error flash message
 
@@ -162,5 +163,9 @@ return [
     'contact.email'    => 'Email',                      // Label for Email
     'contact.phone'    => 'Phone',                      // Label for Phone
     'contact.address'  => 'Address',                    // Label for Address
-    'contact.cta'      => 'Write to us',                // Button or call to action text    
+    'contact.cta'      => 'Write to us',                // Button or call to action text
+
+    // --- Aria Labels ---
+    'aria.language_switch'  => 'Sprache wählen',        // "Choose Language"
+    'aria.user_menu'        => 'Usermenu',              // "Usermenu"
 ];

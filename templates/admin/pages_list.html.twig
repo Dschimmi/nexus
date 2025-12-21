@@ -22,6 +22,7 @@
 
     <div>
         <form action="/admin/pages/delete" method="post" id="deleteForm">
+            {% include 'partials/csrf_input.html.twig' with {'token_id': 'page_delete'} %}
             
             {% if pages is empty %}
                 <div class="u-text-center u-text-muted u-mb-4">
@@ -46,7 +47,7 @@
                             <tr>
                                 <td class="table__col-check">
                                     <label class="checkbox-label" style="justify-content: center;">
-                                        <input type="checkbox" name="slugs[]" value="{{ page.slug }}" class="page-checkbox">
+                                        <input type="checkbox" name="slugs[]" value="{{ page.slug }}" class="page-checkbox" aria-label="Wähle {{ page.title }}">
                                     </label>
                                 </td>
                                 <td class="u-font-bold">
@@ -56,7 +57,7 @@
                                     /{{ page.slug }}
                                 </td>
                                 <td class="table__col-actions">
-                                    <a href="/{{ page.slug }}" target="_blank" class="btn btn--outline btn--sm">
+                                    <a href="/{{ page.slug }}" target="_blank" class="btn btn--outline btn--sm" aria-label="Vorschau von {{ page.title }} (öffnet in neuem Tab)">
                                         Vorschau
                                     </a>
                                 </td>
@@ -77,7 +78,7 @@
     </div>
 </section>
 
-<script>
+<script nonce="{{ app.csp_nonce }}">
     
 // "Alle auswählen" Logik
     document.getElementById('selectAll')?.addEventListener('change', function() {

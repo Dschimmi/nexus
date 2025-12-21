@@ -1,5 +1,6 @@
 {% if config('module_cookie_banner') %}
-<div id="cookie-banner" class="cookie-banner" role="dialog" aria-modal="true" aria-labelledby="cookie-title">
+{# Token ID: 'consent_action' #}
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-modal="true" aria-labelledby="cookie-title" data-csrf="{{ csrf_token('consent_action') }}">
     {# 1. Titel (Visuell oben) #}
     <h3 id="cookie-title" class="cookie-banner__title">{{ 'cookie.title'|trans }}</h3>
     

@@ -45,6 +45,8 @@ window.showCookieBanner = function(event) {
  * @param {boolean} accepted - True für "Alle akzeptieren", False für "Nur Essentielle".
  */
 window.handleCookie = function(accepted) {
+    const banner = document.getElementById('cookie-banner');
+    const csrfToken = banner ? banner.getAttribute('data-csrf') : '';
     // 1. Entscheidung clientseitig speichern (für schnelle lokale Prüfung)
     const value = accepted ? 'all' : 'essential';
     localStorage.setItem('cookie_consent', value);
@@ -60,7 +62,8 @@ window.handleCookie = function(accepted) {
         method: 'POST',
         headers: { 
             'X-Requested-With': 'XMLHttpRequest', // Kennzeichnung als AJAX-Request
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         }
     })
     .then(response => {
@@ -86,10 +89,10 @@ function showBanner() {
     
     if (banner) {
         // CSS-Klassen setzen (.show für Flexbox, .blur-content für den Hintergrund)
-        banner.classList.add('show');
+        banner.classList.add('cookie-banner--visible');
         
         if (wrapper) {
-            wrapper.classList.add('blur-content');
+            wrapper.classList.add('u-blur');
         }
         
         // 1. Initialen Fokus setzen (Barrierefreiheit)
@@ -124,10 +127,10 @@ function hideBanner() {
     
     if (banner) {
         // Visuelle Klassen entfernen
-        banner.classList.remove('show');
+        banner.classList.remove('cookie-banner--visible');
         
         if (wrapper) {
-            wrapper.classList.remove('blur-content');
+            wrapper.classList.remove('u-blur');
         }
         
         // Event-Listener entfernen (Memory Leaks vermeiden)
@@ -161,7 +164,7 @@ function enforceFocus(e) {
     const banner = document.getElementById('cookie-banner');
     
     // Prüfen: Ist Banner offen UND liegt das Ziel des Events AUßERHALB des Banners?
-    if (banner.classList.contains('show') && !banner.contains(e.target)) {
+    if (banner.classList.contains('cookie-banner--visible') && !banner.contains(e.target)) {
         e.stopPropagation();
         e.preventDefault();
         

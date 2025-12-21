@@ -47,7 +47,7 @@
         </div>
 
         {# JavaScript für den automatischen Redirect (Bleibt 1:1) #}
-        <script>
+        <script nonce="{{ app.csp_nonce }}">
             (function() {
                 var seconds = 3;
                 var el = document.getElementById('countdown');

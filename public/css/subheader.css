@@ -26,10 +26,10 @@
     margin: 0 auto;
     padding: 0 var(--space-4);
     height: 100%;
-    
     display: flex;
     align-items: center;
     overflow: hidden; /* Versteckt Scrollbars visuell */
+    position: relative; /* WICHTIG für Pfeile */
 }
 
 /* --- Element: Scroll Wrapper --- */
@@ -98,9 +98,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
     width: 32px;
     height: 100%;
+    background-color: var(--c-bg-surface); /* Hintergrund passend zur Leiste */
+    border: none;
+    color: var(--c-text-muted);
+    cursor: pointer;
+    z-index: 10;
     
-    background-color: var;
+    /* Positionierung über den Content 
+    position: absolute;
+    top: 0; */
+}
+
+.subheader__arrow:hover {
+    color: var(--c-brand-primary);
+    background-color: var(--c-bg-body);
+}
+
+.subheader__arrow-left {
+    left: 0;
+    /* border-right: 1px solid var(--c-border-main); */
+}
+
+.subheader__arrow-right {
+    right: 0;
+    /* border-left: 1px solid var(--c-border-main); */
+}
+
+/* Modifier: Hidden (Initialzustand) */
+.subheader__arrow--hidden {
+    display: none;
 }

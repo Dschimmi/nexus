@@ -1,85 +1,95 @@
-/* =========================================
-   DATEI: footer.css
-   ZWECK: Seitenfuß, Copyright, Links
-   ========================================= */
+/* ==========================================================================
+   LAYER 4: LAYOUT LAYER (FOOTER)
+   Datei: footer.css
+   Zweck: Styling des Seitenfußes, Sitemaps und Copyrights.
+   BEM-Block: .footer
+   ========================================================================== */
 
-/* --- 1. FOOTER CONTAINER --- */
-footer {
+/* --- Block: Footer --- */
+.footer {
     /* Hintergrund passend zu Cards/Subheader */
-    background-color: var(--bg-surface);
-    color: var(--text-muted);
+    background-color: var(--c-bg-surface);
+    color: var(--c-text-muted);
     
-    padding: 3rem 1rem;
+    padding: var(--space-12) var(--space-4);
     
     /* Sticky Footer Logic: Drückt sich immer ans Ende */
     margin-top: auto;
     
     /* PFLICHT: Struktureller Trenner oben (Gold, 1px) */
-    border-top: 1px solid var(--col-gold);
+    border-top: 1px solid var(--c-border-accent);
     
     transition: background-color 0.3s;
 }
 
-/* --- 2. INNERER BEREICH (Spalten) --- */
-.footer-inner {
-    max-width: 1200px;
+/* --- Element: Inner Container --- */
+.footer__inner {
+    max-width: var(--container-width);
     margin: 0 auto;
     
     display: flex;
     flex-wrap: wrap; /* Bricht auf Mobile um */
-    gap: 2rem;
+    gap: var(--space-8);
     justify-content: space-between;
 }
 
-/* --- 3. SPALTEN INHALT --- */
-.footer-col {
+/* --- Element: Spalte (Column) --- */
+.footer__col {
     min-width: 200px; /* Mindestbreite pro Spalte */
+    flex: 1;
 }
 
-/* Überschriften im Footer */
-.footer-col h4 {
-    margin-bottom: 1rem;
-    color: var(--text-main);
+/* --- Element: Titel innerhalb einer Spalte --- */
+.footer__title {
+    margin-bottom: var(--space-4);
+    color: var(--c-text-main);
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: var(--font-weight-bold);
 }
 
-/* Text / Paragraphen */
-.footer-col p {
+/* --- Element: Text / Slogan --- */
+.footer__text {
     font-size: 0.9rem;
     line-height: 1.5;
     max-width: 300px;
+    color: var(--c-text-muted);
 }
 
-/* --- 4. LINKS IM FOOTER --- */
-.footer-col a {
+/* --- Element: Links --- */
+.footer__link {
     display: block; /* Links untereinander */
-    color: var(--text-muted);
+    color: var(--c-text-muted);
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
     text-decoration: none;
     transition: color 0.2s;
 }
 
-/* Hover: Gold */
-.footer-col a:hover {
-    color: var(--col-gold);
+/* Hover: Gold (Brand Primary) */
+.footer__link:hover {
+    color: var(--c-brand-primary);
     text-decoration: none;
 }
 
-/* --- 5. COPYRIGHT ZEILE (Optional) --- */
-/* Falls du einen separaten Copyright-Bereich unten hast */
-.footer-copyright {
+/* --- Element: Copyright Section --- */
+.footer__copyright {
     text-align: center;
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color); /* Feine Linie */
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--c-border-main); /* Feine Linie */
     font-size: 0.85rem;
-    color: var(--text-muted);
+    color: var(--c-text-muted);
 }
 
-/* Klasse für den Slogan-Text im Footer */
-.footer-slogan {
-    color: var(--text-muted);
-    max-width: 300px;
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    .footer__inner {
+        flex-direction: column;
+        gap: var(--space-8);
+    }
+    
+    .footer__col {
+        width: 100%;
+        min-width: 0;
+    }
 }

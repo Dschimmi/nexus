@@ -18,6 +18,7 @@
     {# Inhalt in der Card #}
     <div>
         <form action="/admin/pages/create" method="post">
+            {% include 'partials/csrf_input.html.twig' with {'token_id': 'page_create'} %}
             
             {# Titel #}
             <div class="u-mb-4">
@@ -61,7 +62,7 @@
     </div>
 </section>
 
-<script>
+<script nonce="{{ app.csp_nonce }}">
     /**
      * Generiert einen URL-freundlichen Slug aus dem Titel.
      */

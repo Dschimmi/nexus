@@ -26,21 +26,31 @@
 }
 
 /* Modifiers */
-/* Standard-Button (Outline Style) */
-.btn--primary,
+.btn--primary {
+    color: var(--palette-blue-main);
+    background-color: var(--c-brand-primary);
+    border-color: var(--c-brand-primary);
+}
+
+.btn--primary:hover,
+.btn--primary:focus {
+    background-color: #d9a200; /* Darker Gold */
+    border-color: #d9a200;
+    color: var(--palette-blue-main);
+    text-decoration: none;
+}
+
 .btn--outline {
     color: var(--c-text-main);
     background-color: transparent;
-    /* Rahmenfarbe: Standard ist Border-Main, Primary nutzt Akzentfarbe? Nein, wir nehmen Blau */
-    border: 1px solid var(--c-btn-bg); 
+    border-color: var(--c-border-main);
 }
 
-/* Hover-Effekt: Füllen */
-.btn--primary:hover, .btn--primary:focus,
-.btn--outline:hover, .btn--outline:focus {
-    background-color: var(--c-btn-bg);
-    color: var(--c-btn-text);
-    border-color: var(--c-btn-bg);
+.btn--outline:hover,
+.btn--outline:focus {
+    color: var(--c-brand-primary);
+    border-color: var(--c-brand-primary);
+    background-color: transparent;
     text-decoration: none;
 }
 

@@ -29,6 +29,7 @@
             <h2>{{ 'admin.modules_title'|trans }}</h2>
             
             <form action="/admin/config" method="post">
+                {% include 'partials/csrf_input.html.twig' with {'token_id': 'admin_config'} %}
                 {# Checkboxen behalten ihre Klassen für admin.css #}
                 <div class="checkbox-group">
                     <label class="checkbox-label">

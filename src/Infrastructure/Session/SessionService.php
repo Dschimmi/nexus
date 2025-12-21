@@ -339,15 +339,6 @@ class SessionService implements SessionInterface // Implementierung des Interfac
      * @param string $ua Der komplette User-Agent-String.
      * @return string Die kombinierte Signatur aus OS und Browser.
      */
-    
-    /**
-     * Extrahiert Browser-Familie, Major-Version UND die OS-Plattform.
-     * Erstellt eine Signature (z.B. "MacOS|Chrome/123") für den Fingerprint.
-     * Vermeidet Invalidierung bei Minor-Updates.
-     *
-     * @param string $ua Der komplette User-Agent-String.
-     * @return string Die kombinierte Signatur aus OS und Browser.
-     */
     private function parseUserAgent(string $ua): string
     {
         // 1. OS-Plattform extrahieren

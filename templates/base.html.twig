@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% if app.is_prod %}
+        {# PRODUCTION: Lade das optimierte Bundle #}
+        <link rel="stylesheet" href="{{ asset('app.css') }}" nonce="{{ app.csp_nonce }}">
+    {% else %}
+        {# DEVELOPMENT: Lade Einzeldateien #}
+        <link rel="stylesheet" href="{{ asset('variables.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('base.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('utilities.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('components.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('header.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('subheader.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('content.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('footer.css') }}" nonce="{{ app.csp_nonce }}">
+        <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}" nonce="{{ app.csp_nonce }}">
+    {% endif %}
     
     <title>{% block title %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{{ 'brand.name'|trans }} – {{ 'brand.slogan'|trans }}{% endblock %}">
     
     <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.baseUrl ~ app.request.pathInfo }}">
 
-    {# WICHTIG: NONCE zu allen Stylesheets hinzufügen (Ticket 34) #}
-    <link rel="stylesheet" href="{{ asset('variables.css') }}" nonce="{{ app.csp_nonce }}">
-    <link rel="stylesheet" href="{{ asset('base.css') }}" nonce="{{ app.csp_nonce }}">
-
-    <link rel="stylesheet" href="{{ asset('utilities.css') }}" nonce="{{ app.csp_nonce }}">
-
-    <link rel="stylesheet" href="{{ asset('components.css') }}" nonce="{{ app.csp_nonce }}">
-
-    <link rel="stylesheet" href="{{ asset('header.css') }}" nonce="{{ app.csp_nonce }}">
-    <link rel="stylesheet" href="{{ asset('subheader.css') }}" nonce="{{ app.csp_nonce }}">
-    <link rel="stylesheet" href="{{ asset('content.css') }}" nonce="{{ app.csp_nonce }}">
-    <link rel="stylesheet" href="{{ asset('footer.css') }}" nonce="{{ app.csp_nonce }}">
-
-    <link rel="stylesheet" href="{{ asset('cookie-banner.css') }}" nonce="{{ app.csp_nonce }}">
+    
 
     <script nonce="{{ app.csp_nonce }}">
         (function() {
@@ -107,34 +110,37 @@
             </div>
         </header>
 
-        <nav class="subheader">
-            <button id="nav-scroll-left" class="subheader__arrow subheader__arrow--hidden">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
+        <nav class="subheader" aria-label="Navigationslinks">
+            <div class="subheader__inner">
+                <button id="nav-scroll-left" class="subheader__arrow subheader__arrow--hidden">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
 
-            <div class="subheader__scroll-wrapper" id="nav-scroll-wrapper">
-                <ul class="subheader__tabs">
-                    {# Statischer Startseiten-Link #}
-                    <li>
-                        <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}">
-                            {{ 'nav.home'|trans|default('Startseite') }}
-                        </a>
-                    </li>
-
-                    {# Dynamische Dummy-Seiten #}
-                    {% for page in get_dummy_pages() %}
+                <div class="subheader__scroll-wrapper" id="nav-scroll-wrapper">
+                    <ul class="subheader__tabs">
+                        {# Statischer Startseiten-Link #}
                         <li>
-                            <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}">
-                                {{ page.title }}
+                            <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}">
+                                {{ 'nav.home'|trans|default('Startseite') }}
                             </a>
                         </li>
-                    {% endfor %}
-                </ul>
-            </div>
 
-            <button id="nav-scroll-right" class="subheader__arrow subheader__arrow--hidden">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
+                        {# Dynamische Dummy-Seiten #}
+                        {% for page in get_dummy_pages() %}
+                            <li>
+                                <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}">
+                                    {{ page.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            
+
+                <button id="nav-scroll-right" class="subheader__arrow subheader__arrow--hidden">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
         </nav>
 
         <main id="main-content" class="main-content">
@@ -177,11 +183,6 @@
 
     {% include 'partials/cookie_banner.html.twig' %}
     
-    {# WICHTIG: NONCE zu allen Skript-Tags hinzufügen (Ticket 34) #}
-    <script src="{{ asset('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
-    <script src="{{ asset('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
-    <script src="{{ asset('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
-
     <script nonce="{{ app.csp_nonce }}">
         document.addEventListener('DOMContentLoaded', () => {
             const spinner = document.getElementById('global-spinner');
@@ -211,6 +212,15 @@
             });
         });
     </script>
+
+    {% if app.is_prod %}
+        <script type="module" src="{{ asset('app.js') }}" nonce="{{ app.csp_nonce }}"></script>
+    {% else %}
+        <script src="{{ asset('js/layout.js') }}" nonce="{{ app.csp_nonce }}"></script>
+        <script src="{{ asset('js/compliance.js') }}" nonce="{{ app.csp_nonce }}"></script>
+        <script src="{{ asset('js/theme.js') }}" nonce="{{ app.csp_nonce }}"></script>
+        <!-- main_entry.js brauchen wir hier nicht, da wir die JS einzeln laden -->
+    {% endif %}
 
 </body>
 </html>

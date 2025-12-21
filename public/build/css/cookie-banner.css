@@ -1,73 +1,81 @@
-/* =========================================
-   DATEI: cookie-banner.css
-   ZWECK: Styling für das Consent-Modal
-   ========================================= */
+/* ==========================================================================
+   LAYER 4: MODULE (COOKIE BANNER)
+   Datei: cookie-banner.css
+   Zweck: Styling des modalen Cookie-Overlays.
+   BEM-Block: .cookie-banner
+   ========================================================================== */
 
+/* --- Block: Cookie Banner --- */
 .cookie-banner {
+    display: none; /* Initial versteckt */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     
-    background: var(--bg-surface);
-    color: var(--text-main);
-    
-    /* Goldener Rahmen für Aufmerksamkeit */
-    border: 2px solid var(--col-gold);
-    
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-    
-    z-index: 1000;
-    max-width: 500px;
     width: 90%;
-    text-align: center;
+    max-width: 500px;
     
-    display: none;
+    background-color: var(--c-bg-surface);
+    border: 1px solid var(--c-border-main);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
     
-    /* NEU: Flexbox Spalte, um die visuelle Reihenfolge zu steuern */
+    /* Hoher Z-Index aus variables.css */
+    z-index: var(--z-modal);
+    
+    /* Schatten für "Floating"-Effekt */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    
+    /* Flexbox für Layout */
     flex-direction: column;
+    gap: var(--space-4);
 }
 
-.cookie-banner.active {
-    display: flex; /* Wichtig: flex statt block */
+/* Modifier: Visible State (wird via JS getoggelt) */
+.cookie-banner--visible {
+    display: flex;
 }
 
-/* 1. Überschrift: Bleibt visuell ganz oben (Order 1) */
-.cookie-banner h3 {
+/* --- Element: Title --- */
+.cookie-banner__title {
+    /* Visuell oben */
     order: 1;
-    margin-bottom: 0; /* Inline-Style ersetzt */
-    color: var(--text-main);
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--c-text-main);
 }
 
-/* 2. Text mit Links: Kommt visuell in die Mitte (Order 2) */
-.cookie-text {
+/* --- Element: Text --- */
+.cookie-banner__text {
+    /* Visuell in der Mitte */
     order: 2;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
+    margin: 0;
     font-size: 0.95rem;
     line-height: 1.5;
+    color: var(--c-text-muted);
 }
 
-/* 3. Buttons: Kommen visuell ganz nach unten (Order 3) */
-.cookie-buttons {
+/* --- Element: Actions (Button Wrapper) --- */
+.cookie-banner__actions {
+    /* Visuell unten */
     order: 3;
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    /* Optional: Abstand nach oben sicherstellen */
-    margin-top: 0.5rem; 
+    gap: var(--space-4);
+    margin-top: var(--space-2);
 }
 
-/* --- LINKS IM BANNER (WCAG Konformität) --- */
-.cookie-banner a {
-    color: var(--text-main) !important;
-    font-weight: 700;
-    text-decoration: underline;
-    transition: color 0.2s;
+/* Container für Buttons, damit sie gleich breit sind */
+.cookie-banner__actions .btn {
+    flex: 1;
 }
 
-.cookie-banner a:hover {
-    color: var(--col-gold) !important;
+/* --- Utility: Blur Effect für den Hintergrund --- */
+/* Diese Klasse wird auf den Content-Wrapper (body > div) angewendet */
+.u-blur {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+    transition: filter 0.3s ease;
 }

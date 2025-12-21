@@ -46,6 +46,9 @@ class ConfigService
             'database.dsn'      => $_ENV['DB_DSN'] ?? null,
             'database.user'     => $_ENV['DB_USER'] ?? null,
             'database.password' => $_ENV['DB_PASSWORD'] ?? null,
+
+            // Wartungsmodus (Ticket 70)
+            'app.maintenance' => filter_var($_ENV['APP_MAINTENANCE'] ?? false, FILTER_VALIDATE_BOOLEAN),
         ];
 
         // 2. Persistierte Einstellungen laden

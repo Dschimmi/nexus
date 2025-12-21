@@ -34,7 +34,7 @@ class Kernel
     
     /** @var string Standard CSP-Regel. Wird in der Regel von der Config überschrieben. */
     public const DEFAULT_CSP = "default-src 'self'; style-src 'self' 'nonce-CSP_NONCE'; script-src 'self' 'nonce-CSP_NONCE'";
-
+    
     /**
      * @var ContainerBuilder Der zentrale DI-Container für alle Services.
      */
@@ -122,6 +122,17 @@ class Kernel
    
         $this->container->compile();
 
+        // Wartungsmodus Check (Ticket 70)
+        $configService = $this->container->get('config_service');
+        if ($configService->get('app.maintenance')) {
+            /** @var Environment $twig */
+            $twig = $this->container->get(Environment::class);
+            // Nonce übergeben!
+            return new Response($twig->render('maintenance.html.twig', [
+                'nonce' => $this->cspNonce
+            ]), 503);
+        }
+
         // Starte die Session über den Service aus dem Container.
         $sessionService = $this->container->get('session_service');
         
@@ -155,8 +166,14 @@ class Kernel
         // Globales App-Objekt um die CSP Nonce erweitern (Ticket 34)
         $twig->addGlobal('app', [
             'request' => $request,
-            'csp_nonce' => $this->cspNonce, 
+            'csp_nonce' => $this->cspNonce,
+            'is_prod' => $this->appEnv === 'production', // Environment Flag 
         ]);
+
+        // FIX für Ticket 14: User global verfügbar machen
+        if ($authService->getUser()) {
+             $twig->addGlobal('user', $authService->getUser());
+        }
 
         // Initialisiere die Sprache (i18n) basierend auf der Session/Config
         /** @var TranslatorService $translator */
@@ -223,7 +240,7 @@ class Kernel
         } catch (ResourceNotFoundException $e) {
 
             // Logge den 404-Fehler mit geringerer Priorität.
-            if (Debugger::$logDirectory !== null) {
+            if ($this->appEnv === 'production' && Debugger::$logDirectory !== null) {
                 Debugger::log($e, Debugger::WARNING);
             }
 
@@ -245,7 +262,7 @@ class Kernel
         } catch (Throwable $e) {
 
             // Logge den 500-Fehler mit höchster Priorität.
-            if (Debugger::$logDirectory !== null) {
+            if ($this->appEnv === 'production' && Debugger::$logDirectory !== null) {
                 Debugger::log($e, Debugger::ERROR);
             }
 

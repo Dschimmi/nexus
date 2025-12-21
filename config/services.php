@@ -131,6 +131,7 @@ return function(ContainerBuilder $container) {
     $container->register(PageManager::class, PageManager::class)
         ->addArgument(new Reference(PageRepositoryInterface::class))
         ->addArgument($projectDir)
+        ->addArgument(new Reference(MrWo\Nexus\Infrastructure\Util\SlugService::class))
         ->setPublic(true);
 
     // =========================================================================
@@ -166,6 +167,7 @@ return function(ContainerBuilder $container) {
         
     $container->register(ConsentController::class, ConsentController::class)
         ->addArgument(new Reference('consent_service'))
+        ->addArgument(new Reference('session_service'))
         ->setPublic(true);
 
     $container->register(LanguageController::class, LanguageController::class)

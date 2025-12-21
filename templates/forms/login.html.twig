@@ -29,21 +29,26 @@
         <div class="u-mb-4">
             <label for="username" class="u-block u-font-bold u-mb-1">{{ 'login.username_label'|trans }}</label>
             <input type="text" 
-                   id="username" 
-                   name="username" 
-                   value="{{ last_username|default('') }}" 
-                   class="form-input" 
-                   required 
-                   autofocus>
+                id="username" 
+                name="username" 
+                value="{{ last_username|default('') }}" 
+                class="form-input" 
+                required 
+                autofocus
+                autocomplete="off" 
+                autocorrect="off" 
+                autocapitalize="off" 
+                spellcheck="false">
         </div>
 
         <div class="u-mb-4">
             <label for="password" class="u-block u-font-bold u-mb-1">{{ 'login.password_label'|trans }}</label>
             <input type="password" 
-                   id="password" 
-                   name="password" 
-                   class="form-input" 
-                   required>
+                id="password" 
+                name="password" 
+                class="form-input" 
+                required
+                autocomplete="off">
         </div>
 
         <button type="submit" class="btn btn--primary btn--full-width">

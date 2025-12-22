@@ -39,11 +39,10 @@
                 <div class="u-flex u-items-center u-gap-2">
                     <span class="u-text-muted" aria-hidden="true">exelor.de/</span>
                     {# Flex-Grow Utility nutzen, falls vorhanden, sonst Inline akzeptieren bis v0.8.20 #}
-                    <input type="text" id="slug" name="slug" class="form-input" 
-                           style="flex-grow: 1;"
-                           required aria-required="true" 
-                           pattern="[a-z0-9-]+" 
-                           title="{{ 'admin.page_slug_help'|trans|default('Nur Kleinbuchstaben, Zahlen und Bindestriche.') }}">
+                    <input type="text" id="slug" name="slug" class="form-input u-flex-grow-1"
+                        required aria-required="true" 
+                        pattern="[a-z0-9-]+" 
+                        title="{{ 'admin.page_slug_help'|trans|default('Nur Kleinbuchstaben, Zahlen und Bindestriche.') }}">
                 </div>
             </div>
 

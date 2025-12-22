@@ -155,7 +155,8 @@ return [
     'cookie.btn_essential' => 'Essential Only',   // Button to accept only necessary cookies
 
     // --- SYSTEM / ERRORS ---
-    'error.404.text'       => 'Page not found. Redirecting...', // Message shown before redirecting from a 404 page
+    'error.404.text'        => 'Page not found.',    // Page not found.
+    'error.404.redirect'       => 'Automatic redirection in %seconds% seconds...', // Message shown before redirecting from a 404 page
 
     // --- KONTAKTSEITE ---
     'contact.title'    => 'Contact',                    // H1 Title
@@ -168,4 +169,8 @@ return [
     // --- Aria Labels ---
     'aria.language_switch'  => 'Sprache wählen',        // "Choose Language"
     'aria.user_menu'        => 'Usermenu',              // "Usermenu"
+
+    /// --- MAINTENANCE ---
+    'maintenance.title' => 'Maintenance',
+    'maintenance.text'  => 'This application is currently being updated or set up. Please try again later.',
 ];

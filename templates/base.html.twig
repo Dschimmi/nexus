@@ -69,11 +69,11 @@
                         </button>
                         <div class="dropdown__menu">
                             {# PRG-Pattern: Formular statt GET-Link #}
-                            <form action="/language/switch" method="post" style="margin:0;">
+                            <form action="/language/switch" method="post" class="dropdown__form">
                                 <input type="hidden" name="lang" value="de">
                                 <button type="submit" class="dropdown__item">Deutsch</button>
                             </form>
-                            <form action="/language/switch" method="post" style="margin:0;">
+                            <form action="/language/switch" method="post" class="dropdown__form">
                                 <input type="hidden" name="lang" value="en">
                                 <button type="submit" class="dropdown__item">English</button>
                             </form>
@@ -92,7 +92,7 @@
                         <div class="dropdown">
                              <button class="dropdown__trigger" aria-label="{{ 'aria.user_menu'|trans }}" aria-haspopup="true" aria-expanded="false">
                                 {{ 'header.greeting'|trans({'%name%': user.username}) }}
-                                <svg aria-hidden="true" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 4px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="u-ml-1""><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
                             <div class="dropdown__menu">
                                 <a href="/admin" class="dropdown__item">Admin Dashboard</a>
@@ -113,23 +113,30 @@
         <nav class="subheader" aria-label="Navigationslinks">
             <div class="subheader__inner">
                 <button id="nav-scroll-left" class="subheader__arrow subheader__arrow--hidden">
-                    <svg aria-hidden="true" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
 
                 <div class="subheader__scroll-wrapper" id="nav-scroll-wrapper">
-                    <ul class="subheader__tabs">
+                        
+<ul class="subheader__tabs">
                         {# Statischer Startseiten-Link #}
                         <li>
                             <a href="/" class="subheader__link {% if app.request.pathInfo == '/' %}subheader__link--active{% endif %}" {% if app.request.pathInfo == '/' %}aria-current="page"{% endif %}>
+                                {{ 'nav.home'|trans|default('Startseite') }}
+                            </a>
                         </li>
 
                         {# Dynamische Dummy-Seiten #}
                         {% for page in get_dummy_pages() %}
                             <li>
                                 <a href="/{{ page.slug }}" class="subheader__link {% if app.request.pathInfo == '/' ~ page.slug %}subheader__link--active{% endif %}" {% if app.request.pathInfo == '/' ~ page.slug %}aria-current="page"{% endif %}>
+                                    {{ page.title }}
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
+
+  
                 </div>
             
 

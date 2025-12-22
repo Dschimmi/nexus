@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<url>
-		<loc>http://nexus.test/</loc>
-		<lastmod>2025-12-02</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>1.0</priority>
-	</url>
-	<url>
-		<loc>http://nexus.test/impressum</loc>
-		<lastmod>2025-12-02</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.8</priority>
-	</url>
-	<url>
-		<loc>http://nexus.test/datenschutz</loc>
-		<lastmod>2025-12-02</lastmod>
-		<changefreq>weekly</changefreq>
-		<priority>0.8</priority>
-	</url>
+  <url><loc>https://exelor.de/</loc></url>
+  <url><loc>https://exelor.de/impressum</loc></url>
+  <url><loc>https://exelor.de/datenschutz</loc></url>
+  <url><loc>https://exelor.de/kontakt</loc></url>
+  <url><loc>https://exelor.de/hallo-welt</loc></url>
+  <url><loc>https://exelor.de/nocheins</loc></url>
 </urlset>

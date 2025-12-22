@@ -7,8 +7,8 @@
     {# 2. Buttons (Im DOM hier für Fokus-Reihenfolge, visuell via CSS unten) #}
     <div class="cookie-banner__actions">
         {# JS-Funktion handleCookie() wird erwartet #}
-        <button class="btn btn--outline" onclick="handleCookie(true)">{{ 'cookie.btn_accept'|trans }}</button>
-        <button class="btn btn--outline" onclick="handleCookie(false)">{{ 'cookie.btn_essential'|trans }}</button>
+        <button id="cookie-accept-all" class="btn btn--outline">{{ 'cookie.btn_accept'|trans }}</button>
+        <button id="cookie-accept-essential" class="btn btn--outline">{{ 'cookie.btn_essential'|trans }}</button>
     </div>
 
     {# 3. Text (Visuell in der Mitte) #}

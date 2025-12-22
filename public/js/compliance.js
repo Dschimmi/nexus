@@ -18,7 +18,24 @@ let lastFocusedElement = null;
 document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('cookie-banner');
     const consent = localStorage.getItem('cookie_consent');
-    
+
+    // --- NEU: Event Listener binden (Ticket 89: Unobtrusive JS) ---
+    const btnAccept = document.getElementById('cookie-accept-all');
+    const btnEssential = document.getElementById('cookie-accept-essential');
+    const btnTrigger = document.getElementById('cookie-settings-trigger');
+
+    if (btnAccept) {
+        btnAccept.addEventListener('click', () => handleCookie(true));
+    }
+    if (btnEssential) {
+        btnEssential.addEventListener('click', () => handleCookie(false));
+    }
+    if (btnTrigger) {
+        btnTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            showCookieBanner(e);
+        });
+    }
     // Logik: Falls das Banner im DOM existiert, aber noch keine Entscheidung im LocalStorage liegt.
     // Aktuell wird das Banner standardmäßig versteckt (display: none) gerendert.
     // Eine automatische Öffnung könnte hier implementiert werden:

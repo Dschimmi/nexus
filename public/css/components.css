@@ -176,6 +176,10 @@
     display: none;
 }
 
+.dropdown__form {
+    margin: 0;
+}
+
 /* Anzeigen bei Hover oder Focus innerhalb (Barrierefreiheit ohne JS) */
 .dropdown:hover .dropdown__menu,
 .dropdown:focus-within .dropdown__menu {

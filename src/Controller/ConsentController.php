@@ -8,6 +8,7 @@ use MrWo\Nexus\Infrastructure\Session\SessionService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Behandelt Anfragen zur Verwaltung der Benutzerzustimmung (Cookie-Consent).
@@ -44,6 +45,11 @@ class ConsentController
         $this->consentService->grantConsent('marketing');
         $this->consentService->grantConsent('statistics');
 
+        // AJAX-Support: JSON zurückgeben, um unnötigen HTML-Download zu vermeiden (Ticket 88)
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(['status' => 'ok', 'consent' => 'granted']);
+        }
+
         // Hole die URL der vorherigen Seite aus den Request-Headern.
         // Als Fallback, falls kein Referer gesendet wurde, nutze die Startseite ('/').
         $referer = $request->headers->get('referer', '/');
@@ -68,6 +74,11 @@ class ConsentController
 
         $this->consentService->revokeConsent('marketing');
         $this->consentService->revokeConsent('statistics');
+
+        // AJAX-Support: JSON zurückgeben (Ticket 88)
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(['status' => 'ok', 'consent' => 'denied']);
+        }
 
         // Hole die URL der vorherigen Seite aus den Request-Headern.
         // Als Fallback, falls kein Referer gesendet wurde, nutze die Startseite ('/').

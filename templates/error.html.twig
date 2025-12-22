@@ -31,12 +31,13 @@
     
         <h1 class="hero__title">404</h1>           
  
-        <p class="u-font-bold u-mb-1" style="font-size: 1.2rem;">
+        <p class="u-font-bold u-mb-1 u-text-lg">
             {{ 'error.404.text'|trans }}
         </p>
         
         <p class="u-mb-4">
-            Automatische Weiterleitung in <span id="countdown" class="u-font-bold">3</span> Sekunden...
+            {# Text mit Platzhalter rendern. Das span mit ID muss erhalten bleiben für JS #}
+            {{ 'error.404.redirect'|trans|replace({'%seconds%': '<span id="countdown" class="u-font-bold">3</span>'})|raw }}
         </p>
 
         <div class="card__actions u-justify-center">

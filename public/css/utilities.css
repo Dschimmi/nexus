@@ -17,6 +17,7 @@
 .u-text-main   { color: var(--c-text-main) !important; }
 .u-text-accent { color: var(--c-brand-primary) !important; }
 .u-text-error  { color: var(--c-status-error) !important; }
+.u-text-lg     { font-size: 1.25rem !important; }
 
 /* --- 2. Spacing Utilities (Margins) --- */
 /* Mappt die --space-* Variablen auf atomare Klassen */
@@ -34,6 +35,9 @@
 .u-mt-2    { margin-top: var(--space-2) !important; }
 .u-mt-4    { margin-top: var(--space-4) !important; }
 
+/* Margin Left (ml) */
+.u-ml-1 { margin-left: var(--space-1) !important; } /* Space 1 ist 0.25rem = 4px */
+
 /* --- 3. Layout & Container --- */
 /* Zentraler Container für Seiteninhalte */
 .u-container {
@@ -43,6 +47,13 @@
     margin-right: auto;
     padding-left: var(--space-4);
     padding-right: var(--space-4);
+}
+
+.u-container-sm {
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Flexbox Helfer */

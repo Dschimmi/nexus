@@ -17,6 +17,9 @@
 /node_modules/
 .phpunit.cache/test-results
 
-#Testdateien
+# Testdateien
 coverage.xml
 /coverage/
+
+# Live-Builds
+/dist/

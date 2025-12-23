@@ -26,6 +26,8 @@ return [
     'nav.home'      => 'Home',          // Main link to homepage
     'nav.imprint'   => 'Legal Notice',  // Link to Legal Notice
     'nav.privacy'   => 'Privacy',       // Link to Privacy Policy
+    'action.back' => 'Back',  // Back
+    'action.back_to_dashboard' => 'Back to Dashboard', //Back to Dashboard
 
     // ------------------------------
     // --- Content ---

@@ -47,6 +47,23 @@ Stelle sicher, dass der Webserver Schreibrechte auf folgende Verzeichnisse hat:
 *   `config/modules.json` (Für Feature-Toggles)
 *   `public/sitemap.xml`
 
+**Alternative:**
+Um die Anwendung auf einem Server zu installieren, muss ein "Clean Build" erstellt werden, der nur die notwendigen Dateien (ohne Tests, Dev-Tools) enthält.
+
+### Windows (build_release.bat)
+Führen Sie das Skript `build_release.bat` im Root-Verzeichnis aus.
+Es erstellt einen Ordner `dist/`, der bereit zum Hochladen ist.
+
+**Schritte des Skripts:**
+1.  Führt `npm run build` aus (Assets).
+2.  Kopiert Applikationscode (`src`, `config`, `templates`, `translations`, `public`).
+3.  Installiert Composer-Abhängigkeiten ohne Dev-Pakete (`--no-dev`) im `dist`-Ordner.
+
+**Upload:**
+Laden Sie den Inhalt von `dist/` auf den Webserver hoch.
+
+Stellen sie sicher das die Verzeichnisse var/ und log/ im Root vorhanden und schraibbar sind.
+
 ### 1.3 Webserver Konfiguration
 
 Das Document Root muss auf das Verzeichnis **`/public`** zeigen.

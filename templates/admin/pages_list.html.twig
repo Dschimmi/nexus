@@ -7,13 +7,13 @@
 {% block title %}{{ 'admin.pages_list_title'|trans }} – {{ parent() }}{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+{# <link rel="stylesheet" href="{{ asset('css/admin.css') }}"> #}
 
 <section class="card" aria-labelledby="pages-list-title">
     <div class="u-flex u-justify-between u-items-center u-mb-4">
         <h1 id="pages-list-title">{{ 'admin.pages_list_title'|trans }}</h1>
         <div class="u-flex u-gap-2">
-            <a href="/admin" class="btn btn--outline btn--sm" aria-label="{{ 'action.back_to_dashboard'|trans|default('Zurück') }}">Zurück</a>
+            <a href="/admin" class="btn btn--outline btn--sm" aria-label="{{ 'action.back_to_dashboard'|trans|default('Back') }}">{{'action.back'|trans}}</a>
             <a href="/admin/pages/create" class="btn btn--primary btn--sm">
                 {{ 'admin.pages_btn_create'|trans }}
             </a>

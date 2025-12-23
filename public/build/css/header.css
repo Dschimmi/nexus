@@ -7,7 +7,7 @@
 
 /* --- Block: Header --- */
 .header {
-    background-color: var(--c-bg-surface);
+    background-color: var(--c-bg-header);
     color: var(--c-text-main);
     height: var(--header-height); 
     /* Verhindert Springen beim Laden */
@@ -47,12 +47,11 @@
 
 /* --- Element: Logo Area (Das Fenster) --- */
 .header__logo {
-    /* Feste Größe gemäß Design */
-    height: 50px; /* Angepasst an Header-Höhe 70px minus Padding */
+    /* Größeres Fenster */
+    height: 70px; 
     width: auto;
-    min-width: 150px;
+    min-width: 200px; /* Breiter */
     
-    /* Design: Kontrast-Hintergrund (Gunmetal) */
     background-color: var(--c-bg-contrast);
     border-radius: var(--radius-md);
     border: 1px solid var(--c-border-main);
@@ -61,13 +60,23 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 0 var(--space-2);
+    position: relative; /* Wichtig für absolute Kinder */
+    padding: 0 var(--space-4); /* Mehr Padding */
+    
+    /* Optional: Schatten wie im alten Design */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .header__logo-img {
-    height: 30px;
-    width: auto;
-    object-fit: contain;
+    position: absolute;
+    /* Spiel mit diesen Werten bis das Logo passt: */
+    width: 180%; /* Zoom */
+    max-width: none;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Exakte Zentrierung */   
+    height: auto; /* Wichtig */
+    object-fit: unset;
 }
 
 /* --- Element: Actions Area (Rechts) --- */

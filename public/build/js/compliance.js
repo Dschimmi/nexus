@@ -18,7 +18,24 @@ let lastFocusedElement = null;
 document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('cookie-banner');
     const consent = localStorage.getItem('cookie_consent');
-    
+
+    // --- NEU: Event Listener binden (Ticket 89: Unobtrusive JS) ---
+    const btnAccept = document.getElementById('cookie-accept-all');
+    const btnEssential = document.getElementById('cookie-accept-essential');
+    const btnTrigger = document.getElementById('cookie-settings-trigger');
+
+    if (btnAccept) {
+        btnAccept.addEventListener('click', () => handleCookie(true));
+    }
+    if (btnEssential) {
+        btnEssential.addEventListener('click', () => handleCookie(false));
+    }
+    if (btnTrigger) {
+        btnTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            showCookieBanner(e);
+        });
+    }
     // Logik: Falls das Banner im DOM existiert, aber noch keine Entscheidung im LocalStorage liegt.
     // Aktuell wird das Banner standardmäßig versteckt (display: none) gerendert.
     // Eine automatische Öffnung könnte hier implementiert werden:
@@ -45,6 +62,8 @@ window.showCookieBanner = function(event) {
  * @param {boolean} accepted - True für "Alle akzeptieren", False für "Nur Essentielle".
  */
 window.handleCookie = function(accepted) {
+    const banner = document.getElementById('cookie-banner');
+    const csrfToken = banner ? banner.getAttribute('data-csrf') : '';
     // 1. Entscheidung clientseitig speichern (für schnelle lokale Prüfung)
     const value = accepted ? 'all' : 'essential';
     localStorage.setItem('cookie_consent', value);
@@ -60,7 +79,8 @@ window.handleCookie = function(accepted) {
         method: 'POST',
         headers: { 
             'X-Requested-With': 'XMLHttpRequest', // Kennzeichnung als AJAX-Request
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
         }
     })
     .then(response => {
@@ -86,10 +106,10 @@ function showBanner() {
     
     if (banner) {
         // CSS-Klassen setzen (.show für Flexbox, .blur-content für den Hintergrund)
-        banner.classList.add('show');
+        banner.classList.add('cookie-banner--visible');
         
         if (wrapper) {
-            wrapper.classList.add('blur-content');
+            wrapper.classList.add('u-blur');
         }
         
         // 1. Initialen Fokus setzen (Barrierefreiheit)
@@ -124,10 +144,10 @@ function hideBanner() {
     
     if (banner) {
         // Visuelle Klassen entfernen
-        banner.classList.remove('show');
+        banner.classList.remove('cookie-banner--visible');
         
         if (wrapper) {
-            wrapper.classList.remove('blur-content');
+            wrapper.classList.remove('u-blur');
         }
         
         // Event-Listener entfernen (Memory Leaks vermeiden)
@@ -161,7 +181,7 @@ function enforceFocus(e) {
     const banner = document.getElementById('cookie-banner');
     
     // Prüfen: Ist Banner offen UND liegt das Ziel des Events AUßERHALB des Banners?
-    if (banner.classList.contains('show') && !banner.contains(e.target)) {
+    if (banner.classList.contains('cookie-banner--visible') && !banner.contains(e.target)) {
         e.stopPropagation();
         e.preventDefault();
         

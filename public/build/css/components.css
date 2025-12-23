@@ -26,31 +26,21 @@
 }
 
 /* Modifiers */
-.btn--primary {
-    color: var(--palette-blue-main);
-    background-color: var(--c-brand-primary);
-    border-color: var(--c-brand-primary);
-}
-
-.btn--primary:hover,
-.btn--primary:focus {
-    background-color: #d9a200; /* Darker Gold */
-    border-color: #d9a200;
-    color: var(--palette-blue-main);
-    text-decoration: none;
-}
-
+/* Standard-Button (Outline Style) */
+.btn--primary,
 .btn--outline {
     color: var(--c-text-main);
     background-color: transparent;
-    border-color: var(--c-border-main);
+    /* Rahmenfarbe: Standard ist Border-Main, Primary nutzt Akzentfarbe? Nein, wir nehmen Blau */
+    border: 1px solid var(--c-btn-bg); 
 }
 
-.btn--outline:hover,
-.btn--outline:focus {
-    color: var(--c-brand-primary);
-    border-color: var(--c-brand-primary);
-    background-color: transparent;
+/* Hover-Effekt: Füllen */
+.btn--primary:hover, .btn--primary:focus,
+.btn--outline:hover, .btn--outline:focus {
+    background-color: var(--c-btn-bg);
+    color: var(--c-btn-text);
+    border-color: var(--c-btn-bg);
     text-decoration: none;
 }
 
@@ -120,6 +110,30 @@
     border-color: #fecaca;
 }
 
+/* Close Button für Alerts (Ersatz für Inline Styles) */
+.alert__close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 0.5rem;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    /* Reset von .btn styles falls nötig, aber wir haben .btn Klasse entfernt */
+}
+
+.alert__close:hover {
+    opacity: 1;
+}
+
+/* Animation State für Auto-Dismiss */
+.alert--hiding {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none; /* Keine Klicks mehr während Fade-Out */
+}
+
 /* --- 5. Dropdowns (.dropdown) --- */
 .dropdown {
     position: relative;
@@ -160,6 +174,10 @@
     
     /* Standardmäßig versteckt */
     display: none;
+}
+
+.dropdown__form {
+    margin: 0;
 }
 
 /* Anzeigen bei Hover oder Focus innerhalb (Barrierefreiheit ohne JS) */

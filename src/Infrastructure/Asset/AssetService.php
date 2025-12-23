@@ -37,13 +37,14 @@ class AssetService
         $this->isProd = $env === 'production';
 
         // 2. Pfade zu den Manifest-Dateien definieren
+        $rootDir = dirname(__DIR__, 3);
         
         // Pfad für manuelles Dev-Manifest (optional)
-        $devManifest = __DIR__ . '/../../public/manifest.json';
+        $devManifest = $rootDir . '/public/manifest.json';
         
         // Pfad für generiertes Vite-Manifest (Standard für Produktion)
         // WICHTIG: Vite 5 speichert das Manifest standardmäßig in .vite/manifest.json
-        $prodManifest = __DIR__ . '/../../public/build/.vite/manifest.json';
+        $prodManifest = $rootDir . '/public/build/.vite/manifest.json';
 
         // 3. Manifest basierend auf Umgebung auswählen
         $manifestFile = $this->isProd ? $prodManifest : $devManifest;
@@ -85,6 +86,28 @@ class AssetService
      */
     public function get(string $logicalName): string
     {
+        // SPEZIAL-FALL: Bundle (Ticket 33)
+        // SPEZIAL-FALL: Bundle JS
+        if ($this->isProd && $logicalName === 'app.js') {
+             foreach ($this->manifest as $key => $entry) {
+                if (($entry['isEntry'] ?? false) === true) {
+                    return '/build/' . $entry['file'];
+                }
+            }
+        }
+        // Wenn app.css angefordert wird, müssen wir es aus dem JS-Entry extrahieren.
+        if ($this->isProd && $logicalName === 'app.css') {
+            // Wir suchen den Entry Point (meist public/js/main_entry.js)
+            // Da wir den Key nicht hartcodieren wollen, suchen wir nach isEntry: true
+            foreach ($this->manifest as $key => $entry) {
+                if (($entry['isEntry'] ?? false) === true) {
+                    if (isset($entry['css'][0])) {
+                        return '/build/' . $entry['css'][0];
+                    }
+                }
+            }
+        }
+
         // STRATEGIE 1: Direkter Treffer
         // Nützlich für manuell gepflegte Manifeste im Dev-Modus.
         if (isset($this->manifest[$logicalName])) {

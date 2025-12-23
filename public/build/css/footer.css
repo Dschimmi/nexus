@@ -6,9 +6,19 @@
    ========================================================================== */
 
 /* --- Block: Footer --- */
+/* Erlaubt Buttons als Footer-Link */
+button.footer__link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
 .footer {
     /* Hintergrund passend zu Cards/Subheader */
-    background-color: var(--c-bg-surface);
+    background-color: var(--c-bg-footer);
     color: var(--c-text-muted);
     
     padding: var(--space-12) var(--space-4);
@@ -37,6 +47,10 @@
 .footer__col {
     min-width: 200px; /* Mindestbreite pro Spalte */
     flex: 1;
+    text-align: center; /* Alles zentrieren */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* --- Element: Titel innerhalb einer Spalte --- */
